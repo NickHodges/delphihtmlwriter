@@ -92,7 +92,6 @@ function MakeCloseTag(aTag: string): string;
 
 implementation
 
-
 function StringIsEmpty(Str: string; aUseTrim: Boolean = True): Boolean;
 begin
   Result := Str = EmptyStr;
