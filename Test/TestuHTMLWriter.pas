@@ -30,7 +30,9 @@ type
 
   published
     procedure TestAddSpanTextWithStyle;
+    procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
+    procedure TestAddDivTextWithID;
     procedure TestCloseComment;
     procedure TestOpenComment;
     procedure TestAddMetaNamedContent;
@@ -404,6 +406,36 @@ begin
   TestResult := HTMLWriterFactory('html').AddDivText(TempString).CloseTag.CloseTag.AsHTML;
   // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDivTextWithID;
+var
+  TempID: string;
+  TempString: string;
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TempString :=  'flooble';
+  TempID := 'main';
+  ExpectedResult := DocTestResult(Format('<div id="%s">%s</div>', [TempID, TempString]));
+  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+  // TODO: Validate method results
+end;
+
+procedure TestTHTMLWriter.TestAddDivTextWithStyle;
+var
+  TempStyle: string;
+  TempString: string;
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TempString :=  'flooble';
+  TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
+  ExpectedResult := DocTestResult(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
+  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+  // TODO: Validate method results
 end;
 
 procedure TestTHTMLWriter.TestOpenBold;

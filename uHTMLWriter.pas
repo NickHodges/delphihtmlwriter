@@ -92,11 +92,8 @@ type
     function OpenDiv: THTMLWriter;
     function OpenBlockQuote: THTMLWriter;
 
-    // function
     function OpenComment: THTMLWriter;
     function OpenMeta: THTMLWriter;
-
-    // Paragraph
 
     ///	<summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
     ///	<param name="aString">The text to be added into the &lt;p&gt; tag.</param>
@@ -109,17 +106,19 @@ type
     function AddSpanTextWithStyle(aString: string; aStyle: string): THTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): THTMLWriter;
 
-    // Div
     function AddDivText(aString: string): THTMLWriter;
+    function AddDivTextWithStyle(aString: string; aStyle: string): THTMLWriter;
+    function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
+
+
 
     function AddBlockQuoteText(aString: string): THTMLWriter;
     function AddComment(aCommentText: string): THTMLWriter;
 
-    // Text Formatting
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: THTMLWriter;
       /// <summary>Opens up a &lt;i&gt; tag. Once a tag is open, it can be added to as desired.</summary>
-      function OpenItalic: THTMLWriter;      
+      function OpenItalic: THTMLWriter;
       /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenUnderline: THTMLWriter;
     function OpenEmphasis: THTMLWriter;
@@ -486,6 +485,16 @@ function THTMLWriter.AddDivText(aString: string): THTMLWriter;
 begin
   Result := AddTag(cDiv, chaCannotHaveAttributes);
   Result.AddText(aString);
+end;
+
+function THTMLWriter.AddDivTextWithID(aString, aID: string): THTMLWriter;
+begin
+  Result := OpenDiv.AddID(aID).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddDivTextWithStyle(aString, aStyle: string): THTMLWriter;
+begin
+  Result := OpenDiv.AddStyle(aStyle).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddEmphasisText(aString: string): THTMLWriter;
