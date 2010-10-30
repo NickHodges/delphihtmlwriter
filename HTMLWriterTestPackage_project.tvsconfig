@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<TgConfig Version="3" SubLevelDisabled="False">
-  <Option Name="namespaceFolder.TestStuff" Type="System.String" Value="TestStuff" Category="General" IsBrowsable="False" />
-  <Option Name="namespaceFolder.HTMLWriter" Type="System.String" Value="HTMLWriter" Category="General" IsBrowsable="False" />
-  <Option Name="namespaceFolder.Namespace1" Type="System.String" Value="Namespace1" Category="General" IsBrowsable="False" />
-  <Option Name="namespaceFolder.uHTMLWriter" Type="System.String" Value="uHTMLWriter" Category="General" IsBrowsable="False" />
-  <Option Name="namespaceFolder.uTest" Type="System.String" Value="Namespace1" Category="General" IsBrowsable="False" />
-</TgConfig>
