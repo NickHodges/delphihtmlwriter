@@ -8,5 +8,5 @@ glob:*.dof
 glob:*.dsk
 glob:*.bak
 glob:*.old
-glob:ModelSupport_HTMLWriterTestPackage/default.txaPackage
-glob:HTMLWriterGroup_prjgroup.tvsconfig
+glob:*.txaPackage
+glob:*..tvsconfig
