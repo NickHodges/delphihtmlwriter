@@ -31,6 +31,13 @@ interface
 
 uses SysUtils;
 
+resourcestring
+  StrATagsBracketMust = 'A tag''s bracket must be open to add an attribute.  The Current tag is %s and the attribute being added is %s';
+  strTagNameRequired = 'The aTagName parameter of the THTMLWriter constructor cannot be an empty string.';
+  strOpenBracketImpossible = 'It should be impossible that the bracket is open here. Seeing this error means a very bad logic problem.';
+  strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
+  StrThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
+
 type
   IGetHTML = interface
     function AsHTML: string;
