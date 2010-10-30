@@ -711,7 +711,6 @@ begin
   // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
-
   ExpectedResult := DocTestResult('<i>' + TempString + '</i>');
   TestResult := HTMLWriterFactory('html').AddItalicText(TempString).CloseTag.CloseTag.AsHTML;
   // TODO: Validate method results
