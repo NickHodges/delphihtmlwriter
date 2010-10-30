@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<TgConfig Version="3" SubLevelDisabled="False">
+  <Option Name="namespaceFolder.TestStuff" Type="System.String" Value="TestStuff" Category="General" IsBrowsable="False" />
+  <Option Name="namespaceFolder.uHTMLWriter" Type="System.String" Value="uHTMLWriter" Category="General" IsBrowsable="False" />
+</TgConfig>
