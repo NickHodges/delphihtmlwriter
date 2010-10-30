@@ -722,7 +722,6 @@ end;
 procedure TestTHTMLWriter.TestAddMetaNamedContent;
 var
   TestResult, ExpectedResult: string;
-  TempString: string;
   TempName: string;
   TempContent: string;
 begin

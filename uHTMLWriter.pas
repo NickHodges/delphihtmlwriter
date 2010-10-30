@@ -511,8 +511,6 @@ begin
 end;
 
 function THTMLWriter.AddMetaNamedContent(aName, aContent: string): THTMLWriter;
-var
-  TempStr: string;
 begin
   if not InMetaTag then
   begin

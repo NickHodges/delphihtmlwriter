@@ -45,8 +45,6 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="uHTMLWriter.pas"/>
-			<DCCReference Include="C:\Users\nhodges.GATEWAY\Desktop\di199906kw\code2\IHTML4.pas"/>
-			<DCCReference Include="C:\Users\nhodges.GATEWAY\Desktop\di199906kw\code2\PasParser.pas"/>
 			<None Include="ModelSupport_HTMLWriterTestApp\default.txaPackage"/>
 			<None Include="ModelSupport_HTMLWriterTestApp\default.txvpck"/>
 			<None Include="ModelSupport_HTMLWriterTestApp\TestStuff\default.txvpck"/>

@@ -4,9 +4,7 @@ program HTMLWriterTestApp;
 
 uses
   SysUtils,
-  uHTMLWriter in 'uHTMLWriter.pas',
-  IHTML4 in 'C:\Users\nhodges.GATEWAY\Desktop\di199906kw\code2\IHTML4.pas',
-  PasParser in 'C:\Users\nhodges.GATEWAY\Desktop\di199906kw\code2\PasParser.pas';
+  uHTMLWriter in 'uHTMLWriter.pas';
 
 var
   TempHTML: string;
@@ -17,7 +15,7 @@ begin
      TempHTML := Temp
                   .AddHead
                     .AddAttribute('dweezle')
-                    .AddRawText('farble')
+                    .AddText('farble')
                   .CloseTag
                   .OpenBody
                   .AddAttribute('ding')
@@ -26,13 +24,13 @@ begin
                       .AddStyle('font: italic')
                       .OpenDiv
                         .AddAttribute('floo')
-                        .AddRawText('Blah')
+                        .AddText('Blah')
                       .CloseTag
                     .CloseTag
-                    .AddRawText('Hoorah')
+                    .AddText('Hoorah')
                     .AddBoldText(' Shadooby')
                     .OpenBold
-                      .AddRawText('Goombah')
+                      .AddText('Goombah')
                     .CloseTag
                   .CloseTag
                   .CloseTag
