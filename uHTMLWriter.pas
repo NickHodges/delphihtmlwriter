@@ -111,7 +111,6 @@ type
     function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
 
 
-
     function AddBlockQuoteText(aString: string): THTMLWriter;
     function AddComment(aCommentText: string): THTMLWriter;
 

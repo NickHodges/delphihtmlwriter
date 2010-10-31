@@ -21,7 +21,7 @@ type
   strict private
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
-    function DocTestResult(aString: string): string;
+    function HTML(aString: string): string;
   private
 
   public
@@ -127,14 +127,12 @@ var
   ExpectedValue: string;
   Result: string;
 begin
-  // TODO: Setup method call parameters
-  aString := 'this';
-  ExpectedValue := DocTestResult(aString);//  '<html>this</html>';
+    aString := 'this';
+  ExpectedValue := HTML(aString);//  '<html>this</html>';
   FHTMLWriter := HTMLWriterFactory('html');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedValue, Result);
+    CheckEquals(ExpectedValue, Result);
 
   // arbitrary tags
   aString := 'this';
@@ -142,17 +140,15 @@ begin
   FHTMLWriter := HTMLWriterFactory('this');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedValue, Result);
+    CheckEquals(ExpectedValue, Result);
 
   // try adding text with brackets in it
   aString := '<groob>';
-  ExpectedValue := DocTestResult(aString);
+  ExpectedValue := HTML(aString);
   FHTMLWriter := HTMLWriterFactory('html');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedValue, Result);
+    CheckEquals(ExpectedValue, Result);
 
 end;
 
@@ -162,11 +158,10 @@ var
   TestResult: string;
 begin
   FHTMLWriter := HTMLWriterFactory('html');
-  ExpectedValue := DocTestResult('<head></head>');
+  ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
   TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedValue, TestResult);
+    CheckEquals(ExpectedValue, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenBody;
@@ -176,18 +171,15 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenBody.AsHTML;
   ExpectedResult := '<html><body';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBody.CloseTag.AsHTML;
   ExpectedResult := '<html><body></body>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBody.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><body></body></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -198,23 +190,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenParagraph.AsHTML;
   ExpectedResult := '<html><p';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.CloseTag.AsHTML;
   ExpectedResult := '<html><p></p>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><p></p></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><p>blah</p></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenParagraphWithID;
@@ -224,7 +212,7 @@ var
   TempStyle: string;
 begin
   TempStyle := 'nerster: hormle';
-  ExpectedResult := DocTestResult(Format('<p id="%s"></p>', [TempStyle]));
+  ExpectedResult := HTML(Format('<p id="%s"></p>', [TempStyle]));
   TestResult := HTMLWriterFactory('html').OpenParagraphWithID(TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -236,7 +224,7 @@ var
   TempStyle: string;
 begin
   TempStyle := 'nerster: hormle';
-  ExpectedResult := DocTestResult(Format('<p style="%s"></p>', [TempStyle]));
+  ExpectedResult := HTML(Format('<p style="%s"></p>', [TempStyle]));
   TestResult := HTMLWriterFactory('html').OpenParagraphWithStyle(TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -250,7 +238,7 @@ var
 begin
   TempStyle := 'nerster: hormle';
   TempText := 'jimkast';
-  ExpectedResult := DocTestResult(Format('<p style="%s">%s</p>', [TempStyle, TempText]));
+  ExpectedResult := HTML(Format('<p style="%s">%s</p>', [TempStyle, TempText]));
   TestResult := HTMLWriterFactory('html').AddParagraphTextWithStyle(TempText, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -264,7 +252,7 @@ var
 begin
   TempStyle := 'nerster: hormle';
   TempText := 'jimkast';
-  ExpectedResult := DocTestResult(Format('<p id="%s">%s</p>', [TempStyle, TempText]));
+  ExpectedResult := HTML(Format('<p id="%s">%s</p>', [TempStyle, TempText]));
   TestResult := HTMLWriterFactory('html').AddParagraphTextwithID(TempText, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -277,22 +265,18 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenSpan.AsHTML;
   ExpectedResult := '<html><span';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenSpan.CloseTag.AsHTML;
   ExpectedResult := '<html><span></span>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenSpan.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><span></span></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenSpan.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><span>blah</span></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -302,23 +286,18 @@ var
   ExpectedResult: string;
 begin
   TestResult := HTMLWriterFactory('html').OpenDiv.AsHTML;
-  ExpectedResult := '<html><div';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.CloseTag.AsHTML;
   ExpectedResult := '<html><div></div>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><div></div></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><div>blah</div></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -330,22 +309,18 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenBlockQuote.AsHTML;
   ExpectedResult := '<html><blockquote';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBlockQuote.CloseTag.AsHTML;
   ExpectedResult := '<html><blockquote></blockquote>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBlockQuote.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><blockquote></blockquote></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBlockQuote.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><blockquote>blah</blockquote></html>';
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -359,13 +334,10 @@ begin
 
   ExpectedResult := '<html><p>' + TempString + '</p>';
   TestResult := HTMLWriterFactory('html').AddParagraphText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
-
-  ExpectedResult := DocTestResult('<p>' + TempString + '</p>');
+  ExpectedResult := HTML('<p>' + TempString + '</p>');
   TestResult := HTMLWriterFactory('html').AddParagraphText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -380,14 +352,11 @@ begin
 
   ExpectedResult := '<html><span>' + TempString + '</span>';
   TestResult := HTMLWriterFactory('html').AddSpanText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
-  ExpectedResult := DocTestResult('<span>' + TempString + '</span>');
+  ExpectedResult := HTML('<span>' + TempString + '</span>');
   TestResult := HTMLWriterFactory('html').AddSpanText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
-
 end;
 
 procedure TestTHTMLWriter.TestAddDivText;
@@ -399,12 +368,10 @@ begin
 
   ExpectedResult := '<html><div>' + TempString + '</div>';
   TestResult := HTMLWriterFactory('html').AddDivText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
-  ExpectedResult := DocTestResult('<div>' + TempString + '</div>');
+  ExpectedResult := HTML('<div>' + TempString + '</div>');
   TestResult := HTMLWriterFactory('html').AddDivText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -417,10 +384,9 @@ var
 begin
   TempString :=  'flooble';
   TempID := 'main';
-  ExpectedResult := DocTestResult(Format('<div id="%s">%s</div>', [TempID, TempString]));
+  ExpectedResult := HTML(Format('<div id="%s">%s</div>', [TempID, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  // TODO: Validate method results
 end;
 
 procedure TestTHTMLWriter.TestAddDivTextWithStyle;
@@ -432,11 +398,10 @@ var
 begin
   TempString :=  'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
-  ExpectedResult := DocTestResult(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
+  ExpectedResult := HTML(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  // TODO: Validate method results
-end;
+  end;
 
 procedure TestTHTMLWriter.TestOpenBold;
 var
@@ -445,23 +410,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenBold.AsHTML;
   ExpectedResult := '<html><b';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.AsHTML;
   ExpectedResult := '<html><b></b>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><b></b></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><b>blah</b></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenEmphasis;
@@ -471,23 +432,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenEmphasis.AsHTML;
   ExpectedResult := '<html><em';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.CloseTag.AsHTML;
   ExpectedResult := '<html><em></em>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><em></em></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><em>blah</em></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -498,23 +455,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenStrong.AsHTML;
   ExpectedResult := '<html><strong';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.CloseTag.AsHTML;
   ExpectedResult := '<html><strong></strong>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><strong></strong></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><strong>blah</strong></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -525,23 +478,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenPre.AsHTML;
   ExpectedResult := '<html><pre';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.CloseTag.AsHTML;
   ExpectedResult := '<html><pre></pre>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><pre></pre></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><pre>blah</pre></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -552,23 +501,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenCite.AsHTML;
   ExpectedResult := '<html><cite';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.CloseTag.AsHTML;
   ExpectedResult := '<html><cite></cite>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><cite></cite></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><cite>blah</cite></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -579,7 +524,7 @@ var
   ExpectedResult: string;
 begin
   TempString := 'wertybin';
-  ExpectedResult := DocTestResult(Format('<!-- %s -->', [TempString]));
+  ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
   TestResult := HTMLWriterFactory(chtml).OpenComment.AddText(TempString).CloseComment.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -591,7 +536,7 @@ var
   ExpectedResult: string;
 begin
   TempString := 'gloppet';
-  ExpectedResult := DocTestResult(Format('<span><!-- %s --></span>', [TempString]));
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   TestResult := HTMLWriterFactory(chtml).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -603,7 +548,7 @@ var
   ExpectedResult: string;
 begin
   TempString := 'gropter';
-  ExpectedResult := DocTestResult(Format('<!-- %s -->', [TempString]));
+  ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddComment(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -615,23 +560,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenItalic.AsHTML;
   ExpectedResult := '<html><i';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.CloseTag.AsHTML;
   ExpectedResult := '<html><i></i>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><i></i></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><i>blah</i></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -656,27 +597,23 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenUnderline.AsHTML;
   ExpectedResult := '<html><u';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.CloseTag.AsHTML;
   ExpectedResult := '<html><u></u>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><u></u></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><u>blah</u></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
-function TestTHTMLWriter.DocTestResult(aString: string): string;
+function TestTHTMLWriter.HTML(aString: string): string;
 begin
   Result := Format('<html>%s</html>', [aString]);
 end;
@@ -700,14 +637,12 @@ begin
 
   ExpectedResult := '<html><blockquote>' + TempString + '</blockquote>';
   TestResult := HTMLWriterFactory('html').AddBlockQuoteText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult('<blockquote>' + TempString + '</blockquote>');
+  ExpectedResult := HTML('<blockquote>' + TempString + '</blockquote>');
   TestResult := HTMLWriterFactory('html').AddBlockQuoteText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -720,14 +655,12 @@ begin
 
   ExpectedResult := '<html><b>' + TempString + '</b>';
   TestResult := HTMLWriterFactory('html').AddBoldText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult('<b>' + TempString + '</b>');
+  ExpectedResult := HTML('<b>' + TempString + '</b>');
   TestResult := HTMLWriterFactory('html').AddBoldText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -740,13 +673,11 @@ begin
 
   ExpectedResult := '<html><i>' + TempString + '</i>';
   TestResult := HTMLWriterFactory('html').AddItalicText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
-  ExpectedResult := DocTestResult('<i>' + TempString + '</i>');
+  ExpectedResult := HTML('<i>' + TempString + '</i>');
   TestResult := HTMLWriterFactory('html').AddItalicText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -774,14 +705,12 @@ begin
 
   ExpectedResult := '<html><u>' + TempString + '</u>';
   TestResult := HTMLWriterFactory('html').AddUnderlinedText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult('<u>' + TempString + '</u>');
+  ExpectedResult := HTML('<u>' + TempString + '</u>');
   TestResult := HTMLWriterFactory('html').AddUnderlinedText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -796,14 +725,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddEmphasisText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddEmphasisText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddStrongText;
@@ -817,14 +744,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddStrongText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddStrongText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 
@@ -839,14 +764,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddPreformattedText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddPreformattedText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddCitationText;
@@ -860,14 +783,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddCitationText(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddCitationText(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading1;
@@ -877,23 +798,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenHeading1.AsHTML;
   ExpectedResult := '<html><h1';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.CloseTag.AsHTML;
   ExpectedResult := '<html><h1></h1>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><h1></h1></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><h1>blah</h1></html>';
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading2;
@@ -905,23 +822,19 @@ begin
   TempTag := 'h2';
   TestResult := HTMLWriterFactory('html').OpenHeading2.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading3;
@@ -933,23 +846,19 @@ begin
   TempTag := 'h3';
   TestResult := HTMLWriterFactory('html').OpenHeading3.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading4;
@@ -961,23 +870,19 @@ begin
   TempTag := 'h4';
   TestResult := HTMLWriterFactory('html').OpenHeading4.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading5;
@@ -989,23 +894,19 @@ begin
   TempTag := 'h5';
   TestResult := HTMLWriterFactory('html').OpenHeading5.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading6;
@@ -1017,23 +918,19 @@ begin
   TempTag := 'h6';
   TestResult := HTMLWriterFactory('html').OpenHeading6.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 
@@ -1048,14 +945,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading1Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading1Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 
@@ -1070,14 +965,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading2Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading2Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading3Text;
@@ -1091,14 +984,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading3Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading3Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading4Text;
@@ -1112,14 +1003,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading4Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading4Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading5Text;
@@ -1133,14 +1022,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading5Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading5Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading6Text;
@@ -1154,14 +1041,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading6Text(TempString).CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 
 
-  ExpectedResult := DocTestResult(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading6Text(TempString).CloseTag.CloseTag.AsHTML;
-  // TODO: Validate method results
-  CheckEquals(ExpectedResult, TestResult);
+    CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddStyle;
@@ -1191,14 +1076,13 @@ var
   TestResult, ExpectedResult: string;
   TempClassName: string;
 begin
-  // TODO: Setup method call parameters
-  TempClassName := 'harbie';
+    TempClassName := 'harbie';
 
   ExpectedResult := Format('<html><span class="%s"', [TempClassName]);
   TestResult := HTMLWriterFactory('html').OpenSpan.AddClass(TempClassName).AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  ExpectedResult := DocTestResult(Format('<span class="%s"></span>', [TempClassName]));
+  ExpectedResult := HTML(Format('<span class="%s"></span>', [TempClassName]));
   TestResult := HTMLWriterFactory('html').OpenSpan.AddClass(TempClassName).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -1209,14 +1093,13 @@ var
   TestResult, ExpectedResult: string;
   TempClassName: string;
 begin
-  // TODO: Setup method call parameters
-  TempClassName := 'harbie';
+    TempClassName := 'harbie';
 
   ExpectedResult := Format('<html><span id="%s"', [TempClassName]);
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  ExpectedResult := DocTestResult(Format('<span id="%s"></span>', [TempClassName]));
+  ExpectedResult := HTML(Format('<span id="%s"></span>', [TempClassName]));
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -1265,11 +1148,10 @@ var
 begin
   TempString :=  'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
-  ExpectedResult := DocTestResult(Format('<span style="%s">%s</span>', [TempStyle, TempString]));
+  ExpectedResult := HTML(Format('<span style="%s">%s</span>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  // TODO: Validate method results
-end;
+  end;
 
 procedure TestTHTMLWriter.TestAddSpanTextWithID;
 var
@@ -1280,17 +1162,15 @@ var
 begin
   TempString :=  'flooble';
   TempID := 'main';
-  ExpectedResult := DocTestResult(Format('<span id="%s">%s</span>', [TempID, TempString]));
+  ExpectedResult := HTML(Format('<span id="%s">%s</span>', [TempID, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  // TODO: Validate method results
-end;
+  end;
 
 
 procedure TestIGetHTML.SetUp;
 begin
-  // TODO: Initialize FIGetHTML
-end;
+  end;
 
 procedure TestIGetHTML.TearDown;
 begin
@@ -1302,8 +1182,7 @@ var
   ReturnValue: string;
 begin
   ReturnValue := FIGetHTML.AsHTML;
-  // TODO: Validate method results
-end;
+  end;
 
 initialization
 
