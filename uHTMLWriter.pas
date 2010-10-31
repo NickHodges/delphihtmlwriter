@@ -1,29 +1,29 @@
 {
- ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Original Code is Delphi HTMLWriter
- *
- * The Initial Developer of the Original Code is
- * Nick Hodges
- *
- * Portions created by the Initial Developer are Copyright (C) 2010
- * the Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *
- * ***** END LICENSE BLOCK *****
- }
+  ***** BEGIN LICENSE BLOCK *****
+  * Version: MPL 1.1
+  *
+  * The contents of this file are subject to the Mozilla Public License Version
+  * 1.1 (the "License"); you may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at
+  * http://www.mozilla.org/MPL/
+  *
+  * Software distributed under the License is distributed on an "AS IS" basis,
+  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+  * for the specific language governing rights and limitations under the
+  * License.
+  *
+  * The Original Code is Delphi HTMLWriter
+  *
+  * The Initial Developer of the Original Code is
+  * Nick Hodges
+  *
+  * Portions created by the Initial Developer are Copyright (C) 2010
+  * the Initial Developer. All Rights Reserved.
+  *
+  * Contributor(s):
+  *
+  * ***** END LICENSE BLOCK *****
+  }
 
 unit uHTMLWriter;
 
@@ -95,9 +95,14 @@ type
     function OpenComment: THTMLWriter;
     function OpenMeta: THTMLWriter;
 
-    ///	<summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
-    ///	<param name="aString">The text to be added into the &lt;p&gt; tag.</param>
+    /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
+    /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
     function AddParagraphText(aString: string): THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>Adds theh passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
+    /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
+    /// <param name="aStyle">The value for the Style attribute&#160;to be added to the &lt;p&gt; tag.</param>
+{$ENDREGION}
     function AddParagraphTextWithStyle(aString: string; aStyle: string): THTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): THTMLWriter;
 
@@ -110,15 +115,14 @@ type
     function AddDivTextWithStyle(aString: string; aStyle: string): THTMLWriter;
     function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
 
-
     function AddBlockQuoteText(aString: string): THTMLWriter;
     function AddComment(aCommentText: string): THTMLWriter;
 
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: THTMLWriter;
-      /// <summary>Opens up a &lt;i&gt; tag. Once a tag is open, it can be added to as desired.</summary>
-      function OpenItalic: THTMLWriter;
-      /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
+    /// <summary>Opens up a &lt;i&gt; tag. Once a tag is open, it can be added to as desired.</summary>
+    function OpenItalic: THTMLWriter;
+    /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenUnderline: THTMLWriter;
     function OpenEmphasis: THTMLWriter;
     function OpenStrong: THTMLWriter;
@@ -152,9 +156,19 @@ type
     function AddStyle(aStyle: string): THTMLWriter;
     function AddClass(aClass: string): THTMLWriter;
     function AddID(aID: string): THTMLWriter;
-
-    // "Raw" stuff
+{$REGION 'Documentation'}
+    /// <summary>Adds any text to the HTML.&#160;</summary>
+    /// <param name="aString">The string to be added</param>
+    /// <remarks>AddText will close the current tag and then add the text passed in the string parameter</remarks>
+{$ENDREGION}
     function AddText(aString: string): THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>AddRawText will inject the passed in string directly into the HTML.&#160;</summary>
+    /// <param name="aString">The text to be added to the HTML</param>
+    /// <remarks>AddRawText&#160;will not make any other changes to open tags or open brackets.&#160; It just injects
+    /// the passed text directly onto the HTML.</remarks>
+{$ENDREGION}
+    function AddRawText(aString: string): THTMLWriter;
 
     // Miscellaneous Stuff
 {$REGION 'Documentation'}
@@ -170,6 +184,8 @@ type
     function CloseComment: THTMLWriter;
     // image tag <img>
     // Line Break <br>
+    function AddLineBreak(aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+
     // Hard Rule <hr>
     // Anchors <a>
 
@@ -181,7 +197,7 @@ type
 
 implementation
 
-  { THTMLWriter }
+{ THTMLWriter }
 
 function THTMLWriter.CloseBracket: THTMLWriter;
 begin
@@ -537,6 +553,28 @@ begin
   Result := AddFormattedText(aString, ftItalic)
 end;
 
+function THTMLWriter.AddLineBreak(aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+begin
+  CloseBracket;
+  FHTML := FHTML + '<br';
+  if aClearValue <> cvNoValue then
+  begin
+    FHTML := Format('%s clear="%s"', [FHTML, TClearValueStrings[aClearValue]]);
+  end;
+  case aUseCloseSlash of
+    ucsUseCloseSlash:
+      begin
+        FHTML := FHTML + ' />';
+      end;
+    ucsDoNotUseCloseSlash:
+      begin
+        FHTML := FHTML + '>';
+      end;
+  end;
+
+  Result := Self;
+end;
+
 function THTMLWriter.AddMetaNamedContent(aName, aContent: string): THTMLWriter;
 begin
   if not InMetaTag then
@@ -565,6 +603,12 @@ end;
 function THTMLWriter.AddPreformattedText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftPreformatted)
+end;
+
+function THTMLWriter.AddRawText(aString: string): THTMLWriter;
+begin
+  FHTML := FHTML + aString;
+  Result := Self;
 end;
 
 function THTMLWriter.OpenParagraphWithID(aID: string): THTMLWriter;
