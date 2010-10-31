@@ -38,6 +38,7 @@ resourcestring
   strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
+  strMustBeInList = 'An attempt is being made to add a list item outside of a list tag.';
 
 type
   IGetHTML = interface
@@ -51,23 +52,29 @@ type
     EMetaOnlyInHeadTagHTMLException = class(EHTMLWriterException);
     ENotInMetaTagHTMLException = class(EHTMLWriterException);
     ETryingToCloseClosedTag = class(EHTMLWriterException);
+    ENotInListTagException = class(EHTMLWriterException);
 
-  type
+type
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag);
     TTagStates = set of TTagState;
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
     TUseCloseSlash = (ucsUseCloseSlash, ucsDoNotUseCloseSlash);
+    TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
+    TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
 
   const
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite');
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
+    TBulletShapeStrings: array[TBulletShape] of string = ('', 'disc', 'circle', 'square');
+    TNumberTypeStrings: array[TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
+
 
     cDiv = 'div';
     cSpan = 'span';
@@ -87,6 +94,10 @@ type
     cImage = 'img';
     cURL = 'url';
     cSource = 'src';
+    cUnorderedList = 'ul';
+    cOrderedList = 'ol';
+    cListItem = 'li';
+    cType = 'type';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';

@@ -54,8 +54,10 @@ type
     function InCommentTag: Boolean;
     function TagIsOpen: Boolean;
     function InMetaTag: Boolean;
+    function InListTag: Boolean;
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
+    procedure CleanUpTagState;
   strict protected
     function CloseBracket: THTMLWriter;
   public
@@ -184,8 +186,6 @@ type
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
 
-    // image tag <img>
-
     function OpenImage: THTMLWriter; overload;
     function OpenImage(aImageSource: string): THTMLWriter; overload;
     function AddImage(aImageSource: string): THTMLWriter;
@@ -193,15 +193,16 @@ type
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 
-
     function OpenAnchor: THTMLWriter; overload;
     function OpenAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
     function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
 
-    // Ordered/Unordered lists
-
+    function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
+    function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
+    function OpenListItem: THTMLWriter;
+    function AddListItem(aText: string): THTMLWriter;
   end;
 
 implementation
@@ -271,17 +272,8 @@ begin
     FHTML := Format(cClosingTag, [FHTML, FCurrentTagName]);
   end;
 
-  if (FCurrentTagName = cHead) and InHeadTag then
-  begin
-    Exclude(FTagState, tsInHeadTag);
-  end;
+  CleanUpTagState;
 
-  if (FCurrentTagName = cBody) and InBodyTag then
-  begin
-    Exclude(FTagState, tsInBodyTag);
-  end;
-
-  FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
   FParent.FHTML := Self.FHTML;
   Result := FParent;
 end;
@@ -322,6 +314,11 @@ end;
 function THTMLWriter.InHeadTag: Boolean;
 begin
   Result := tsInHeadTag in FTagState;
+end;
+
+function THTMLWriter.InListTag: Boolean;
+begin
+  Result := tsInListTag in FTagState;
 end;
 
 function THTMLWriter.InMetaTag: Boolean;
@@ -398,12 +395,21 @@ end;
 
 function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
 begin
- Result := OpenImage(aImageSource).CloseTag;
+  Result := OpenImage(aImageSource).CloseTag;
 end;
 
 function THTMLWriter.OpenItalic: THTMLWriter;
 begin
   Result := OpenFormatTag(ftItalic);
+end;
+
+function THTMLWriter.OpenListItem: THTMLWriter;
+begin
+  if not InListTag then
+  begin
+    raise ENotInListTagException.Create(strMustBeInList);
+  end;
+  Result := AddTag(cListItem);
 end;
 
 function THTMLWriter.OpenMeta: THTMLWriter;
@@ -424,6 +430,39 @@ end;
 function THTMLWriter.OpenUnderline: THTMLWriter;
 begin
   Result := OpenFormatTag(ftUnderline);
+end;
+
+function THTMLWriter.OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
+begin
+  Result := AddTag(cUnorderedList);
+  if aBulletShape <> bsNone then
+  begin
+    Result := Result.AddAttribute(cType, TBulletShapeStrings[aBulletShape]);
+  end;
+  Result.FTagState := Result.FTagState + [tsInListTag];
+end;
+
+function THTMLWriter.OpenOrderedList(aNumberType: TNumberType): THTMLWriter;
+begin
+  Result := AddTag(cOrderedList);
+  if aNumberType <> ntNone then
+  begin
+    Result := Result.AddAttribute(cType, TNumberTypeStrings[aNumberType]);
+  end;
+  Result.FTagState := Result.FTagState + [tsInListTag];
+end;
+
+procedure THTMLWriter.CleanUpTagState;
+begin
+  FTagState := FTagState + [tsTagClosed] - [tsTagOpen] - [tsInListTag];
+  if (FCurrentTagName = cHead) and InHeadTag then
+  begin
+    Exclude(FTagState, tsInHeadTag);
+  end;
+  if (FCurrentTagName = cBody) and InBodyTag then
+  begin
+    Exclude(FTagState, tsInBodyTag);
+  end;
 end;
 
 function THTMLWriter.AddTag(aString: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
@@ -611,7 +650,6 @@ begin
   Result := AddAttribute(cID, aID);
 end;
 
-
 function THTMLWriter.AddItalicText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftItalic)
@@ -637,6 +675,11 @@ begin
   end;
 
   Result := Self;
+end;
+
+function THTMLWriter.AddListItem(aText: string): THTMLWriter;
+begin
+  Result := OpenListItem.AddText(aText).CloseTag;
 end;
 
 function THTMLWriter.AddMetaNamedContent(aName, aContent: string): THTMLWriter;
