@@ -30,6 +30,7 @@ type
 
   published
     procedure TestAddLineBreak;
+    procedure TestAddHardRule;
     procedure TestAddSpanTextWithStyle;
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
@@ -147,6 +148,25 @@ begin
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
+
+end;
+
+procedure TestTHTMLWriter.TestAddHardRule;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := HTML('<hr />');
+  TestResult := HTMLWriterFactory(cHTML).AddHardRule.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<hr>');
+  TestResult := HTMLWriterFactory(cHTML).AddHardRule('', ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<hr clear="left" />');
+  TestResult := HTMLWriterFactory(cHTML).AddHardRule('clear="left"', ucsUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 

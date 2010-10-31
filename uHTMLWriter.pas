@@ -183,10 +183,12 @@ type
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
     // image tag <img>
-    // Line Break <br>
     function AddLineBreak(aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 
     // Hard Rule <hr>
+
+    function AddHardRule(aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+
     // Anchors <a>
 
     // Table Support
@@ -421,6 +423,27 @@ function THTMLWriter.AddText(aString: string): THTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML + aString;
+  Result := Self;
+end;
+
+function THTMLWriter.AddHardRule(aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+begin
+  CloseBracket;
+  FHTML := FHTML + '<hr';
+  if not StringIsEmpty(aAttributes) then
+  begin
+    FHTML := FHTML + cSpace + aAttributes;
+  end;
+  case aUseCloseSlash of
+    ucsUseCloseSlash:
+      begin
+        FHTML := FHTML + ' />';
+      end;
+    ucsDoNotUseCloseSlash:
+      begin
+        FHTML := FHTML + '>';
+      end;
+  end;
   Result := Self;
 end;
 
