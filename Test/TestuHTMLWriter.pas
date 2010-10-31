@@ -329,6 +329,8 @@ procedure TestTHTMLWriter.TestOpenAnchor;
 var
   TestResult: string;
   ExpectedResult: string;
+  TempText: string;
+  TempHREF: string;
 begin
   TestResult := HTMLWriterFactory('html').OpenAnchor.AsHTML;
   ExpectedResult := '<html><a';
@@ -345,6 +347,13 @@ begin
   TestResult := HTMLWriterFactory('html').OpenAnchor.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><a>blah</a></html>';
   CheckEquals(ExpectedResult, TestResult);
+
+  TempHREF := 'http://www.nickhodges.com';
+  TempText := 'Nick Hodges';
+  TestResult := HTMLWriterFactory('html').OpenAnchor(TempHREF, TempText).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><a href="%s">%s</a></html>', [TempHREF, TempText]);
+  CheckEquals(ExpectedResult, TestResult);
+
 
 end;
 
@@ -634,8 +643,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
-
 procedure TestTHTMLWriter.TestOpenItalic;
 var
   TestResult: string;
@@ -797,7 +804,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
-
 
 procedure TestTHTMLWriter.TestAddMetaNamedContent;
 var
@@ -1206,8 +1212,6 @@ begin
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
-
-
 
 procedure TestTHTMLWriter.TestAddAttribute;
 var
