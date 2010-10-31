@@ -43,6 +43,8 @@ type
     procedure TestAddText;
     procedure TestAddHead;
     procedure TestOpenBody;
+    procedure TestOpenImage;
+    procedure TestAddImage;
     procedure TestOpenMeta;
     procedure TestOpenAnchor;
     procedure TestAddAnchor;
@@ -595,6 +597,44 @@ begin
   TestResult := HTMLWriterFactory(cHTML).AddComment(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
+
+procedure TestTHTMLWriter.TestOpenImage;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempSource: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenImage.AsHTML;
+  ExpectedResult := '<html><img';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenImage.CloseTag.AsHTML;
+  ExpectedResult := '<html><img />';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenImage.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><img /></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempSource := 'blah.jpg';
+  TestResult := HTMLWriterFactory(cHTML).OpenImage(TempSource).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><img src="%s" /></html>', [TempSource]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddImage;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempSource: string;
+begin
+  TempSource := 'blah.jpg';
+  TestResult := HTMLWriterFactory(cHTML).AddImage(TempSource).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><img src="%s" /></html>', [TempSource]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+
 
 procedure TestTHTMLWriter.TestOpenItalic;
 var
@@ -1166,6 +1206,7 @@ begin
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
+
 
 
 procedure TestTHTMLWriter.TestAddAttribute;

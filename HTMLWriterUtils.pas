@@ -84,6 +84,9 @@ type
     cParagraph = 'p';
     cAnchor = 'a';
     cHREF = 'href';
+    cImage = 'img';
+    cURL = 'url';
+    cSource = 'src';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
