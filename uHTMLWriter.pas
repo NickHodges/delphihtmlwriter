@@ -193,9 +193,9 @@ type
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 
-    // Anchors <a>
 
-    function OpenAnchor: THTMLWriter;
+    function OpenAnchor: THTMLWriter; overload;
+    function OpenAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
     function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
@@ -516,6 +516,11 @@ end;
 function THTMLWriter.OpenAnchor: THTMLWriter;
 begin
   Result := AddTag(cAnchor);
+end;
+
+function THTMLWriter.OpenAnchor(const aHREF: string; aText: string): THTMLWriter;
+begin
+  Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
 end;
 
 function THTMLWriter.OpenBlockQuote: THTMLWriter;
