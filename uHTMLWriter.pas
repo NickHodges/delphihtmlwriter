@@ -440,7 +440,8 @@ end;
 
 function THTMLWriter.OpenTable: THTMLWriter;
 begin
-
+  Result := AddTag(cTable);
+  Result.FTagState := Result.FTagState + [tsInTableTag];
 end;
 
 function THTMLWriter.OpenUnderline: THTMLWriter;

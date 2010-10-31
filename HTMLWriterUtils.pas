@@ -60,7 +60,7 @@ type
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag);
     TTagStates = set of TTagState;
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
@@ -98,6 +98,7 @@ type
     cOrderedList = 'ol';
     cListItem = 'li';
     cType = 'type';
+    cTable = 'table';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
