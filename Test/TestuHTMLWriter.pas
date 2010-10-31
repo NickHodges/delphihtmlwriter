@@ -568,7 +568,7 @@ var
 begin
   TempString := 'wertybin';
   ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
-  TestResult := HTMLWriterFactory(cHTML).OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenComment.AddText(TempString).CloseComment.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
