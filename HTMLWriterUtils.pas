@@ -36,7 +36,8 @@ resourcestring
   strTagNameRequired = 'The aTagName parameter of the THTMLWriter constructor cannot be an empty string.';
   strOpenBracketImpossible = 'It should be impossible that the bracket is open here. Seeing this error means a very bad logic problem.';
   strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
-  StrThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
+  strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
+  strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
 
 type
   IGetHTML = interface
@@ -49,6 +50,7 @@ type
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
     EMetaOnlyInHeadTagHTMLException = class(EHTMLWriterException);
     ENotInMetaTagHTMLException = class(EHTMLWriterException);
+    ETryingToCloseClosedTag = class(EHTMLWriterException);
 
   type
 
@@ -80,6 +82,8 @@ type
     cName = 'name';
     cContent = 'content';
     cParagraph = 'p';
+    cAnchor = 'a';
+    cHREF = 'href';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
