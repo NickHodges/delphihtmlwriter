@@ -10,3 +10,4 @@ glob:*.bak
 glob:*.old
 glob:*.txaPackage
 glob:*.tvsconfig
+glob:*.txvpck

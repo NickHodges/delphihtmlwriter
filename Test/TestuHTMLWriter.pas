@@ -44,6 +44,8 @@ type
     procedure TestAddHead;
     procedure TestOpenBody;
     procedure TestOpenMeta;
+    procedure TestOpenAnchor;
+    procedure TestAddAnchor;
     procedure TestOpenParagraph;
     procedure TestOpenParagraphWithStyle;
     procedure TestOpenParagraphWithID;
@@ -178,7 +180,7 @@ begin
   FHTMLWriter := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.CloseTag.AsHTML;
+  TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -257,7 +259,7 @@ begin
   TempStyle := 'nerster: hormle';
   TempText := 'jimkast';
   ExpectedResult := HTML(Format('<p style="%s">%s</p>', [TempStyle, TempText]));
-  TestResult := HTMLWriterFactory('html').AddParagraphTextWithStyle(TempText, TempStyle).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').AddParagraphTextWithStyle(TempText, TempStyle).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -271,7 +273,7 @@ begin
   TempStyle := 'nerster: hormle';
   TempText := 'jimkast';
   ExpectedResult := HTML(Format('<p id="%s">%s</p>', [TempStyle, TempText]));
-  TestResult := HTMLWriterFactory('html').AddParagraphTextwithID(TempText, TempStyle).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').AddParagraphTextwithID(TempText, TempStyle).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -317,6 +319,29 @@ begin
 
   TestResult := HTMLWriterFactory('html').OpenDiv.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><div>blah</div></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenAnchor;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenAnchor.AsHTML;
+  ExpectedResult := '<html><a';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAnchor.CloseTag.AsHTML;
+  ExpectedResult := '<html><a></a>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAnchor.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><a></a></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAnchor.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><a>blah</a></html>';
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -403,7 +428,7 @@ begin
   TempString := 'flooble';
   TempID := 'main';
   ExpectedResult := HTML(Format('<div id="%s">%s</div>', [TempID, TempString]));
-  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -417,7 +442,7 @@ begin
   TempString := 'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
-  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -543,7 +568,7 @@ var
 begin
   TempString := 'wertybin';
   ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
-  TestResult := HTMLWriterFactory(cHTML).OpenComment.AddText(TempString).CloseComment.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -718,6 +743,21 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
+
+procedure TestTHTMLWriter.TestAddAnchor;
+var
+  TestResult: string;
+  ExpectedResult: string;
+const
+  TempHREF = 'http://www.nickhodges.com';
+  TempText = 'Nick Hodges';
+begin
+  ExpectedResult := Format(HTML('<a href="%s">%s</a>'), [TempHREF, TempText]);
+  TestResult := HTMLWriterFactory(cHTML).AddAnchor(TempHREF, TempText).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
 
 procedure TestTHTMLWriter.TestAddMetaNamedContent;
 var
@@ -1127,6 +1167,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+
 procedure TestTHTMLWriter.TestAddAttribute;
 var
   TestResult: string;
@@ -1153,12 +1194,12 @@ var
   TempTagName: string;
   ExpectedResult: string;
 begin
-  // Close tag is tested all over the place, so we'll juat have one basic
-  // test here
   TempTagName := 'gretis';
   ExpectedResult := Format('<%s></%s>', [TempTagName, TempTagName]);
   TestResult := HTMLWriterFactory(TempTagName).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+
+  { TODO : Make sure that an extra close tag raises an exception }
 
 end;
 
@@ -1172,7 +1213,7 @@ begin
   TempString := 'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<span style="%s">%s</span>', [TempStyle, TempString]));
-  TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithStyle(TempString, TempStyle).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -1186,7 +1227,7 @@ begin
   TempString := 'flooble';
   TempID := 'main';
   ExpectedResult := HTML(Format('<span id="%s">%s</span>', [TempID, TempString]));
-  TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithID(TempString, TempID).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 

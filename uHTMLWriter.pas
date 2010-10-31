@@ -183,13 +183,14 @@ type
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
     // image tag <img>
-    function AddLineBreak(aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 
-    // Hard Rule <hr>
-
-    function AddHardRule(aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+    function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+    function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 
     // Anchors <a>
+
+    function OpenAnchor: THTMLWriter;
+    function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
 
@@ -203,7 +204,7 @@ implementation
 
 function THTMLWriter.CloseBracket: THTMLWriter;
 begin
-  if (tsBracketOpen in FTagState) and (not(tsCommentOpen in FTagState)) then
+  if (tsBracketOpen in FTagState) and (not (tsCommentOpen in FTagState)) then
   begin
     FHTML := FHTML + cCloseBracket;
     Include(FTagState, tsTagOpen);
@@ -233,6 +234,12 @@ end;
 
 function THTMLWriter.CloseTag: THTMLWriter;
 begin
+  if tsTagClosed in FTagState then
+  begin
+    raise ETryingToCloseClosedTag.Create(strClosingClosedTag);
+  end;
+
+
   if not(tsUseSlashClose in FTagState) and (not(tsCommentOpen in FTagState)) then
   begin
     CloseBracket;
@@ -426,7 +433,7 @@ begin
   Result := Self;
 end;
 
-function THTMLWriter.AddHardRule(aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML + '<hr';
@@ -481,6 +488,11 @@ end;
 function THTMLWriter.AddHeading6Text(aString: string): THTMLWriter;
 begin
   Result := AddHeadingText(aString, htHeading6);
+end;
+
+function THTMLWriter.OpenAnchor: THTMLWriter;
+begin
+  Result := AddTag(cAnchor);
 end;
 
 function THTMLWriter.OpenBlockQuote: THTMLWriter;
@@ -576,7 +588,7 @@ begin
   Result := AddFormattedText(aString, ftItalic)
 end;
 
-function THTMLWriter.AddLineBreak(aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML + '<br';
@@ -679,6 +691,11 @@ function THTMLWriter.AddHeadingText(aString: string; aHeadingType: THeadingType)
 begin
   Result := AddTag(THeadingTypeStrings[aHeadingType], chaCannotHaveAttributes);
   Result.AddText(aString);
+end;
+
+function THTMLWriter.AddAnchor(const aHREF: string; aText: string): THTMLWriter;
+begin
+  Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText).CloseTag;
 end;
 
 function THTMLWriter.AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
