@@ -103,14 +103,12 @@ implementation
 
 procedure TestTHTMLWriter.SetUp;
 begin
-  // FHTMLWriter := THTMLWriter.CreateDocument;
   FHTMLWriter := nil;
 end;
 
 procedure TestTHTMLWriter.TearDown;
 begin
-  // FHTMLWriter.Free;
-  // FHTMLWriter := nil;
+
 end;
 
 procedure TestTHTMLWriter.TestAsHTML;
