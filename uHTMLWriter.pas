@@ -138,6 +138,7 @@ type
     function AddCitationText(aString: string): THTMLWriter;
 
     // Headings
+
     function OpenHeading1: THTMLWriter;
     function OpenHeading2: THTMLWriter;
     function OpenHeading3: THTMLWriter;
@@ -182,7 +183,12 @@ type
     /// <summary>Closes an open tag.</summary>
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
+
     // image tag <img>
+
+    function OpenImage: THTMLWriter; overload;
+    function OpenImage(aImageSource: string): THTMLWriter; overload;
+    function AddImage(aImageSource: string): THTMLWriter;
 
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
@@ -204,7 +210,7 @@ implementation
 
 function THTMLWriter.CloseBracket: THTMLWriter;
 begin
-  if (tsBracketOpen in FTagState) and (not (tsCommentOpen in FTagState)) then
+  if (tsBracketOpen in FTagState) and (not(tsCommentOpen in FTagState)) then
   begin
     FHTML := FHTML + cCloseBracket;
     Include(FTagState, tsTagOpen);
@@ -223,6 +229,7 @@ begin
   FHTML := FHTML + cSpace + cCloseComment;
   Exclude(FTagState, tsCommentOpen);
   Exclude(FTagState, tsTagOpen);
+  Include(FTagState, tsTagClosed);
 end;
 
 procedure THTMLWriter.CloseSlashBracket;
@@ -238,7 +245,6 @@ begin
   begin
     raise ETryingToCloseClosedTag.Create(strClosingClosedTag);
   end;
-
 
   if not(tsUseSlashClose in FTagState) and (not(tsCommentOpen in FTagState)) then
   begin
@@ -376,6 +382,23 @@ end;
 function THTMLWriter.OpenHeading6: THTMLWriter;
 begin
   Result := AddTag(THeadingTypeStrings[htHeading6]);
+end;
+
+function THTMLWriter.OpenImage: THTMLWriter;
+begin
+  Result := AddTag(cImage);
+  Include(Result.FTagState, tsUseSlashClose);
+end;
+
+function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
+begin
+  Result := AddTag(cImage).AddAttribute(cSource, aImageSource);
+  Include(Result.FTagState, tsUseSlashClose);
+end;
+
+function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
+begin
+ Result := OpenImage(aImageSource).CloseTag;
 end;
 
 function THTMLWriter.OpenItalic: THTMLWriter;
@@ -582,6 +605,7 @@ function THTMLWriter.AddID(aID: string): THTMLWriter;
 begin
   Result := AddAttribute(cID, aID);
 end;
+
 
 function THTMLWriter.AddItalicText(aString: string): THTMLWriter;
 begin
