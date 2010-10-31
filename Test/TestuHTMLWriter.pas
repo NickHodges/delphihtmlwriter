@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestAddLineBreak;
     procedure TestAddSpanTextWithStyle;
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
@@ -100,7 +101,6 @@ type
 
 implementation
 
-
 procedure TestTHTMLWriter.SetUp;
 begin
   FHTMLWriter := nil;
@@ -113,8 +113,8 @@ end;
 
 procedure TestTHTMLWriter.TestAsHTML;
 begin
- // This gets tested so much below, and it is so simple, that we don't
- // really need much testing here....
+  // This gets tested so much below, and it is so simple, that we don't
+  // really need much testing here....
 
   CheckEquals('<html></html>', HTMLWriterFactory('html').CloseTag.AsHTML);
 end;
@@ -125,12 +125,12 @@ var
   ExpectedValue: string;
   Result: string;
 begin
-    aString := 'this';
-  ExpectedValue := HTML(aString);//  '<html>this</html>';
+  aString := 'this';
+  ExpectedValue := HTML(aString); // '<html>this</html>';
   FHTMLWriter := HTMLWriterFactory('html');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-    CheckEquals(ExpectedValue, Result);
+  CheckEquals(ExpectedValue, Result);
 
   // arbitrary tags
   aString := 'this';
@@ -138,7 +138,7 @@ begin
   FHTMLWriter := HTMLWriterFactory('this');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-    CheckEquals(ExpectedValue, Result);
+  CheckEquals(ExpectedValue, Result);
 
   // try adding text with brackets in it
   aString := '<groob>';
@@ -146,7 +146,7 @@ begin
   FHTMLWriter := HTMLWriterFactory('html');
   FHTMLWriter.AddText(aString);
   Result := FHTMLWriter.CloseTag.AsHTML;
-    CheckEquals(ExpectedValue, Result);
+  CheckEquals(ExpectedValue, Result);
 
 end;
 
@@ -159,7 +159,7 @@ begin
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
   TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedValue, TestResult);
+  CheckEquals(ExpectedValue, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenBody;
@@ -169,15 +169,15 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenBody.AsHTML;
   ExpectedResult := '<html><body';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBody.CloseTag.AsHTML;
   ExpectedResult := '<html><body></body>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBody.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><body></body></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -188,19 +188,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenParagraph.AsHTML;
   ExpectedResult := '<html><p';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.CloseTag.AsHTML;
   ExpectedResult := '<html><p></p>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><p></p></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenParagraph.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><p>blah</p></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenParagraphWithID;
@@ -255,7 +255,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestOpenSpan;
 var
   TestResult: string;
@@ -284,6 +283,8 @@ var
   ExpectedResult: string;
 begin
   TestResult := HTMLWriterFactory('html').OpenDiv.AsHTML;
+  ExpectedResult := '<html><div';
+  // TODO: Validate method results
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.CloseTag.AsHTML;
@@ -340,7 +341,6 @@ begin
 
 end;
 
-
 procedure TestTHTMLWriter.TestAddSpanText;
 var
   TestResult, ExpectedResult: string;
@@ -380,7 +380,7 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString :=  'flooble';
+  TempString := 'flooble';
   TempID := 'main';
   ExpectedResult := HTML(Format('<div id="%s">%s</div>', [TempID, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
@@ -394,12 +394,12 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString :=  'flooble';
+  TempString := 'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  end;
+end;
 
 procedure TestTHTMLWriter.TestOpenBold;
 var
@@ -408,19 +408,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenBold.AsHTML;
   ExpectedResult := '<html><b';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.AsHTML;
   ExpectedResult := '<html><b></b>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><b></b></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenBold.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><b>blah</b></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenEmphasis;
@@ -430,19 +430,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenEmphasis.AsHTML;
   ExpectedResult := '<html><em';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.CloseTag.AsHTML;
   ExpectedResult := '<html><em></em>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><em></em></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenEmphasis.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><em>blah</em></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -453,19 +453,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenStrong.AsHTML;
   ExpectedResult := '<html><strong';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.CloseTag.AsHTML;
   ExpectedResult := '<html><strong></strong>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><strong></strong></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenStrong.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><strong>blah</strong></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -476,19 +476,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenPre.AsHTML;
   ExpectedResult := '<html><pre';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.CloseTag.AsHTML;
   ExpectedResult := '<html><pre></pre>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><pre></pre></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenPre.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><pre>blah</pre></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -499,19 +499,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenCite.AsHTML;
   ExpectedResult := '<html><cite';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.CloseTag.AsHTML;
   ExpectedResult := '<html><cite></cite>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><cite></cite></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenCite.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><cite>blah</cite></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -523,7 +523,7 @@ var
 begin
   TempString := 'wertybin';
   ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
-  TestResult := HTMLWriterFactory(chtml).OpenComment.AddText(TempString).CloseComment.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenComment.AddText(TempString).CloseComment.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -535,7 +535,7 @@ var
 begin
   TempString := 'gloppet';
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  TestResult := HTMLWriterFactory(chtml).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -558,19 +558,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenItalic.AsHTML;
   ExpectedResult := '<html><i';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.CloseTag.AsHTML;
   ExpectedResult := '<html><i></i>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><i></i></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenItalic.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><i>blah</i></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -585,7 +585,6 @@ begin
 
   { TODO -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
 
-
 end;
 
 procedure TestTHTMLWriter.TestOpenUnderline;
@@ -595,19 +594,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenUnderline.AsHTML;
   ExpectedResult := '<html><u';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.CloseTag.AsHTML;
   ExpectedResult := '<html><u></u>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><u></u></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><u>blah</u></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -635,12 +634,11 @@ begin
 
   ExpectedResult := '<html><blockquote>' + TempString + '</blockquote>';
   TestResult := HTMLWriterFactory('html').AddBlockQuoteText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<blockquote>' + TempString + '</blockquote>');
   TestResult := HTMLWriterFactory('html').AddBlockQuoteText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -653,12 +651,11 @@ begin
 
   ExpectedResult := '<html><b>' + TempString + '</b>';
   TestResult := HTMLWriterFactory('html').AddBoldText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<b>' + TempString + '</b>');
   TestResult := HTMLWriterFactory('html').AddBoldText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -671,11 +668,34 @@ begin
 
   ExpectedResult := '<html><i>' + TempString + '</i>';
   TestResult := HTMLWriterFactory('html').AddItalicText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<i>' + TempString + '</i>');
   TestResult := HTMLWriterFactory('html').AddItalicText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestAddLineBreak;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := HTML('<br />');
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak().CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<br>');
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvNoValue, ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<br clear="left">');
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<br clear="left" />');
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ucsUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -703,12 +723,11 @@ begin
 
   ExpectedResult := '<html><u>' + TempString + '</u>';
   TestResult := HTMLWriterFactory('html').AddUnderlinedText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<u>' + TempString + '</u>');
   TestResult := HTMLWriterFactory('html').AddUnderlinedText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -723,12 +742,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddEmphasisText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddEmphasisText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddStrongText;
@@ -742,14 +760,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddStrongText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddStrongText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestAddPreformattedText;
 var
@@ -762,12 +778,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddPreformattedText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddPreformattedText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddCitationText;
@@ -781,12 +796,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddCitationText(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddCitationText(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading1;
@@ -796,19 +810,19 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenHeading1.AsHTML;
   ExpectedResult := '<html><h1';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.CloseTag.AsHTML;
   ExpectedResult := '<html><h1></h1>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><h1></h1></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading1.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><h1>blah</h1></html>';
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading2;
@@ -820,19 +834,19 @@ begin
   TempTag := 'h2';
   TestResult := HTMLWriterFactory('html').OpenHeading2.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-    CheckEquals(ExpectedResult, TestResult);
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]); ;
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading2.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading3;
@@ -844,19 +858,19 @@ begin
   TempTag := 'h3';
   TestResult := HTMLWriterFactory('html').OpenHeading3.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-    CheckEquals(ExpectedResult, TestResult);
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]); ;
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading3.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading4;
@@ -868,19 +882,19 @@ begin
   TempTag := 'h4';
   TestResult := HTMLWriterFactory('html').OpenHeading4.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-    CheckEquals(ExpectedResult, TestResult);
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]); ;
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading4.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading5;
@@ -892,19 +906,19 @@ begin
   TempTag := 'h5';
   TestResult := HTMLWriterFactory('html').OpenHeading5.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-    CheckEquals(ExpectedResult, TestResult);
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]); ;
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading5.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeading6;
@@ -916,21 +930,20 @@ begin
   TempTag := 'h6';
   TestResult := HTMLWriterFactory('html').OpenHeading6.AsHTML;
   ExpectedResult := Format('<html><%s', [TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);;
-    CheckEquals(ExpectedResult, TestResult);
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]); ;
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenHeading6.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestAddHeading1Text;
 var
@@ -943,14 +956,12 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading1Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading1Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestAddHeading2Text;
 var
@@ -963,12 +974,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading2Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading2Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading3Text;
@@ -982,12 +992,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading3Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading3Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading4Text;
@@ -1001,12 +1010,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading4Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading4Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading5Text;
@@ -1020,12 +1028,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading5Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading5Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddHeading6Text;
@@ -1039,12 +1046,11 @@ begin
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
   TestResult := HTMLWriterFactory('html').AddHeading6Text(TempString).CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
-
+  CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddHeading6Text(TempString).CloseTag.CloseTag.AsHTML;
-    CheckEquals(ExpectedResult, TestResult);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddStyle;
@@ -1074,7 +1080,7 @@ var
   TestResult, ExpectedResult: string;
   TempClassName: string;
 begin
-    TempClassName := 'harbie';
+  TempClassName := 'harbie';
 
   ExpectedResult := Format('<html><span class="%s"', [TempClassName]);
   TestResult := HTMLWriterFactory('html').OpenSpan.AddClass(TempClassName).AsHTML;
@@ -1085,13 +1091,12 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestAddID;
 var
   TestResult, ExpectedResult: string;
   TempClassName: string;
 begin
-    TempClassName := 'harbie';
+  TempClassName := 'harbie';
 
   ExpectedResult := Format('<html><span id="%s"', [TempClassName]);
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).AsHTML;
@@ -1144,12 +1149,12 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString :=  'flooble';
+  TempString := 'flooble';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<span style="%s">%s</span>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithStyle(TempString, TempStyle).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  end;
+end;
 
 procedure TestTHTMLWriter.TestAddSpanTextWithID;
 var
@@ -1158,17 +1163,16 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString :=  'flooble';
+  TempString := 'flooble';
   TempID := 'main';
   ExpectedResult := HTML(Format('<span id="%s">%s</span>', [TempID, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithID(TempString, TempID).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-  end;
-
+end;
 
 procedure TestIGetHTML.SetUp;
 begin
-  end;
+end;
 
 procedure TestIGetHTML.TearDown;
 begin
@@ -1180,7 +1184,7 @@ var
   ReturnValue: string;
 begin
   ReturnValue := FIGetHTML.AsHTML;
-  end;
+end;
 
 initialization
 
