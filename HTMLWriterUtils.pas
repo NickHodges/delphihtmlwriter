@@ -38,7 +38,7 @@ resourcestring
   strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
-  strMustBeInList = 'An attempt is being made to add a list item outside of a list tag.';
+  strMustBeInList = 'A list must be open in order to call this.';
 
 type
   IGetHTML = interface

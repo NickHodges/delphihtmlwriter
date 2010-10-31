@@ -198,11 +198,13 @@ type
     function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
+    function OpenTable: THTMLWriter;
 
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
     function OpenListItem: THTMLWriter;
     function AddListItem(aText: string): THTMLWriter;
+    function CloseList: THTMLWriter;
   end;
 
 implementation
@@ -231,6 +233,15 @@ begin
   Exclude(FTagState, tsCommentOpen);
   Exclude(FTagState, tsTagOpen);
   Include(FTagState, tsTagClosed);
+end;
+
+function THTMLWriter.CloseList: THTMLWriter;
+begin
+  if not InListTag then
+  begin
+    raise ENotInListTagException.Create(strMustBeInList);
+  end;
+  Result := CloseTag;
 end;
 
 procedure THTMLWriter.CloseSlashBracket;
@@ -425,6 +436,11 @@ end;
 function THTMLWriter.OpenStrong: THTMLWriter;
 begin
   Result := OpenFormatTag(ftStrong);
+end;
+
+function THTMLWriter.OpenTable: THTMLWriter;
+begin
+
 end;
 
 function THTMLWriter.OpenUnderline: THTMLWriter;
