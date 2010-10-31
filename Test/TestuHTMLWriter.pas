@@ -23,13 +23,14 @@ type
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
   private
-
   public
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
     procedure TestAddLineBreak;
+    procedure TestOpenListItem;
+    procedure TestAddListItem;
     procedure TestAddHardRule;
     procedure TestAddSpanTextWithStyle;
     procedure TestAddDivTextWithStyle;
@@ -56,6 +57,8 @@ type
     procedure TestOpenSpan;
     procedure TestOpenDiv;
     procedure TestOpenBlockQuote;
+    procedure TestOpenUnorderedList;
+    procedure TestOpenOrderedList;
     procedure TestAddParagraphText;
     procedure TestAddSpanText;
     procedure TestAddDivText;
@@ -353,7 +356,6 @@ begin
   TestResult := HTMLWriterFactory('html').OpenAnchor(TempHREF, TempText).CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><a href="%s">%s</a></html>', [TempHREF, TempText]);
   CheckEquals(ExpectedResult, TestResult);
-
 
 end;
 
@@ -679,6 +681,29 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenOrderedList;
+var
+  TestResult, ExpectedResult: string;
+begin
+
+  ExpectedResult := '<html><ol></ol></html>';
+  TestResult := HTMLWriterFactory('html').OpenOrderedList().CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ol type="1"></ol></html>';
+  TestResult := HTMLWriterFactory('html').OpenOrderedList(ntNumber).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ol type="A"></ol></html>';
+  TestResult := HTMLWriterFactory('html').OpenOrderedList(ntUpperCase).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ol type="i"></ol></html>';
+  TestResult := HTMLWriterFactory('html').OpenOrderedList(ntLowerRoman).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
 procedure TestTHTMLWriter.TestOpenUnderline;
 var
   TestResult: string;
@@ -698,6 +723,83 @@ begin
 
   TestResult := HTMLWriterFactory('html').OpenUnderline.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><u>blah</u></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenUnorderedList;
+var
+  TestResult, ExpectedResult: string;
+begin
+
+  ExpectedResult := '<html><ul></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList().CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="disc"></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsDisc).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="circle"></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsCircle).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="square"></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenListItem;
+var
+  TestResult, ExpectedResult: string;
+  Temp: string;
+begin
+  Temp := 'bloople';
+
+  ExpectedResult := '<html><ul><li></li></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList().OpenListItem.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="disc"><li></li></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsDisc).OpenListItem.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="circle"><li></li></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsCircle).OpenListItem.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><ul type="square"><li></li></ul></html>';
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := Format('<html><ul type="square"><li>%s</li></ul></html>', [Temp]);
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.AddText(Temp).CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := Format('<html><ul type="square"><li type="zoob">%s</li></ul></html>', [Temp]);
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.AddAttribute('type', 'zoob').AddText(Temp).CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to see that a list item was being added outside a list');
+  except
+    on E: ENotInListTagException do
+      Check(True, 'Successfully raised the ENotInListTagException.  All is well.');
+  end;
+
+end;
+
+procedure TestTHTMLWriter.TestAddListItem;
+var
+  TestResult, ExpectedResult: string;
+  Temp: string;
+begin
+  Temp := 'bloople';
+
+  ExpectedResult := Format('<html><ul type="square"><li>%s</li></ul></html>', [Temp]);
+  TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).AddListItem(Temp).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
