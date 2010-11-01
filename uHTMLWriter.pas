@@ -55,9 +55,16 @@ type
     function TagIsOpen: Boolean;
     function InMetaTag: Boolean;
     function InListTag: Boolean;
+    function InTableTag: Boolean;
+    function InTableRowTag: Boolean;
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
     procedure CleanUpTagState;
+    procedure CheckInHeadTag;
+    procedure CheckInCommentTag;
+    procedure CheckInListTag;
+    procedure CheckInTableRowTag;
+    procedure CheckInTableTag;
   strict protected
     function CloseBracket: THTMLWriter;
   public
@@ -84,7 +91,14 @@ type
 {$ENDREGION}
     function AsHTML: string;
     /// <summary>Adds a &lt;head&gt; tag to the document.&#160;</summary>
-    function AddHead: THTMLWriter;
+    function OpenHead: THTMLWriter;
+    function OpenMeta: THTMLWriter;
+    function OpenTitle: THTMLWriter;
+    function AddTitle(aTitleText: string): THTMLWriter;
+    function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
+
+
+
     function OpenBody: THTMLWriter;
     // Block types
     function OpenParagraph: THTMLWriter;
@@ -95,7 +109,6 @@ type
     function OpenBlockQuote: THTMLWriter;
 
     function OpenComment: THTMLWriter;
-    function OpenMeta: THTMLWriter;
 
     /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
     /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
@@ -180,11 +193,11 @@ type
     /// have it's bracket open.</exception>
 {$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
-    function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
 
     /// <summary>Closes an open tag.</summary>
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
+    function CloseList: THTMLWriter;
 
     function OpenImage: THTMLWriter; overload;
     function OpenImage(aImageSource: string): THTMLWriter; overload;
@@ -198,13 +211,23 @@ type
     function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
-    function OpenTable: THTMLWriter;
+    function OpenTable: THTMLWriter; overload;
+    function OpenTable(aBorder: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
+    { DONE -oNick : Think about how to do percentage widths }
+
+    function OpenTableRow: THTMLWriter;
+    function OpenTableData: THTMLWriter;
+    function AddTableData(aText: string): THTMLWriter;
+
+    // list
 
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
     function OpenListItem: THTMLWriter;
     function AddListItem(aText: string): THTMLWriter;
-    function CloseList: THTMLWriter;
   end;
 
 implementation
@@ -224,6 +247,7 @@ end;
 
 function THTMLWriter.CloseComment: THTMLWriter;
 begin
+  CheckInCommentTag;
   Result := CloseTag;
 end;
 
@@ -237,10 +261,7 @@ end;
 
 function THTMLWriter.CloseList: THTMLWriter;
 begin
-  if not InListTag then
-  begin
-    raise ENotInListTagException.Create(strMustBeInList);
-  end;
+  CheckInListTag;
   Result := CloseTag;
 end;
 
@@ -337,6 +358,16 @@ begin
   Result := FCurrentTagName = cMeta;
 end;
 
+function THTMLWriter.InTableRowTag: Boolean;
+begin
+  Result := tsInTableRowTag in FTagState;
+end;
+
+function THTMLWriter.InTableTag: Boolean;
+begin
+  Result := tsInTableTag in FTagState;
+end;
+
 function THTMLWriter.OpenBold: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBold);
@@ -416,19 +447,13 @@ end;
 
 function THTMLWriter.OpenListItem: THTMLWriter;
 begin
-  if not InListTag then
-  begin
-    raise ENotInListTagException.Create(strMustBeInList);
-  end;
+  CheckInListTag;
   Result := AddTag(cListItem);
 end;
 
 function THTMLWriter.OpenMeta: THTMLWriter;
 begin
-  if not InHeadTag then
-  begin
-    raise EMetaOnlyInHeadTagHTMLException.Create(strAMetaTagCanOnly);
-  end;
+  CheckInHeadTag;
   Result := AddTag(cMeta);
   Include(Result.FTagState, tsUseSlashClose);
 end;
@@ -440,7 +465,72 @@ end;
 
 function THTMLWriter.OpenTable: THTMLWriter;
 begin
+  Result := OpenTable(-1, -1, -1);
+end;
 
+function THTMLWriter.OpenTable(aBorder: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, -1, -1);
+end;
+
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, aCellPadding, -1);
+end;
+
+function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, False));
+end;
+
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter;
+begin
+  Result := AddTag(cTable);
+  if aBorder >= 0 then
+  begin
+    Result := Result.AddAttribute(cBorder, IntToStr(aBorder));
+  end;
+  if aCellPadding >= 0 then
+  begin
+    Result := Result.AddAttribute(cCellPadding, IntToStr(aCellPadding));
+  end;
+  if aCellSpacing >= 0 then
+  begin
+    Result := Result.AddAttribute(cCellSpacing, IntToStr(aCellSpacing));
+  end;
+  if aWidth.Width >= 0 then
+  begin
+    if aWidth.IsPercentage then
+    begin
+      Result := Result.AddAttribute(cWidth, aWidth.AsPercentage);
+    end
+    else
+    begin
+      Result := Result.AddAttribute(cWidth, IntToStr(aWidth.Width));
+    end;
+  end;
+
+  Result.FTagState := Result.FTagState + [tsInTableTag];
+
+end;
+
+function THTMLWriter.OpenTableData: THTMLWriter;
+begin
+  CheckInTableRowTag;
+  Result := AddTag(cTableData);
+end;
+
+function THTMLWriter.OpenTableRow: THTMLWriter;
+begin
+  CheckInTableTag;
+  Result := AddTag(cTableRow);
+  Result.FTagState := Result.FTagState + [tsInTableRowTag];
+end;
+
+function THTMLWriter.OpenTitle: THTMLWriter;
+begin
+  CheckInHeadTag;
+  Result := AddTag(cTitle);
 end;
 
 function THTMLWriter.OpenUnderline: THTMLWriter;
@@ -470,15 +560,44 @@ end;
 
 procedure THTMLWriter.CleanUpTagState;
 begin
-  FTagState := FTagState + [tsTagClosed] - [tsTagOpen] - [tsInListTag];
+  FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cUnorderedList) and InListTag then
+  begin
+    Exclude(FTagState, tsInListTag);
+  end;
+
+  if (FCurrentTagName = cOrderedList) and InListTag then
+  begin
+    Exclude(FTagState, tsInListTag);
+  end;
+
+  if (FCurrentTagName = cTable) and InTableTag then
+  begin
+    Exclude(FTagState, tsInTableTag);
+  end;
+
   if (FCurrentTagName = cHead) and InHeadTag then
   begin
     Exclude(FTagState, tsInHeadTag);
   end;
+
   if (FCurrentTagName = cBody) and InBodyTag then
   begin
     Exclude(FTagState, tsInBodyTag);
   end;
+
+  if (FCurrentTagName = cTableRow) and InTableRowTag then
+  begin
+    Exclude(FTagState, tsInTableRowTag);
+  end;
+  FCurrentTagName := '';
+end;
+
+function THTMLWriter.AddTableData(aText: string): THTMLWriter;
+begin
+  CheckInTableRowTag;
+  Result := OpenTableData.AddText(aText).CloseTag;
 end;
 
 function THTMLWriter.AddTag(aString: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
@@ -486,7 +605,7 @@ begin
   CloseBracket;
   Result := THTMLWriter.Create(aString, aCanAddAttributes);
   Result.FHTML := Self.FHTML + Result.FHTML;
-  Result.FTagState := Result.FTagState + [tsBracketOpen];
+  Result.FTagState := Self.FTagState + [tsBracketOpen];
   Result.FParent := Self;
 end;
 
@@ -511,10 +630,16 @@ begin
   Result := Self;
 end;
 
+function THTMLWriter.AddTitle(aTitleText: string): THTMLWriter;
+begin
+  CheckInHeadTag;
+  Result := OpenTitle.AddText(aTitleText).CloseTag;
+end;
+
 function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + '<hr';
+  FHTML := FHTML + cOpenBracket + cHardRule;
   if not StringIsEmpty(aAttributes) then
   begin
     FHTML := FHTML + cSpace + aAttributes;
@@ -532,7 +657,7 @@ begin
   Result := Self;
 end;
 
-function THTMLWriter.AddHead: THTMLWriter;
+function THTMLWriter.OpenHead: THTMLWriter;
 begin
   Result := AddTag(cHead, chaCanHaveAttributes);
   Result.FTagState := Result.FTagState + [tsInHeadTag];
@@ -674,19 +799,19 @@ end;
 function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + '<br';
+  FHTML := FHTML + cOpenBracket + cBreak;
   if aClearValue <> cvNoValue then
   begin
-    FHTML := Format('%s clear="%s"', [FHTML, TClearValueStrings[aClearValue]]);
+    FHTML := Format('%s %s="%s"', [FHTML, cClear, TClearValueStrings[aClearValue]]);
   end;
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML + ' />';
+        FHTML := FHTML + cSpace + cCloseSlashBracket;
       end;
     ucsDoNotUseCloseSlash:
       begin
-        FHTML := FHTML + '>';
+        FHTML := FHTML + cCloseBracket;
       end;
   end;
 
@@ -698,12 +823,49 @@ begin
   Result := OpenListItem.AddText(aText).CloseTag;
 end;
 
+procedure THTMLWriter.CheckInTableTag;
+begin
+  if not InTableTag then
+  begin
+    raise ENotInTableTagException.Create(strMustBeInList);
+  end;
+end;
+
+procedure THTMLWriter.CheckInTableRowTag;
+begin
+  if not InTableRowTag then
+  begin
+    raise ENotInTableTagException.Create(strMustBeInList);
+  end;
+end;
+
+procedure THTMLWriter.CheckInListTag;
+begin
+  if not InListTag then
+  begin
+    raise ENotInListTagException.Create(strMustBeInList);
+  end;
+end;
+
+procedure THTMLWriter.CheckInCommentTag;
+begin
+  if not InCommentTag then
+  begin
+    raise ENotInCommentTagException.Create(strMustBeInComment);
+  end;
+end;
+
+procedure THTMLWriter.CheckInHeadTag;
+begin
+  if not InHeadTag then
+  begin
+    raise EHeadTagRequiredHTMLException.Create(strAMetaTagCanOnly);
+  end;
+end;
+
 function THTMLWriter.AddMetaNamedContent(aName, aContent: string): THTMLWriter;
 begin
-  if not InMetaTag then
-  begin
-    raise ENotInMetaTagHTMLException.Create(StrThisMethodCanOnly);
-  end;
+  CheckInHeadTag;
   Result := AddAttribute(cName, aName).AddAttribute(cContent, aContent);
 end;
 

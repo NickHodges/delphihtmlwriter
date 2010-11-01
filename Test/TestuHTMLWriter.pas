@@ -23,11 +23,16 @@ type
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
   private
+
   public
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
+    procedure TestConstructorException;
+    procedure TestThatExceptionsAreRaised;
+    procedure TestTHTMLWidth;
+    procedure TestAddTableData;
     procedure TestAddLineBreak;
     procedure TestOpenListItem;
     procedure TestAddListItem;
@@ -43,7 +48,12 @@ type
     procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
+    procedure TestOpenTitle;
+    procedure TestAddTitle;
     procedure TestOpenBody;
+    procedure TestOpenTable;
+    procedure TestOpenTableRow;
+    procedure TestOpenTableData;
     procedure TestOpenImage;
     procedure TestAddImage;
     procedure TestOpenMeta;
@@ -185,7 +195,7 @@ begin
   FHTMLWriter := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.AsHTML;
+  TestResult := FHTMLWriter.OpenHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -311,7 +321,7 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenDiv.AsHTML;
   ExpectedResult := '<html><div';
-  // TODO: Validate method results
+
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.CloseTag.AsHTML;
@@ -527,6 +537,201 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenTable;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.AsHTML;
+  ExpectedResult := '<html><table';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.CloseTag.AsHTML;
+  ExpectedResult := '<html><table></table>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table>blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellpadding="4" cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Width
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Width as percentage
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenTableData;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.OpenTableData.AsHTML;
+  ExpectedResult := '<html><table><tr><td';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.OpenTableData.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td></td>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.OpenTableData.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td></td></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.OpenTableData.AddText('blah').CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td>blah</td></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestAddTableData;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddTableData('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td>blah</td></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenTableRow;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AsHTML;
+  ExpectedResult := '<html><table><tr';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr></tr>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr>blah</tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenTitle;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<html><head><title';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title></head>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title>hethland</title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.AddText('hethland').CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestAddTitle;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<html><head><title>hethland</title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.AddTitle('hethland').CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
+    Check(False, 'Failed to raise a EMetaOnlyInHeadTagHTMLException when adding a title outside of a <head> tag');
+  except
+    Check(True, 'All is well -- the EMetaOnlyInHeadTagHTMLException was properly raised. ');
+  end;
+
+
+end;
+
 procedure TestTHTMLWriter.TestOpenPre;
 var
   TestResult: string;
@@ -674,10 +879,20 @@ var
   ExpectedResult: string;
 begin
   ExpectedResult := '<html><head><meta /></head></html>';
-  TestResult := HTMLWriterFactory(cHTML).AddHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { TODO -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
+  { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
+  except
+    on E: EHeadTagRequiredHTMLException do
+    begin
+      Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
+    end;
+  end;
 
 end;
 
@@ -750,6 +965,69 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
+var
+  TestResult: string;
+begin
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
+    Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
+  except
+    on E: EHeadTagRequiredHTMLException do
+    begin
+      Check(True, 'Successfully raised EHeadTagRequiredHTMLException when it was supposed to be raised.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a lise');
+  except
+    on E: ENotInListTagException do
+    begin
+      Check(True, 'Properly called ENotInListTagException when outside of a list.  All is well.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
+  except
+    on E: ENotInTableTagException do
+    begin
+      Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenComment.AddDivText('graster').CloseComment.CloseTag.AsHTML;
+    Check(False, 'EHeadTagRequiredHTMLException was not raised when adding things to a comment');
+  except
+    Check(True, 'EHeadTagRequiredHTMLException was properly raised');
+  end;
+
+
+
+  end;
+
+procedure TestTHTMLWriter.TestTHTMLWidth;
+var
+  TempWidth: THTMLWidth;
+  ExpectedResult: string;
+  TestResult: string;
+begin
+  TempWidth.Width := 42;
+  ExpectedResult := '';
+  TestResult := TempWidth.AsPercentage;
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempWidth.IsPercentage := True;
+  ExpectedResult := '42%';
+  TestResult := TempWidth.AsPercentage;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
 procedure TestTHTMLWriter.TestOpenListItem;
 var
   TestResult, ExpectedResult: string;
@@ -782,7 +1060,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML;
     Check(False, 'Failed to see that a list item was being added outside a list');
   except
     on E: ENotInListTagException do
@@ -912,12 +1190,20 @@ var
   TestResult, ExpectedResult: string;
   TempName: string;
   TempContent: string;
+  Temp: THTMLWriter;
 begin
   TempName := 'Snerdo';
   TempContent := 'derfle';
   ExpectedResult := '<html><head><meta name="%s" content="%s" /></head></html>';
   ExpectedResult := Format(ExpectedResult, [TempName, TempContent]);
-  TestResult := HTMLWriterFactory(cHTML).AddHead.OpenMeta.AddMetaNamedContent(TempName, TempContent).CloseTag.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenHead;
+  Temp := Temp.OpenMeta;
+  Temp := Temp.AddMetaNamedContent(TempName, TempContent);
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1346,8 +1632,33 @@ begin
   TestResult := HTMLWriterFactory(TempTagName).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { TODO : Make sure that an extra close tag raises an exception }
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to rais an exception when an extra Closetag was called.');
+  except
+    on E: ETryingToCloseClosedTag do
+    begin
+      Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
+    end;
+  end;
 
+  { DONE : Make sure that an extra close tag raises an exception }
+
+end;
+
+procedure TestTHTMLWriter.TestConstructorException;
+var
+  TestValue: string;
+begin
+  try
+    TestValue := HTMLWriterFactory('').CloseTag.AsHTML;
+    Check(False, 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
+  except
+    on E: EHTMLWriterEmptyTagException do
+    begin
+      Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
+    end;
+  end;
 end;
 
 procedure TestTHTMLWriter.TestAddSpanTextWithStyle;

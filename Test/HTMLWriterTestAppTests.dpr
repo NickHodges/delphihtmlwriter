@@ -28,8 +28,7 @@ uses
 begin
   Application.Initialize;
   if IsConsole then
-    with TextTestRunner.RunRegisteredTests do
-      Free
+    TextTestRunner.RunRegisteredTests.Free
   else
     GUITestRunner.RunRegisteredTests;
 end.

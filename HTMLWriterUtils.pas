@@ -35,32 +35,42 @@ resourcestring
   StrATagsBracketMust = 'A tag''s bracket must be open to add an attribute.  The Current tag is %s and the attribute being added is %s';
   strTagNameRequired = 'The aTagName parameter of the THTMLWriter constructor cannot be an empty string.';
   strOpenBracketImpossible = 'It should be impossible that the bracket is open here. Seeing this error means a very bad logic problem.';
-  strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
+  strAMetaTagCanOnly = 'This tag can only be added inside a <head> tag.';
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
-  strMustBeInList = 'A list must be open in order to call this.';
+  strMustBeInList = 'A list must be open in order to call CloseList.';
+  strMustBeInTable = 'A table must be open in order to call this.';
+  strMustBeInComment = 'A comment must be open in order to call CloseComment';
 
 type
   IGetHTML = interface
     function AsHTML: string;
   end;
 
+  THTMLWidth = record
+    Width: integer;
+    IsPercentage: Boolean;
+    constructor Create(aWidth: integer; aIsPercentage: Boolean);
+    function AsPercentage: string;
+  end;
+
 type
   EHTMLWriterException = class(Exception);
     EHTMLWriterEmptyTagException = class(EHTMLWriterException);
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
-    EMetaOnlyInHeadTagHTMLException = class(EHTMLWriterException);
-    ENotInMetaTagHTMLException = class(EHTMLWriterException);
+    EHeadTagRequiredHTMLException = class(EHTMLWriterException);
     ETryingToCloseClosedTag = class(EHTMLWriterException);
     ENotInListTagException = class(EHTMLWriterException);
+    ENotInTableTagException = class(EHTMLWriterException);
+    ENotInCommentTagException = class(EHTMLWriterException);
 
-type
+  type
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag);
     TTagStates = set of TTagState;
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
@@ -68,13 +78,14 @@ type
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
 
+    TPercentage = 1 .. 100;
+
   const
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite');
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
-    TBulletShapeStrings: array[TBulletShape] of string = ('', 'disc', 'circle', 'square');
-    TNumberTypeStrings: array[TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
-
+    TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
+    TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
 
     cDiv = 'div';
     cSpan = 'span';
@@ -94,10 +105,22 @@ type
     cImage = 'img';
     cURL = 'url';
     cSource = 'src';
+    cHardRule = 'hr';
+    cBreak = 'br';
     cUnorderedList = 'ul';
     cOrderedList = 'ol';
     cListItem = 'li';
+    cClear = 'clear';
     cType = 'type';
+    cTable = 'table';
+    cBorder = 'border';
+    cCellPadding = 'cellpadding';
+    cCellSpacing = 'cellspacing';
+    cWidth = 'width';
+    cTableRow = 'tr';
+    cTableData = 'td';
+    cTableHeader = 'th';
+    cTitle = 'title';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
@@ -131,6 +154,23 @@ end;
 function MakeCloseTag(aTag: string): string;
 begin
   Result := Format('</%s>', [aTag]);
+end;
+
+{ THTMLWidth }
+
+function THTMLWidth.AsPercentage: string;
+begin
+  Result := '';
+  if IsPercentage then
+  begin
+    Result := Format('%d%%', [Width]);
+  end;
+end;
+
+constructor THTMLWidth.Create(aWidth: integer; aIsPercentage: Boolean);
+begin
+  Width := aWidth;
+  IsPercentage := aIsPercentage;
 end;
 
 end.
