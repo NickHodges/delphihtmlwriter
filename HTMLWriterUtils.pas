@@ -121,6 +121,7 @@ type
     cTableData = 'td';
     cTableHeader = 'th';
     cTitle = 'title';
+    cScript = 'script';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';

@@ -4,7 +4,6 @@ interface
 
 uses
   SysUtils, HTMLWriterUtils;
-
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -36,10 +35,10 @@ uses
 
 type
 {$REGION 'Documentation'}
-    /// <summary>A class for creating HTML.&#160; THTMLWriter uses the fluent
-    /// interface.  It can be used to create either complete HTML documents or
-    /// chunks of HTML.  By using the fluent interface, you can link together
-    /// number of methods to create a complete document.</summary>
+  /// <summary>A class for creating HTML.&#160; THTMLWriter uses the fluent
+  /// interface.  It can be used to create either complete HTML documents or
+  /// chunks of HTML.  By using the fluent interface, you can link together
+  /// number of methods to create a complete document.</summary>
 {$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML)
   private
@@ -54,117 +53,108 @@ type
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): THTMLWriter;
 {$REGION 'In Tag Type Methods'}
-      function InHeadTag: Boolean;
-      function InBodyTag: Boolean;
-      function InCommentTag: Boolean;
-      function TagIsOpen: Boolean;
-      function InListTag: Boolean;
-      function InTableTag: Boolean;
-      function InTableRowTag: Boolean;
+    function InHeadTag: Boolean;
+    function InBodyTag: Boolean;
+    function InCommentTag: Boolean;
+    function TagIsOpen: Boolean;
+    function InListTag: Boolean;
+    function InTableTag: Boolean;
+    function InTableRowTag: Boolean;
 {$ENDREGION}
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
     procedure CleanUpTagState;
 {$REGION 'Check Methods'}
-      procedure CheckInHeadTag;
-      procedure CheckInCommentTag;
-      procedure CheckInListTag;
-      procedure CheckInTableRowTag;
-      procedure CheckInTableTag;
-      procedure CheckBracketOpen(aString: string);
+    procedure CheckInHeadTag;
+    procedure CheckInCommentTag;
+    procedure CheckInListTag;
+    procedure CheckInTableRowTag;
+    procedure CheckInTableTag;
+    procedure CheckBracketOpen(aString: string);
 {$ENDREGION}
     function CloseBracket: THTMLWriter;
 
   public
-
 {$REGION 'Constructors'}
-  {$REGION 'Documentation'}
-      /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
-      /// you want to create a chunk of HTML code not associated with a document.</summary>
-      /// <param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
-      /// &lt;span&gt; tag, you should pass 'span' as the value</param>
-      /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
-      /// normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag
-      /// will not have any attributes.</param>
-      /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
-      /// parameter</exception>
-      /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-  {$ENDREGION}
-      constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
-      constructor CreateDocument;
+{$REGION 'Documentation'}
+    /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
+    /// you want to create a chunk of HTML code not associated with a document.</summary>
+    /// <param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
+    /// &lt;span&gt; tag, you should pass 'span' as the value</param>
+    /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
+    /// normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag
+    /// will not have any attributes.</param>
+    /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
+    /// parameter</exception>
+    /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
 {$ENDREGION}
-
+    constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
+    constructor CreateDocument;
+{$ENDREGION}
 {$REGION 'Main Section Methods'}
-      /// <summary>Opens a&lt;head&gt; tag to the document.&#160;</summary>
-      function OpenHead: THTMLWriter;
-
-      {$REGION 'Documentation'}
-      ///	<summary>Opens a &lt;meta&gt; tag.</summary>
-      ///	<exception cref="EHeadTagRequiredHTMLException">Raised if an attempt&#160;is made&#160;to call this method
-      ///	when not inside a &lt;head&gt; tag.</exception>
-      ///	<remarks>Note that this method can only be called from within &lt;head&gt; tag.&#160; If it is called from
-      ///	anywhere else, it will raise an exception.</remarks>
-      {$ENDREGION}
-      function OpenMeta: THTMLWriter;
-
-      ///	<summary>Opens a &lt;title&gt; tag.</summary>
-      function OpenTitle: THTMLWriter;
-
-      {$REGION 'Documentation'}
-      ///	<summary>Adds a &lt;title&gt; tag including the passed in text.</summary>
-      ///	<param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
-      ///	<remarks>There is no need to close this tag manually.&#160; All "AddXXXX" methods close themselves.</remarks>
-      {$ENDREGION}
-      function AddTitle(aTitleText: string): THTMLWriter;
-      function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
-
-      ///	<summary>Opens a &lt;body&gt; tag.</summary>
-      function OpenBody: THTMLWriter;
+    /// <summary>Opens a&lt;head&gt; tag to the document.&#160;</summary>
+    function OpenHead: THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;meta&gt; tag.</summary>
+    /// <exception cref="EHeadTagRequiredHTMLException">Raised if an attempt&#160;is made&#160;to call this method
+    /// when not inside a &lt;head&gt; tag.</exception>
+    /// <remarks>Note that this method can only be called from within &lt;head&gt; tag.&#160; If it is called from
+    /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
+    function OpenMeta: THTMLWriter;
 
+    /// <summary>Opens a &lt;title&gt; tag.</summary>
+    function OpenTitle: THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>Adds a &lt;title&gt; tag including the passed in text.</summary>
+    /// <param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
+    /// <remarks>There is no need to close this tag manually.&#160; All "AddXXXX" methods close themselves.</remarks>
+{$ENDREGION}
+    function AddTitle(aTitleText: string): THTMLWriter;
+    function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
+
+    /// <summary>Opens a &lt;body&gt; tag.</summary>
+    function OpenBody: THTMLWriter;
+{$ENDREGION}
 {$REGION 'Text Block Methods'}
-    ///	<summary>Opens a &lt;p&gt; tag.&#160;</summary>
+    /// <summary>Opens a &lt;p&gt; tag.&#160;</summary>
     function OpenParagraph: THTMLWriter;
-    ///	<summary>Opens a &lt;p&gt; tag and gives it the passed in style="" attribute</summary>
-    ///	<param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
+    /// <summary>Opens a &lt;p&gt; tag and gives it the passed in style="" attribute</summary>
+    /// <param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
     function OpenParagraphWithStyle(aStyle: string): THTMLWriter;
     function OpenParagraphWithID(aID: string): THTMLWriter;
 
-    ///	<summary>Opens a &lt;span&gt; tag.</summary>
+    /// <summary>Opens a &lt;span&gt; tag.</summary>
     function OpenSpan: THTMLWriter;
 
-    ///	<summary>Opens a &lt;div&gt; tag.</summary>
+    /// <summary>Opens a &lt;div&gt; tag.</summary>
     function OpenDiv: THTMLWriter;
 
-    ///	<summary>Opens a &lt;blockquote&gt; tag.</summary>
+    /// <summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: THTMLWriter;
-
-
-  {$REGION 'Documentation'}
-        /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
-        /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
-  {$ENDREGION}
-      function AddParagraphText(aString: string): THTMLWriter;
-  {$REGION 'Documentation'}
-      /// <summary>Adds theh passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
-      /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
-      /// <param name="aStyle">The value for the Style attribute&#160;to be added to the &lt;p&gt; tag.</param>
-  {$ENDREGION}
-      function AddParagraphTextWithStyle(aString: string; aStyle: string): THTMLWriter;
-      function AddParagraphTextWithID(aString: string; aID: string): THTMLWriter;
-
-      ///	<summary>Adds text inside of a &lt;span&gt; tag.</summary>
-      ///	<param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
-      function AddSpanText(aString: string): THTMLWriter;
-      function AddSpanTextWithStyle(aString: string; aStyle: string): THTMLWriter;
-      function AddSpanTextWithID(aString: string; aID: string): THTMLWriter;
-
-      function AddDivText(aString: string): THTMLWriter;
-      function AddDivTextWithStyle(aString: string; aStyle: string): THTMLWriter;
-      function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
-
+{$REGION 'Documentation'}
+    /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
+    /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
 {$ENDREGION}
+    function AddParagraphText(aString: string): THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>Adds theh passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
+    /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
+    /// <param name="aStyle">The value for the Style attribute&#160;to be added to the &lt;p&gt; tag.</param>
+{$ENDREGION}
+    function AddParagraphTextWithStyle(aString: string; aStyle: string): THTMLWriter;
+    function AddParagraphTextWithID(aString: string; aID: string): THTMLWriter;
 
+    /// <summary>Adds text inside of a &lt;span&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
+    function AddSpanText(aString: string): THTMLWriter;
+    function AddSpanTextWithStyle(aString: string; aStyle: string): THTMLWriter;
+    function AddSpanTextWithID(aString: string; aID: string): THTMLWriter;
+
+    function AddDivText(aString: string): THTMLWriter;
+    function AddDivTextWithStyle(aString: string; aStyle: string): THTMLWriter;
+    function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
+{$ENDREGION}
 {$REGION 'General Formatting Methods'}
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: THTMLWriter;
@@ -172,13 +162,13 @@ type
     function OpenItalic: THTMLWriter;
     /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenUnderline: THTMLWriter;
-    ///	<summary>Opens a &lt;em&gt; tag.</summary>
+    /// <summary>Opens a &lt;em&gt; tag.</summary>
     function OpenEmphasis: THTMLWriter;
-    ///	<summary>Opens a &lt;strong&gt; tag.</summary>
+    /// <summary>Opens a &lt;strong&gt; tag.</summary>
     function OpenStrong: THTMLWriter;
-    ///	<summary>Opens a &lt;pre&gt; tag.</summary>
+    /// <summary>Opens a &lt;pre&gt; tag.</summary>
     function OpenPre: THTMLWriter;
-    ///	<summary>Opens a &lt;cite&gt; tag.</summary>
+    /// <summary>Opens a &lt;cite&gt; tag.</summary>
     function OpenCite: THTMLWriter;
 
     function AddBoldText(aString: string): THTMLWriter;
@@ -190,42 +180,37 @@ type
     function AddCitationText(aString: string): THTMLWriter;
     function AddBlockQuoteText(aString: string): THTMLWriter;
 {$ENDREGION}
-
 {$REGION 'Heading Methods'}
-      function OpenHeading1: THTMLWriter;
-      function OpenHeading2: THTMLWriter;
-      function OpenHeading3: THTMLWriter;
-      function OpenHeading4: THTMLWriter;
-      function OpenHeading5: THTMLWriter;
-      function OpenHeading6: THTMLWriter;
+    function OpenHeading1: THTMLWriter;
+    function OpenHeading2: THTMLWriter;
+    function OpenHeading3: THTMLWriter;
+    function OpenHeading4: THTMLWriter;
+    function OpenHeading5: THTMLWriter;
+    function OpenHeading6: THTMLWriter;
 
-      function AddHeading1Text(aString: string): THTMLWriter;
-      function AddHeading2Text(aString: string): THTMLWriter;
-      function AddHeading3Text(aString: string): THTMLWriter;
-      function AddHeading4Text(aString: string): THTMLWriter;
-      function AddHeading5Text(aString: string): THTMLWriter;
-      function AddHeading6Text(aString: string): THTMLWriter;
+    function AddHeading1Text(aString: string): THTMLWriter;
+    function AddHeading2Text(aString: string): THTMLWriter;
+    function AddHeading3Text(aString: string): THTMLWriter;
+    function AddHeading4Text(aString: string): THTMLWriter;
+    function AddHeading5Text(aString: string): THTMLWriter;
+    function AddHeading6Text(aString: string): THTMLWriter;
 {$ENDREGION}
-
 {$REGION 'CSS Formatting Methods'}
-      // CSS Formatting
-          function AddStyle(aStyle: string): THTMLWriter;
-          function AddClass(aClass: string): THTMLWriter;
-          function AddID(aID: string): THTMLWriter;
-
-    {$ENDREGION}
-
+    // CSS Formatting
+    function AddStyle(aStyle: string): THTMLWriter;
+    function AddClass(aClass: string): THTMLWriter;
+    function AddID(aID: string): THTMLWriter;
+{$ENDREGION}
 {$REGION 'Miscellaneous Methods'}
-
-    {$REGION 'Documentation'}
-    ///	<summary>Adds an attribute to the current tag.&#160; The tag must have its bracket open.&#160;</summary>
-    ///	<param name="aString">The name of the attribute to be added.&#160; If this is the only parameter passed in,
-    ///	then this string should contain the entire attribute string.</param>
-    ///	<param name="aValue">Optional parameter.&#160; If this value is passed, then the first parameter become the
-    ///	<i>name</i>, and this one the <i>value</i>, in a <i>name=value</i> pair.</param>
-    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
-    ///	have it's bracket open.</exception>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Adds an attribute to the current tag.&#160; The tag must have its bracket open.&#160;</summary>
+    /// <param name="aString">The name of the attribute to be added.&#160; If this is the only parameter passed in,
+    /// then this string should contain the entire attribute string.</param>
+    /// <param name="aValue">Optional parameter.&#160; If this value is passed, then the first parameter become the
+    /// <i>name</i>, and this one the <i>value</i>, in a <i>name=value</i> pair.</param>
+    /// <exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
+    /// have it's bracket open.</exception>
+{$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
@@ -243,7 +228,7 @@ type
     /// the passed text directly onto the HTML.</remarks>
 {$ENDREGION}
     function AddRawText(aString: string): THTMLWriter;
-    {$REGION 'Documentation'}
+{$REGION 'Documentation'}
     /// <summary>Returns a string containing the current HTML for the
     /// HTMLWriter</summary>
     /// <remarks>This property will return the HTML in whatever state it is
@@ -252,57 +237,50 @@ type
 {$ENDREGION}
     function AsHTML: string;
     function AddComment(aCommentText: string): THTMLWriter;
-{$ENDREGION}
 
+    function OpenScript: THTMLWriter;
+    function AddScript(aScriptText: string): THTMLWriter;
+{$ENDREGION}
 {$REGION 'CloseTag methods'}
-      /// <summary>Closes an open tag.</summary>
-      function CloseTag: THTMLWriter;
-      function CloseComment: THTMLWriter;
-      function CloseList: THTMLWriter;
+    /// <summary>Closes an open tag.</summary>
+    function CloseTag: THTMLWriter;
+    function CloseComment: THTMLWriter;
+    function CloseList: THTMLWriter;
 {$ENDREGION}
-
 {$REGION 'Image Methods'}
-      function OpenImage: THTMLWriter; overload;
-      function OpenImage(aImageSource: string): THTMLWriter; overload;
-      function AddImage(aImageSource: string): THTMLWriter;
+    function OpenImage: THTMLWriter; overload;
+    function OpenImage(aImageSource: string): THTMLWriter; overload;
+    function AddImage(aImageSource: string): THTMLWriter;
 {$ENDREGION}
-
 {$REGION 'Anchor Methods'}
-      function OpenAnchor: THTMLWriter; overload;
-      function OpenAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
-      function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
+    function OpenAnchor: THTMLWriter; overload;
+    function OpenAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
+    function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 {$ENDREGION}
-
 {$REGION 'Table Support Methods'}
-
-      {$REGION 'Documentation'}
-      ///	<summary>Opens a &lt;table&gt; tag</summary>
-      ///	<remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
-      ///	open.</remarks>
-      {$ENDREGION}
-      function OpenTable: THTMLWriter; overload;
-      function OpenTable(aBorder: integer): THTMLWriter; overload;
-      function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
-      function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
-      function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
-      { DONE -oNick : Think about how to do percentage widths }
-
-      function OpenTableRow: THTMLWriter;
-      function OpenTableData: THTMLWriter;
-      function AddTableData(aText: string): THTMLWriter;
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;table&gt; tag</summary>
+    /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
+    /// open.</remarks>
 {$ENDREGION}
+    function OpenTable: THTMLWriter; overload;
+    function OpenTable(aBorder: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
+    { DONE -oNick : Think about how to do percentage widths }
 
+    function OpenTableRow: THTMLWriter;
+    function OpenTableData: THTMLWriter;
+    function AddTableData(aText: string): THTMLWriter;
+{$ENDREGION}
 {$REGION 'List Methods'}
-
-      function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
-      function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
-      function OpenListItem: THTMLWriter;
-      function AddListItem(aText: string): THTMLWriter;
-
+    function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
+    function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
+    function OpenListItem: THTMLWriter;
+    function AddListItem(aText: string): THTMLWriter;
 {$ENDREGION}
-
   end;
-
 
 implementation
 
@@ -829,10 +807,14 @@ begin
   Result := AddFormattedText(aString, ftEmphasis)
 end;
 
+function THTMLWriter.AddScript(aScriptText: string): THTMLWriter;
+begin
+  Result := OpenScript.AddText(aScriptText).CloseTag;
+end;
+
 function THTMLWriter.AddSpanText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cSpan, chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(cSpan, chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddSpanTextWithID(aString, aID: string): THTMLWriter;
@@ -991,6 +973,11 @@ end;
 function THTMLWriter.OpenPre: THTMLWriter;
 begin
   Result := OpenFormatTag(ftPreformatted);
+end;
+
+function THTMLWriter.OpenScript: THTMLWriter;
+begin
+  Result := AddTag(cScript);
 end;
 
 function THTMLWriter.OpenSpan: THTMLWriter;

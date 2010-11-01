@@ -29,6 +29,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenScript;
+    procedure TestAddScript;
     procedure TestConstructorException;
     procedure TestThatExceptionsAreRaised;
     procedure TestTHTMLWidth;
@@ -292,6 +294,28 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestOpenScript;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenScript.AsHTML;
+  ExpectedResult := '<html><script';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenScript.CloseTag.AsHTML;
+  ExpectedResult := '<html><script></script>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenScript.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><script></script></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenScript.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><script>blah</script></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestOpenSpan;
 var
   TestResult: string;
@@ -409,6 +433,22 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestAddScript;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><script>' + TempString + '</script>';
+  TestResult := HTMLWriterFactory('html').AddScript(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<script>' + TempString + '</script>');
+  TestResult := HTMLWriterFactory('html').AddScript(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestAddSpanText;
 var
   TestResult, ExpectedResult: string;
@@ -417,11 +457,11 @@ begin
   TempString := 'grundle';
 
   ExpectedResult := '<html><span>' + TempString + '</span>';
-  TestResult := HTMLWriterFactory('html').AddSpanText(TempString).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').AddSpanText(TempString).AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<span>' + TempString + '</span>');
-  TestResult := HTMLWriterFactory('html').AddSpanText(TempString).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').AddSpanText(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
