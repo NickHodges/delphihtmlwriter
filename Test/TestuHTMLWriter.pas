@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestTHTMLWidth;
     procedure TestAddTableData;
     procedure TestAddLineBreak;
     procedure TestOpenListItem;
@@ -581,25 +582,49 @@ begin
   ExpectedResult := '<html><table cellspacing="5">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  // Width
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
+
+    // Width as percentage
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+
 
 end;
 
@@ -878,6 +903,24 @@ begin
 
   ExpectedResult := '<html><ul type="square"></ul></html>';
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestTHTMLWidth;
+var
+  TempWidth: THTMLWidth;
+  ExpectedResult: string;
+  TestResult: string;
+begin
+  TempWidth.Width := 42;
+  ExpectedResult := '';
+  TestResult := TempWidth.AsPercentage;
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempWidth.IsPercentage := True;
+  ExpectedResult := '42%';
+  TestResult := TempWidth.AsPercentage;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
