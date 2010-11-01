@@ -55,6 +55,7 @@ type
     function TagIsOpen: Boolean;
     function InMetaTag: Boolean;
     function InListTag: Boolean;
+    function InTableTag: Boolean;
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
     procedure CleanUpTagState;
@@ -198,7 +199,12 @@ type
     function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 
     // Table Support
-    function OpenTable: THTMLWriter;
+    function OpenTable: THTMLWriter; overload;
+    function OpenTable(aBorder: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
+
+    // list
 
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
@@ -337,6 +343,11 @@ begin
   Result := FCurrentTagName = cMeta;
 end;
 
+function THTMLWriter.InTableTag: Boolean;
+begin
+  Result := tsInTableTag in FTagState;
+end;
+
 function THTMLWriter.OpenBold: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBold);
@@ -440,9 +451,39 @@ end;
 
 function THTMLWriter.OpenTable: THTMLWriter;
 begin
-  Result := AddTag(cTable);
-  Result.FTagState := Result.FTagState + [tsInTableTag];
+  Result := OpenTable(-1, -1, -1);
 end;
+
+function THTMLWriter.OpenTable(aBorder: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, -1, -1);
+end;
+
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, aCellPadding, -1);
+end;
+
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter;
+begin
+  Result := AddTag(cTable);
+  if aBorder >= 0  then
+  begin
+    Result := Result.AddAttribute(cBorder, IntToStr(aBorder));
+  end;
+  if aCellPadding >= 0 then
+  begin
+    Result := Result.AddAttribute(cCellPadding, IntToStr(aCellPadding));
+  end;
+  if aCellSpacing >= 0 then
+  begin
+    Result := Result.AddAttribute(cCellSpacing, IntToStr(aCellSpacing));
+  end;
+
+  Result.FTagState := Result.FTagState + [tsInTableTag];
+
+end;
+
 
 function THTMLWriter.OpenUnderline: THTMLWriter;
 begin
@@ -471,7 +512,23 @@ end;
 
 procedure THTMLWriter.CleanUpTagState;
 begin
-  FTagState := FTagState + [tsTagClosed] - [tsTagOpen] - [tsInListTag];
+  FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cUnorderedList) and InListTag then
+  begin
+    Exclude(FTagState, tsInListTag);
+  end;
+
+  if (FCurrentTagName = cOrderedList) and InListTag then
+  begin
+    Exclude(FTagState, tsInListTag);
+  end;
+
+  if (FCurrentTagName = cTable) and InTableTag then
+  begin
+    Exclude(FTagState, tsInTableTag);
+  end;
+
   if (FCurrentTagName = cHead) and InHeadTag then
   begin
     Exclude(FTagState, tsInHeadTag);

@@ -99,6 +99,9 @@ type
     cListItem = 'li';
     cType = 'type';
     cTable = 'table';
+    cBorder = 'border';
+    cCellPadding = 'cellpadding';
+    cCellSpacing = 'cellspacing';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
