@@ -48,6 +48,8 @@ type
     procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
+    procedure TestOpenTitle;
+    procedure TestAddTitle;
     procedure TestOpenBody;
     procedure TestOpenTable;
     procedure TestOpenTableRow;
@@ -193,7 +195,7 @@ begin
   FHTMLWriter := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.AddHead.CloseTag.CloseTag.AsHTML;
+  TestResult := FHTMLWriter.OpenHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -684,6 +686,52 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenTitle;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<html><head><title';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title></head>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title></title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := '<html><head><title>hethland</title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenTitle.AddText('hethland').CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestAddTitle;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<html><head><title>hethland</title></head></html>';
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.AddTitle('hethland').CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
+    Check(False, 'Failed to raise a EMetaOnlyInHeadTagHTMLException when adding a title outside of a <head> tag');
+  except
+    Check(True, 'All is well -- the EMetaOnlyInHeadTagHTMLException was properly raised. ');
+  end;
+
+
+end;
+
 procedure TestTHTMLWriter.TestOpenPre;
 var
   TestResult: string;
@@ -831,7 +879,7 @@ var
   ExpectedResult: string;
 begin
   ExpectedResult := '<html><head><meta /></head></html>';
-  TestResult := HTMLWriterFactory(cHTML).AddHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
@@ -840,7 +888,7 @@ begin
     TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
     Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
   except
-    on E: EMetaOnlyInHeadTagHTMLException do
+    on E: EHeadTagRequiredHTMLException do
     begin
       Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
     end;
@@ -923,11 +971,11 @@ var
 begin
   try
     TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInMetaTagHTMLException when adding <meta> tag outside <head> tag');
+    Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
   except
-    on E: ENotInMetaTagHTMLException do
+    on E: EHeadTagRequiredHTMLException do
     begin
-      Check(True, 'Successfully raised ENotInMetaTagHTMLException when it was supposed to be raised.');
+      Check(True, 'Successfully raised EHeadTagRequiredHTMLException when it was supposed to be raised.');
     end;
   end;
 
@@ -951,7 +999,16 @@ begin
     end;
   end;
 
-end;
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenComment.AddDivText('graster').CloseComment.CloseTag.AsHTML;
+    Check(False, 'EHeadTagRequiredHTMLException was not raised when adding things to a comment');
+  except
+    Check(True, 'EHeadTagRequiredHTMLException was properly raised');
+  end;
+
+
+
+  end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth;
 var
@@ -1133,12 +1190,20 @@ var
   TestResult, ExpectedResult: string;
   TempName: string;
   TempContent: string;
+  Temp: THTMLWriter;
 begin
   TempName := 'Snerdo';
   TempContent := 'derfle';
   ExpectedResult := '<html><head><meta name="%s" content="%s" /></head></html>';
   ExpectedResult := Format(ExpectedResult, [TempName, TempContent]);
-  TestResult := HTMLWriterFactory(cHTML).AddHead.OpenMeta.AddMetaNamedContent(TempName, TempContent).CloseTag.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenHead;
+  Temp := Temp.OpenMeta;
+  Temp := Temp.AddMetaNamedContent(TempName, TempContent);
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1568,7 +1633,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   try
-    TestResult := HTMLWriterFactory(cHTML).AddHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+    TestResult := HTMLWriterFactory(cHTML).OpenHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
     Check(False, 'Failed to rais an exception when an extra Closetag was called.');
   except
     on E: ETryingToCloseClosedTag do
