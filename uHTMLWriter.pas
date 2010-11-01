@@ -208,6 +208,7 @@ type
     { TODO -oNick : Think about how to do percentage widths }
 
     function OpenTableRow: THTMLWriter;
+    function OpenTableData: THTMLWriter;
 
     // list
 
@@ -503,11 +504,22 @@ begin
 
 end;
 
+function THTMLWriter.OpenTableData: THTMLWriter;
+begin
+  if not InTableRowTag then
+  begin
+    raise ENotInTableTagException.Create(strMustBeInList);
+  end;
+  Result := AddTag(cTableRow);
+  Result.FTagState := Result.FTagState + [tsInTableRowTag];
+
+end;
+
 function THTMLWriter.OpenTableRow: THTMLWriter;
 begin
   if not InTableTag then
   begin
-    raise ENotInListTagException.Create(strMustBeInList);
+    raise ENotInTableTagException.Create(strMustBeInList);
   end;
   Result := AddTag(cTableRow);
   Result.FTagState := Result.FTagState + [tsInTableRowTag];
