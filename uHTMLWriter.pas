@@ -591,6 +591,10 @@ end;
 
 function THTMLWriter.AddTableData(aText: string): THTMLWriter;
 begin
+  if not InTableRowTag then
+  begin
+    raise ENotInTableTagException.Create(strMustBeInList);
+  end;
   Result := OpenTableData.AddText(aText).CloseTag;
 end;
 
