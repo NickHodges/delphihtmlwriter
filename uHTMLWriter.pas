@@ -53,53 +53,56 @@ type
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): THTMLWriter;
-    function InHeadTag: Boolean;
-    function InBodyTag: Boolean;
-    function InCommentTag: Boolean;
-    function TagIsOpen: Boolean;
-    function InListTag: Boolean;
-    function InTableTag: Boolean;
-    function InTableRowTag: Boolean;
+{$REGION 'In Tag Type Methods'}
+      function InHeadTag: Boolean;
+      function InBodyTag: Boolean;
+      function InCommentTag: Boolean;
+      function TagIsOpen: Boolean;
+      function InListTag: Boolean;
+      function InTableTag: Boolean;
+      function InTableRowTag: Boolean;
+{$ENDREGION}
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
     procedure CleanUpTagState;
-    procedure CheckInHeadTag;
-    procedure CheckInCommentTag;
-    procedure CheckInListTag;
-    procedure CheckInTableRowTag;
-    procedure CheckInTableTag;
+{$REGION 'Check Methods'}
+      procedure CheckInHeadTag;
+      procedure CheckInCommentTag;
+      procedure CheckInListTag;
+      procedure CheckInTableRowTag;
+      procedure CheckInTableTag;
+      procedure CheckBracketOpen(aString: string);
+{$ENDREGION}
     function CloseBracket: THTMLWriter;
-    procedure CheckBracketOpen(aString: string);
+
   public
-{$REGION 'Documentation'}
-    /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
-    /// you want to create a chunk of HTML code not associated with a document.</summary>
-    /// <param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
-    /// &lt;span&gt; tag, you should pass 'span' as the value</param>
-    /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
-    /// normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag
-    /// will not have any attributes.</param>
-    /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
-    /// parameter</exception>
-    /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
+
+{$REGION 'Constructors'}
+  {$REGION 'Documentation'}
+      /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
+      /// you want to create a chunk of HTML code not associated with a document.</summary>
+      /// <param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
+      /// &lt;span&gt; tag, you should pass 'span' as the value</param>
+      /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
+      /// normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag
+      /// will not have any attributes.</param>
+      /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
+      /// parameter</exception>
+      /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
+  {$ENDREGION}
+      constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
+      constructor CreateDocument;
 {$ENDREGION}
-    constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
-    constructor CreateDocument;
-{$REGION 'Documentation'}
-    /// <summary>Returns a string containing the current HTML for the
-    /// HTMLWriter</summary>
-    /// <remarks>This property will return the HTML in whatever state it is
-    /// in when called.&#160; This may mean that brackets or even tags are
-    /// open, attributes hanging undone, etc.&#160;</remarks>
+
+{$REGION 'Main Section Methods'}
+      /// <summary>Adds a &lt;head&gt; tag to the document.&#160;</summary>
+      function OpenHead: THTMLWriter;
+      function OpenMeta: THTMLWriter;
+      function OpenTitle: THTMLWriter;
+      function AddTitle(aTitleText: string): THTMLWriter;
+      function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
+      function OpenBody: THTMLWriter;
 {$ENDREGION}
-    function AsHTML: string;
-    /// <summary>Adds a &lt;head&gt; tag to the document.&#160;</summary>
-    function OpenHead: THTMLWriter;
-    function OpenMeta: THTMLWriter;
-    function OpenTitle: THTMLWriter;
-    function AddTitle(aTitleText: string): THTMLWriter;
-    function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
-    function OpenBody: THTMLWriter;
 
 {$REGION 'Text Block Methods'}
 
@@ -135,8 +138,6 @@ type
       function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
 
 {$ENDREGION}
-
-    function AddComment(aCommentText: string): THTMLWriter;
 
 {$REGION 'General Formatting Methods'}
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
@@ -207,6 +208,15 @@ type
     /// the passed text directly onto the HTML.</remarks>
 {$ENDREGION}
     function AddRawText(aString: string): THTMLWriter;
+    {$REGION 'Documentation'}
+    /// <summary>Returns a string containing the current HTML for the
+    /// HTMLWriter</summary>
+    /// <remarks>This property will return the HTML in whatever state it is
+    /// in when called.&#160; This may mean that brackets or even tags are
+    /// open, attributes hanging undone, etc.&#160;</remarks>
+{$ENDREGION}
+    function AsHTML: string;
+    function AddComment(aCommentText: string): THTMLWriter;
 {$ENDREGION}
 
 {$REGION 'CloseTag methods'}
