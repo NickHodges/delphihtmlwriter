@@ -605,7 +605,7 @@ begin
   ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-    // Width as percentage
+  // Width as percentage
   TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
@@ -625,8 +625,6 @@ begin
   TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
-
-
 
 end;
 
@@ -935,7 +933,7 @@ begin
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
-    Check (False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a lise');
+    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a lise');
   except
     on E: ENotInListTagException do
     begin
@@ -943,8 +941,15 @@ begin
     end;
   end;
 
-
-
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
+  except
+    on E: ENotInTableTagException do
+    begin
+      Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
+    end;
+  end;
 
 end;
 
