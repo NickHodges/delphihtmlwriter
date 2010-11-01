@@ -100,9 +100,12 @@ type
     cImage = 'img';
     cURL = 'url';
     cSource = 'src';
+    cHardRule = 'hr';
+    cBreak = 'br';
     cUnorderedList = 'ul';
     cOrderedList = 'ol';
     cListItem = 'li';
+    cClear = 'clear';
     cType = 'type';
     cTable = 'table';
     cBorder = 'border';

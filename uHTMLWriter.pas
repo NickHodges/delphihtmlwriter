@@ -631,7 +631,7 @@ end;
 function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + '<hr';
+  FHTML := FHTML + cOpenBracket + cHardRule;
   if not StringIsEmpty(aAttributes) then
   begin
     FHTML := FHTML + cSpace + aAttributes;
@@ -791,19 +791,19 @@ end;
 function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + '<br';
+  FHTML := FHTML + cOpenBracket + cBreak;
   if aClearValue <> cvNoValue then
   begin
-    FHTML := Format('%s clear="%s"', [FHTML, TClearValueStrings[aClearValue]]);
+    FHTML := Format('%s %s="%s"', [FHTML, cClear, TClearValueStrings[aClearValue]]);
   end;
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML + ' />';
+        FHTML := FHTML + cSpace + cCloseSlashBracket;
       end;
     ucsDoNotUseCloseSlash:
       begin
-        FHTML := FHTML + '>';
+        FHTML := FHTML + cCloseBracket;
       end;
   end;
 
