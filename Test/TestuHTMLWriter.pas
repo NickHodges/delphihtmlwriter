@@ -30,6 +30,7 @@ type
 
   published
     procedure TestConstructorException;
+    procedure TestThatExceptionsAreRaised;
     procedure TestTHTMLWidth;
     procedure TestAddTableData;
     procedure TestAddLineBreak;
@@ -916,6 +917,21 @@ begin
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
+end;
+
+procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
+var
+  TestResult: string;
+begin
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInMetaTagHTMLException when adding <meta> tag outside <head> tag');
+  except
+    on E: ENotInMetaTagHTMLException do
+    begin
+      Check(True, 'Successfully raised ENotInMetaTagHTMLException when it was supposed to be raised.');
+    end;
+  end;
 end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth;
