@@ -38,8 +38,9 @@ resourcestring
   strAMetaTagCanOnly = 'A meta tag can only be added inside a <head> tag.';
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
-  strMustBeInList = 'A list must be open in order to call this.';
+  strMustBeInList = 'A list must be open in order to call CloseList.';
   strMustBeInTable = 'A table must be open in order to call this.';
+  strMustBeInComment = 'A comment must be open in order to call CloseComment';
 
 type
   IGetHTML = interface
@@ -55,6 +56,7 @@ type
     ETryingToCloseClosedTag = class(EHTMLWriterException);
     ENotInListTagException = class(EHTMLWriterException);
     ENotInTableTagException = class(EHTMLWriterException);
+    ENotInCommentTagException = class(EHTMLWriterException);
 
 type
 
