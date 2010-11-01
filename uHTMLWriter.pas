@@ -206,7 +206,7 @@ type
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
-    { TODO -oNick : Think about how to do percentage widths }
+    { DONE -oNick : Think about how to do percentage widths }
 
     function OpenTableRow: THTMLWriter;
     function OpenTableData: THTMLWriter;
