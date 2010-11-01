@@ -216,11 +216,16 @@ type
     {$ENDREGION}
 
 {$REGION 'Miscellaneous Methods'}
-{$REGION 'Documentation'}
-    /// <summary>Adds an attribute to the current tag.&#160; The tag must have its bracket open.&#160;</summary>
-    /// <exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
-    /// have it's bracket open.</exception>
-{$ENDREGION}
+
+    {$REGION 'Documentation'}
+    ///	<summary>Adds an attribute to the current tag.&#160; The tag must have its bracket open.&#160;</summary>
+    ///	<param name="aString">The name of the attribute to be added.&#160; If this is the only parameter passed in,
+    ///	then this string should contain the entire attribute string.</param>
+    ///	<param name="aValue">Optional parameter.&#160; If this value is passed, then the first parameter become the
+    ///	<i>name</i>, and this one the <i>value</i>, in a <i>name=value</i> pair.</param>
+    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
+    ///	have it's bracket open.</exception>
+    {$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
@@ -269,7 +274,12 @@ type
 {$ENDREGION}
 
 {$REGION 'Table Support Methods'}
-      // Table Support
+
+      {$REGION 'Documentation'}
+      ///	<summary>Opens a &lt;table&gt; tag</summary>
+      ///	<remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
+      ///	open.</remarks>
+      {$ENDREGION}
       function OpenTable: THTMLWriter; overload;
       function OpenTable(aBorder: integer): THTMLWriter; overload;
       function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
