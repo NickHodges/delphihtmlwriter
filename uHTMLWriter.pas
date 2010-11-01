@@ -56,6 +56,7 @@ type
     function InMetaTag: Boolean;
     function InListTag: Boolean;
     function InTableTag: Boolean;
+    function InTableRowTag: Boolean;
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
     procedure CleanUpTagState;
@@ -203,6 +204,10 @@ type
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: integer): THTMLWriter; overload;
+    { TODO -oNick : Think about how to do percentage widths }
+
+    function OpenTableRow: THTMLWriter;
 
     // list
 
@@ -343,6 +348,11 @@ begin
   Result := FCurrentTagName = cMeta;
 end;
 
+function THTMLWriter.InTableRowTag: Boolean;
+begin
+  Result := tsInTableRowTag in FTagState;
+end;
+
 function THTMLWriter.InTableTag: Boolean;
 begin
   Result := tsInTableTag in FTagState;
@@ -464,10 +474,15 @@ begin
   Result := OpenTable(aBorder, aCellPadding, -1);
 end;
 
-function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter;
+function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): THTMLWriter;
+begin
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, -1);
+end;
+
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: integer): THTMLWriter;
 begin
   Result := AddTag(cTable);
-  if aBorder >= 0  then
+  if aBorder >= 0 then
   begin
     Result := Result.AddAttribute(cBorder, IntToStr(aBorder));
   end;
@@ -479,11 +494,24 @@ begin
   begin
     Result := Result.AddAttribute(cCellSpacing, IntToStr(aCellSpacing));
   end;
+  if aWidth >= 0 then
+  begin
+    Result := Result.AddAttribute(cWidth, IntToStr(aWidth));
+  end;
 
   Result.FTagState := Result.FTagState + [tsInTableTag];
 
 end;
 
+function THTMLWriter.OpenTableRow: THTMLWriter;
+begin
+  if not InTableTag then
+  begin
+    raise ENotInListTagException.Create(strMustBeInList);
+  end;
+  Result := AddTag(cTableRow);
+  Result.FTagState := Result.FTagState + [tsInTableRowTag];
+end;
 
 function THTMLWriter.OpenUnderline: THTMLWriter;
 begin
@@ -533,10 +561,17 @@ begin
   begin
     Exclude(FTagState, tsInHeadTag);
   end;
+
   if (FCurrentTagName = cBody) and InBodyTag then
   begin
     Exclude(FTagState, tsInBodyTag);
   end;
+
+  if (FCurrentTagName = cTableRow) and InTableRowTag then
+  begin
+    Exclude(FTagState, tsInTableRowTag);
+  end;
+  FCurrentTagName := '';
 end;
 
 function THTMLWriter.AddTag(aString: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
