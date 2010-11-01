@@ -932,6 +932,20 @@ begin
       Check(True, 'Successfully raised ENotInMetaTagHTMLException when it was supposed to be raised.');
     end;
   end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
+    Check (False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a lise');
+  except
+    on E: ENotInListTagException do
+    begin
+      Check(True, 'Properly called ENotInListTagException when outside of a list.  All is well.');
+    end;
+  end;
+
+
+
+
 end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth;
