@@ -123,6 +123,28 @@ type
     cTitle = 'title';
     cScript = 'script';
 
+    { TODO -oNick : Add these formatting tags }
+    cAcronym = 'acronym';
+    cAbbreviation = 'abbr';
+    cAddress = 'address';
+    cBDO = 'bdo';
+    cBig = 'big';
+    cCenter = 'center';
+    cCode = 'code';
+    cDelete = 'del';
+    cDefinition = 'dfn';
+    cFont = 'font';
+    cInsert = 'ins';
+    cKeyboard = 'kdb';
+    cQuotation = 'q';
+    cSample = 'samp';
+    cSmall = 'small';
+    cStrike = 'strike';
+    cSubscript = 'sub';
+    cSuperscript = 'sup';
+    cTeletype = 'tt';
+    cVariable = 'var';
+
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
     cOpenBracketSlash = '</';

@@ -22,8 +22,6 @@ type
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
-  private
-
   public
     procedure SetUp; override;
     procedure TearDown; override;
