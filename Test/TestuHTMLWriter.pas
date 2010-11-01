@@ -45,6 +45,7 @@ type
     procedure TestAddHead;
     procedure TestOpenBody;
     procedure TestOpenTable;
+    procedure TestOpenTableRow;
     procedure TestOpenImage;
     procedure TestAddImage;
     procedure TestOpenMeta;
@@ -575,6 +576,49 @@ begin
 
   TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table border="3" cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, 6).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestOpenTableRow;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AsHTML;
+  ExpectedResult := '<html><table><tr';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr></tr>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr>blah</tr></table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
 end;

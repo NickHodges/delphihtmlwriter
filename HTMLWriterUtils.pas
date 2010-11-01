@@ -39,6 +39,7 @@ resourcestring
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
   strMustBeInList = 'A list must be open in order to call this.';
+  strMustBeInTable = 'A table must be open in order to call this.';
 
 type
   IGetHTML = interface
@@ -53,6 +54,7 @@ type
     ENotInMetaTagHTMLException = class(EHTMLWriterException);
     ETryingToCloseClosedTag = class(EHTMLWriterException);
     ENotInListTagException = class(EHTMLWriterException);
+    ENotInTableTagException = class(EHTMLWriterException);
 
 type
 
@@ -60,13 +62,15 @@ type
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag);
     TTagStates = set of TTagState;
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
     TUseCloseSlash = (ucsUseCloseSlash, ucsDoNotUseCloseSlash);
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
+
+    TPercentage = 1..100;
 
   const
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite');
@@ -102,6 +106,8 @@ type
     cBorder = 'border';
     cCellPadding = 'cellpadding';
     cCellSpacing = 'cellspacing';
+    cWidth = 'width';
+    cTableRow = 'tr';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
