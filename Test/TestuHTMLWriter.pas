@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestConstructorException;
     procedure TestTHTMLWidth;
     procedure TestAddTableData;
     procedure TestAddLineBreak;
@@ -317,7 +318,7 @@ var
 begin
   TestResult := HTMLWriterFactory('html').OpenDiv.AsHTML;
   ExpectedResult := '<html><div';
-  // TODO: Validate method results
+
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenDiv.CloseTag.AsHTML;
@@ -604,23 +605,23 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
     // Width as percentage
-  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True).AsPercentage).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -834,7 +835,17 @@ begin
   TestResult := HTMLWriterFactory(cHTML).AddHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { TODO -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
+  { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
+  except
+    on E: EMetaOnlyInHeadTagHTMLException do
+    begin
+      Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
+    end;
+  end;
 
 end;
 
@@ -1521,8 +1532,33 @@ begin
   TestResult := HTMLWriterFactory(TempTagName).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { TODO : Make sure that an extra close tag raises an exception }
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to rais an exception when an extra Closetag was called.');
+  except
+    on E: ETryingToCloseClosedTag do
+    begin
+      Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
+    end;
+  end;
 
+  { DONE : Make sure that an extra close tag raises an exception }
+
+end;
+
+procedure TestTHTMLWriter.TestConstructorException;
+var
+  TestValue: string;
+begin
+  try
+    TestValue := HTMLWriterFactory('').CloseTag.AsHTML;
+    Check(False, 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
+  except
+    on E: EHTMLWriterEmptyTagException do
+    begin
+      Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
+    end;
+  end;
 end;
 
 procedure TestTHTMLWriter.TestAddSpanTextWithStyle;
