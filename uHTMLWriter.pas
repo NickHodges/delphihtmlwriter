@@ -187,6 +187,7 @@ type
     /// <summary>Closes an open tag.</summary>
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
+    function CloseList: THTMLWriter;
 
     function OpenImage: THTMLWriter; overload;
     function OpenImage(aImageSource: string): THTMLWriter; overload;
@@ -209,6 +210,7 @@ type
 
     function OpenTableRow: THTMLWriter;
     function OpenTableData: THTMLWriter;
+    function AddTableData(aText: string): THTMLWriter;
 
     // list
 
@@ -216,7 +218,6 @@ type
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
     function OpenListItem: THTMLWriter;
     function AddListItem(aText: string): THTMLWriter;
-    function CloseList: THTMLWriter;
   end;
 
 implementation
@@ -236,6 +237,10 @@ end;
 
 function THTMLWriter.CloseComment: THTMLWriter;
 begin
+  if not InCommentTag then
+  begin
+    raise ENotInCommentTagException.Create(strMustBeInComment);
+  end;
   Result := CloseTag;
 end;
 
@@ -510,9 +515,7 @@ begin
   begin
     raise ENotInTableTagException.Create(strMustBeInList);
   end;
-  Result := AddTag(cTableRow);
-  Result.FTagState := Result.FTagState + [tsInTableRowTag];
-
+  Result := AddTag(cTableData);
 end;
 
 function THTMLWriter.OpenTableRow: THTMLWriter;
@@ -584,6 +587,11 @@ begin
     Exclude(FTagState, tsInTableRowTag);
   end;
   FCurrentTagName := '';
+end;
+
+function THTMLWriter.AddTableData(aText: string): THTMLWriter;
+begin
+  Result := OpenTableData.AddText(aText).CloseTag;
 end;
 
 function THTMLWriter.AddTag(aString: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;

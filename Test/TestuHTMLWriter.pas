@@ -23,11 +23,13 @@ type
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
   private
+
   public
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
+    procedure TestAddTableData;
     procedure TestAddLineBreak;
     procedure TestOpenListItem;
     procedure TestAddListItem;
@@ -622,6 +624,16 @@ begin
   ExpectedResult := '<html><table><tr><td>blah</td></tr></table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
+end;
+
+procedure TestTHTMLWriter.TestAddTableData;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddTableData('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td>blah</td></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenTableRow;
