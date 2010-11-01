@@ -108,6 +108,8 @@ type
     cCellSpacing = 'cellspacing';
     cWidth = 'width';
     cTableRow = 'tr';
+    cTableData = 'td';
+    cTableHeader = 'th';
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
