@@ -95,23 +95,48 @@ type
 {$ENDREGION}
 
 {$REGION 'Main Section Methods'}
-      /// <summary>Adds a &lt;head&gt; tag to the document.&#160;</summary>
+      /// <summary>Opens a&lt;head&gt; tag to the document.&#160;</summary>
       function OpenHead: THTMLWriter;
+
+      {$REGION 'Documentation'}
+      ///	<summary>Opens a &lt;meta&gt; tag.</summary>
+      ///	<exception cref="EHeadTagRequiredHTMLException">Raised if an attempt&#160;is made&#160;to call this method
+      ///	when not inside a &lt;head&gt; tag.</exception>
+      ///	<remarks>Note that this method can only be called from within &lt;head&gt; tag.&#160; If it is called from
+      ///	anywhere else, it will raise an exception.</remarks>
+      {$ENDREGION}
       function OpenMeta: THTMLWriter;
+
+      ///	<summary>Opens a &lt;title&gt; tag.</summary>
       function OpenTitle: THTMLWriter;
+
+      {$REGION 'Documentation'}
+      ///	<summary>Adds a &lt;title&gt; tag including the passed in text.</summary>
+      ///	<param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
+      ///	<remarks>There is no need to close this tag manually.&#160; All "AddXXXX" methods close themselves.</remarks>
+      {$ENDREGION}
       function AddTitle(aTitleText: string): THTMLWriter;
       function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
+
+      ///	<summary>Opens a &lt;body&gt; tag.</summary>
       function OpenBody: THTMLWriter;
 {$ENDREGION}
 
 {$REGION 'Text Block Methods'}
-
-    // Block types
+    ///	<summary>Opens a &lt;p&gt; tag.&#160;</summary>
     function OpenParagraph: THTMLWriter;
+    ///	<summary>Opens a &lt;p&gt; tag and gives it the passed in style="" attribute</summary>
+    ///	<param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
     function OpenParagraphWithStyle(aStyle: string): THTMLWriter;
     function OpenParagraphWithID(aID: string): THTMLWriter;
+
+    ///	<summary>Opens a &lt;span&gt; tag.</summary>
     function OpenSpan: THTMLWriter;
+
+    ///	<summary>Opens a &lt;div&gt; tag.</summary>
     function OpenDiv: THTMLWriter;
+
+    ///	<summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: THTMLWriter;
 
 
@@ -128,7 +153,8 @@ type
       function AddParagraphTextWithStyle(aString: string; aStyle: string): THTMLWriter;
       function AddParagraphTextWithID(aString: string; aID: string): THTMLWriter;
 
-      // Span
+      ///	<summary>Adds text inside of a &lt;span&gt; tag.</summary>
+      ///	<param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
       function AddSpanText(aString: string): THTMLWriter;
       function AddSpanTextWithStyle(aString: string; aStyle: string): THTMLWriter;
       function AddSpanTextWithID(aString: string; aID: string): THTMLWriter;
@@ -146,9 +172,13 @@ type
     function OpenItalic: THTMLWriter;
     /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenUnderline: THTMLWriter;
+    ///	<summary>Opens a &lt;em&gt; tag.</summary>
     function OpenEmphasis: THTMLWriter;
+    ///	<summary>Opens a &lt;strong&gt; tag.</summary>
     function OpenStrong: THTMLWriter;
+    ///	<summary>Opens a &lt;pre&gt; tag.</summary>
     function OpenPre: THTMLWriter;
+    ///	<summary>Opens a &lt;cite&gt; tag.</summary>
     function OpenCite: THTMLWriter;
 
     function AddBoldText(aString: string): THTMLWriter;
