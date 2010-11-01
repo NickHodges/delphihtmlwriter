@@ -205,7 +205,7 @@ type
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
-    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: integer): THTMLWriter; overload;
+    function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
     { TODO -oNick : Think about how to do percentage widths }
 
     function OpenTableRow: THTMLWriter;
@@ -482,10 +482,10 @@ end;
 
 function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): THTMLWriter;
 begin
-  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, -1);
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, False));
 end;
 
-function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: integer): THTMLWriter;
+function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter;
 begin
   Result := AddTag(cTable);
   if aBorder >= 0 then
@@ -500,9 +500,15 @@ begin
   begin
     Result := Result.AddAttribute(cCellSpacing, IntToStr(aCellSpacing));
   end;
-  if aWidth >= 0 then
+  if aWidth.Width >= 0 then
   begin
-    Result := Result.AddAttribute(cWidth, IntToStr(aWidth));
+    if aWidth.IsPercentage then
+    begin
+      Result := Result.AddAttribute(cWidth, AWidth.AsPercentage);
+    end else
+    begin
+      Result := Result.AddAttribute(cWidth, IntToStr(aWidth.Width));
+    end;
   end;
 
   Result.FTagState := Result.FTagState + [tsInTableTag];

@@ -47,6 +47,13 @@ type
     function AsHTML: string;
   end;
 
+  THTMLWidth = record
+    Width: integer;
+    IsPercentage: Boolean;
+    constructor Create(aWidth: integer; aIsPercentage: Boolean);
+    function AsPercentage: string;
+  end;
+
 type
   EHTMLWriterException = class(Exception);
     EHTMLWriterEmptyTagException = class(EHTMLWriterException);
@@ -58,7 +65,7 @@ type
     ENotInTableTagException = class(EHTMLWriterException);
     ENotInCommentTagException = class(EHTMLWriterException);
 
-type
+  type
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
@@ -72,15 +79,14 @@ type
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
 
-    TPercentage = 1..100;
+    TPercentage = 1 .. 100;
 
   const
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite');
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
-    TBulletShapeStrings: array[TBulletShape] of string = ('', 'disc', 'circle', 'square');
-    TNumberTypeStrings: array[TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
-
+    TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
+    TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
 
     cDiv = 'div';
     cSpan = 'span';
@@ -148,6 +154,23 @@ end;
 function MakeCloseTag(aTag: string): string;
 begin
   Result := Format('</%s>', [aTag]);
+end;
+
+{ THTMLWidth }
+
+function THTMLWidth.AsPercentage: string;
+begin
+  Result := '';
+  if IsPercentage then
+  begin
+    Result := Format('%d%%', [Width]);
+  end;
+end;
+
+constructor THTMLWidth.Create(aWidth: integer; aIsPercentage: Boolean);
+begin
+  Width := aWidth;
+  IsPercentage := aIsPercentage;
 end;
 
 end.
