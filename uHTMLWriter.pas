@@ -65,7 +65,6 @@ type
     procedure CheckInListTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
-  strict protected
     function CloseBracket: THTMLWriter;
   public
 {$REGION 'Documentation'}
@@ -96,8 +95,6 @@ type
     function OpenTitle: THTMLWriter;
     function AddTitle(aTitleText: string): THTMLWriter;
     function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
-
-
 
     function OpenBody: THTMLWriter;
     // Block types
@@ -647,11 +644,11 @@ begin
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML + ' />';
+        FHTML := FHTML + cSpace + cCloseSlashBracket;
       end;
     ucsDoNotUseCloseSlash:
       begin
-        FHTML := FHTML + '>';
+        FHTML := FHTML + cCloseBracket;
       end;
   end;
   Result := Self;
