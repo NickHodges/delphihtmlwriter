@@ -573,6 +573,10 @@ begin
   ExpectedResult := '<html><table border="3" cellspacing="5">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table cellspacing="5">blah</table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestOpenPre;
