@@ -171,6 +171,24 @@ type
     /// <summary>Opens a &lt;cite&gt; tag.</summary>
     function OpenCite: THTMLWriter;
 
+    function OpenAcronym: THTMLWriter;
+    function OpenAbbreviation: THTMLWriter;
+    function OpenAddress: THTMLWriter;
+    function OpenBDO: THTMLWriter;
+    function OpenBig: THTMLWriter;
+    function OpenCenter: THTMLWriter;
+    function OpenCode: THTMLWriter;
+    function OpenDelete: THTMLWriter;
+    function OpenDefinition: THTMLWriter;
+    function OpenFont: THTMLWriter;
+    function OpenKeyboard: THTMLWriter;
+    function OpenQuotation: THTMLWriter;
+    function OpenSample: THTMLWriter;
+    function OpenSmall: THTMLWriter;
+    function OpenStrike: THTMLWriter;
+    function OpenTeletype: THTMLWriter;
+    function OpenVariable: THTMLWriter;
+
     function AddBoldText(aString: string): THTMLWriter;
     function AddItalicText(aString: string): THTMLWriter;
     function AddUnderlinedText(aString: string): THTMLWriter;
@@ -179,6 +197,24 @@ type
     function AddPreformattedText(aString: string): THTMLWriter;
     function AddCitationText(aString: string): THTMLWriter;
     function AddBlockQuoteText(aString: string): THTMLWriter;
+
+    function AddAcronymText(aString: string): THTMLWriter;
+    function AddAbbreviationText(aString: string): THTMLWriter;
+    function AddAddressText(aString: string): THTMLWriter;
+    function AddBDOText(aString: string): THTMLWriter;
+    function AddBigText(aString: string): THTMLWriter;
+    function AddCenterText(aString: string): THTMLWriter;
+    function AddCodeText(aString: string): THTMLWriter;
+    function AddDeleteText(aString: string): THTMLWriter;
+    function AddDefinitionText(aString: string): THTMLWriter;
+    function AddFontText(aString: string): THTMLWriter;
+    function AddKeyboardText(aString: string): THTMLWriter;
+    function AddQuotationText(aString: string): THTMLWriter;
+    function AddSampleText(aString: string): THTMLWriter;
+    function AddSmallText(aString: string): THTMLWriter;
+    function AddStrikeText(aString: string): THTMLWriter;
+    function AddTeletypeText(aString: string): THTMLWriter;
+    function AddValiableText(aString: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'Heading Methods'}
     function OpenHeading1: THTMLWriter;
@@ -425,57 +461,14 @@ begin
   Result := tsInTableTag in FTagState;
 end;
 
-procedure THTMLWriter.LoadFromFile(const FileName: string; Encoding: TEncoding);
-var
-  Stream: TStream;
-begin
-  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
-  try
-    LoadFromStream(Stream, Encoding);
-  finally
-    Stream.Free;
-  end;
-end;
-
-
-procedure THTMLWriter.LoadFromFile(const FileName: string);
-var
-  Stream: TStream;
-begin
-  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
-  try
-    LoadFromStream(Stream);
-  finally
-    Stream.Free;
-  end;
-end;
-
-procedure THTMLWriter.LoadFromStream(Stream: TStream);
-begin
-  LoadFromStream(Stream, nil);
-end;
-
-procedure THTMLWriter.LoadFromStream(Stream: TStream; Encoding: TEncoding);
-var
- SS: TStringStream;
-begin
-  if Encoding = nil then
-  begin
-    Encoding := TEncoding.Default;
-  end;
-  SS := TStringStream.Create('', Encoding);
-  try
-    SS.Position := 0;
-    SS.LoadFromStream(Stream);
-    FHTML := SS.DataString;
-  finally
-    SS.Free;
-  end;
-end;
-
 function THTMLWriter.OpenBold: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBold);
+end;
+
+function THTMLWriter.OpenCenter: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftCenter);
 end;
 
 function THTMLWriter.OpenCite: THTMLWriter;
@@ -491,6 +484,11 @@ end;
 procedure THTMLWriter.AddToHTML(const aString: string);
 begin
   FHTML := FHTML + aString;
+end;
+
+function THTMLWriter.OpenFont: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftFont);
 end;
 
 function THTMLWriter.OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
@@ -550,6 +548,11 @@ begin
   Result := OpenFormatTag(ftItalic);
 end;
 
+function THTMLWriter.OpenKeyboard: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftKeyboard);
+end;
+
 function THTMLWriter.OpenListItem: THTMLWriter;
 begin
   CheckInListTag;
@@ -561,6 +564,11 @@ begin
   CheckInHeadTag;
   Result := AddTag(cMeta);
   Include(Result.FTagState, tsUseSlashClose);
+end;
+
+function THTMLWriter.OpenStrike: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftStrike);
 end;
 
 function THTMLWriter.OpenStrong: THTMLWriter;
@@ -632,6 +640,11 @@ begin
   Result.FTagState := Result.FTagState + [tsInTableRowTag];
 end;
 
+function THTMLWriter.OpenTeletype: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftTeletype);
+end;
+
 function THTMLWriter.OpenTitle: THTMLWriter;
 begin
   CheckInHeadTag;
@@ -653,6 +666,11 @@ begin
   Result.FTagState := Result.FTagState + [tsInListTag];
 end;
 
+function THTMLWriter.OpenVariable: THTMLWriter;
+begin
+    Result := OpenFormatTag(ftVariable);
+end;
+
 procedure THTMLWriter.SaveToFile(const FileName: string);
 begin
   SaveToFile(FileName, nil);
@@ -667,6 +685,52 @@ begin
     SaveToStream(Stream, Encoding);
   finally
     Stream.Free;
+  end;
+end;
+
+procedure THTMLWriter.LoadFromFile(const FileName: string; Encoding: TEncoding);
+var
+  Stream: TStream;
+begin
+  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream, Encoding);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure THTMLWriter.LoadFromFile(const FileName: string);
+var
+  Stream: TStream;
+begin
+  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure THTMLWriter.LoadFromStream(Stream: TStream);
+begin
+  LoadFromStream(Stream, nil);
+end;
+
+procedure THTMLWriter.LoadFromStream(Stream: TStream; Encoding: TEncoding);
+var
+  SS: TStringStream;
+begin
+  if Encoding = nil then
+  begin
+    Encoding := TEncoding.Default;
+  end;
+  SS := TStringStream.Create('', Encoding);
+  try
+    SS.LoadFromStream(Stream);
+    FHTML := SS.DataString;
+  finally
+    SS.Free;
   end;
 end;
 
@@ -752,6 +816,11 @@ begin
   Result.FParent := Self;
 end;
 
+function THTMLWriter.OpenCode: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftCode);
+end;
+
 function THTMLWriter.OpenComment: THTMLWriter;
 begin
   CloseBracket;
@@ -764,6 +833,11 @@ end;
 function THTMLWriter.AsHTML: string;
 begin
   Result := FHTML;
+end;
+
+function THTMLWriter.AddTeletypeText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftTeletype);
 end;
 
 function THTMLWriter.AddText(aString: string): THTMLWriter;
@@ -841,9 +915,34 @@ begin
   Result := AddTag(cAnchor);
 end;
 
+function THTMLWriter.OpenAbbreviation: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftAbbreviation);
+end;
+
+function THTMLWriter.OpenAcronym: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftAcronym);
+end;
+
+function THTMLWriter.OpenAddress: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftAddress);
+end;
+
 function THTMLWriter.OpenAnchor(const aHREF: string; aText: string): THTMLWriter;
 begin
   Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
+end;
+
+function THTMLWriter.OpenBDO: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftBDO);
+end;
+
+function THTMLWriter.OpenBig: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftBig);
 end;
 
 function THTMLWriter.OpenBlockQuote: THTMLWriter;
@@ -856,15 +955,29 @@ begin
   Result := AddTag(cBody, chaCanHaveAttributes);
 end;
 
+function THTMLWriter.AddBDOText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftBDO);
+end;
+
+function THTMLWriter.AddBigText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftBig);
+end;
+
 function THTMLWriter.AddBlockQuoteText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cBlockQuote, chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(cBlockQuote, chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddBoldText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftBold)
+end;
+
+function THTMLWriter.AddCenterText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftCenter);
 end;
 
 function THTMLWriter.AddCitationText(aString: string): THTMLWriter;
@@ -877,15 +990,29 @@ begin
   Result := AddAttribute(cClass, aClass);
 end;
 
+function THTMLWriter.AddCodeText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftCode);
+end;
+
 function THTMLWriter.AddComment(aCommentText: string): THTMLWriter;
 begin
   Result := OpenComment.AddText(aCommentText).CloseComment;
 end;
 
+function THTMLWriter.AddDefinitionText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftDefinition);
+end;
+
+function THTMLWriter.AddDeleteText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftDelete);
+end;
+
 function THTMLWriter.AddDivText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cDiv, chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(cDiv, chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddDivTextWithID(aString, aID: string): THTMLWriter;
@@ -903,9 +1030,19 @@ begin
   Result := AddFormattedText(aString, ftEmphasis)
 end;
 
+function THTMLWriter.AddSampleText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftSample);
+end;
+
 function THTMLWriter.AddScript(aScriptText: string): THTMLWriter;
 begin
   Result := OpenScript.AddText(aScriptText).CloseTag;
+end;
+
+function THTMLWriter.AddSmallText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftSmall);
 end;
 
 function THTMLWriter.AddSpanText(aString: string): THTMLWriter;
@@ -923,6 +1060,11 @@ begin
   Result := OpenSpan.AddStyle(aStyle).AddText(aString).CloseTag;
 end;
 
+function THTMLWriter.AddStrikeText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftStrike);
+end;
+
 function THTMLWriter.AddStrongText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftStrong)
@@ -933,6 +1075,11 @@ begin
   Result := AddFormattedText(aString, ftUnderline)
 end;
 
+function THTMLWriter.AddValiableText(aString: string): THTMLWriter;
+begin
+ Result := AddFormattedText(aString, ftVariable)
+end;
+
 function THTMLWriter.AddID(aID: string): THTMLWriter;
 begin
   Result := AddAttribute(cID, aID);
@@ -941,6 +1088,11 @@ end;
 function THTMLWriter.AddItalicText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftItalic)
+end;
+
+function THTMLWriter.AddKeyboardText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftKeyboard)
 end;
 
 function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
@@ -1026,8 +1178,7 @@ end;
 
 function THTMLWriter.AddParagraphText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cParagraph, chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(cParagraph, chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddParagraphTextWithID(aString, aID: string): THTMLWriter;
@@ -1043,6 +1194,11 @@ end;
 function THTMLWriter.AddPreformattedText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftPreformatted)
+end;
+
+function THTMLWriter.AddQuotationText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftQuotation)
 end;
 
 function THTMLWriter.AddRawText(aString: string): THTMLWriter;
@@ -1071,9 +1227,24 @@ begin
   Result := OpenFormatTag(ftPreformatted);
 end;
 
+function THTMLWriter.OpenQuotation: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftQuotation);
+end;
+
+function THTMLWriter.OpenSample: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftSample);
+end;
+
 function THTMLWriter.OpenScript: THTMLWriter;
 begin
   Result := AddTag(cScript);
+end;
+
+function THTMLWriter.OpenSmall: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftSmall);
 end;
 
 function THTMLWriter.OpenSpan: THTMLWriter;
@@ -1086,21 +1257,49 @@ begin
   Result := AddAttribute(cStyle, aStyle);
 end;
 
+function THTMLWriter.OpenDefinition: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftDefinition);
+end;
+
+function THTMLWriter.OpenDelete: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftDelete);
+end;
+
 function THTMLWriter.OpenDiv: THTMLWriter;
 begin
   Result := AddTag(cDiv, chaCanHaveAttributes);
 end;
 
+function THTMLWriter.AddFontText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftFont);
+end;
+
 function THTMLWriter.AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
 begin
-  Result := AddTag(TFormatTypeStrings[aFormatType], chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(TFormatTypeStrings[aFormatType], chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddHeadingText(aString: string; aHeadingType: THeadingType): THTMLWriter;
 begin
-  Result := AddTag(THeadingTypeStrings[aHeadingType], chaCannotHaveAttributes);
-  Result.AddText(aString);
+  Result := AddTag(THeadingTypeStrings[aHeadingType], chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddAbbreviationText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftAbbreviation);
+end;
+
+function THTMLWriter.AddAcronymText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftAcronym);
+end;
+
+function THTMLWriter.AddAddressText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftAddress);
 end;
 
 function THTMLWriter.AddAnchor(const aHREF: string; aText: string): THTMLWriter;
