@@ -79,7 +79,9 @@ type
   type
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
-    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation);
+    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym,
+                   ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation, ftSample,
+                   ftSmall, ftStrike, ftTeletype, ftVariable);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag);
@@ -93,7 +95,9 @@ type
     TPercentage = 1 .. 100;
 
   const
-    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite');
+    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym',
+                                                         'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp',
+                                                         'small', 'strike', 'tt', 'var' );
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
     TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
@@ -136,26 +140,7 @@ type
     cScript = 'script';
 
     { TODO -oNick : Add these formatting tags }
-    cAcronym = 'acronym';
-    cAbbreviation = 'abbr';
-    cAddress = 'address';
-    cBDO = 'bdo';
-    cBig = 'big';
-    cCenter = 'center';
-    cCode = 'code';
-    cDelete = 'del';
-    cDefinition = 'dfn';
-    cFont = 'font';
-    cInsert = 'ins';
-    cKeyboard = 'kdb';
-    cQuotation = 'q';
-    cSample = 'samp';
-    cSmall = 'small';
-    cStrike = 'strike';
-    cSubscript = 'sub';
-    cSuperscript = 'sup';
-    cTeletype = 'tt';
-    cVariable = 'var';
+
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
