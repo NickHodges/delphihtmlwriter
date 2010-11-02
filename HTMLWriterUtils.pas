@@ -29,7 +29,19 @@ unit HTMLWriterUtils;
 
 interface
 
-uses SysUtils;
+uses SysUtils, Classes;
+
+type
+  ILoadSave = interface
+    procedure LoadFromFile(const FileName: string); overload;
+    procedure LoadFromFile(const FileName: string; Encoding: TEncoding); overload;
+    procedure LoadFromStream(Stream: TStream); overload;
+    procedure LoadFromStream(Stream: TStream; Encoding: TEncoding); overload;
+    procedure SaveToFile(const FileName: string); overload;
+    procedure SaveToFile(const FileName: string; Encoding: TEncoding); overload;
+    procedure SaveToStream(Stream: TStream); overload;
+    procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload;
+  end;
 
 resourcestring
   StrATagsBracketMust = 'A tag''s bracket must be open to add an attribute.  The Current tag is %s and the attribute being added is %s';

@@ -3,7 +3,7 @@ unit uHTMLWriter;
 interface
 
 uses
-  SysUtils, HTMLWriterUtils;
+  SysUtils, HTMLWriterUtils, Classes;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -40,7 +40,7 @@ type
   /// chunks of HTML.  By using the fluent interface, you can link together
   /// number of methods to create a complete document.</summary>
 {$ENDREGION}
-  THTMLWriter = class(TInterfacedObject, IGetHTML)
+  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
   private
     FHTML: string;
     FCurrentTagName: string;
@@ -280,6 +280,16 @@ type
     function OpenListItem: THTMLWriter;
     function AddListItem(aText: string): THTMLWriter;
 {$ENDREGION}
+{$REGION 'Storage Methods'}
+    procedure LoadFromFile(const FileName: string); overload; virtual;
+    procedure LoadFromFile(const FileName: string; Encoding: TEncoding); overload; virtual;
+    procedure LoadFromStream(Stream: TStream); overload; virtual;
+    procedure LoadFromStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
+    procedure SaveToFile(const FileName: string); overload; virtual;
+    procedure SaveToFile(const FileName: string; Encoding: TEncoding); overload; virtual;
+    procedure SaveToStream(Stream: TStream); overload; virtual;
+    procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
+{$ENDREGION}
   end;
 
 implementation
@@ -413,6 +423,54 @@ end;
 function THTMLWriter.InTableTag: Boolean;
 begin
   Result := tsInTableTag in FTagState;
+end;
+
+procedure THTMLWriter.LoadFromFile(const FileName: string; Encoding: TEncoding);
+var
+  Stream: TStream;
+begin
+  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream, Encoding);
+  finally
+    Stream.Free;
+  end;
+end;
+
+
+procedure THTMLWriter.LoadFromFile(const FileName: string);
+var
+  Stream: TStream;
+begin
+  Stream := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
+  try
+    LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure THTMLWriter.LoadFromStream(Stream: TStream);
+begin
+  LoadFromStream(Stream, nil);
+end;
+
+procedure THTMLWriter.LoadFromStream(Stream: TStream; Encoding: TEncoding);
+var
+ SS: TStringStream;
+begin
+  if Encoding = nil then
+  begin
+    Encoding := TEncoding.Default;
+  end;
+  SS := TStringStream.Create('', Encoding);
+  try
+    SS.Position := 0;
+    SS.LoadFromStream(Stream);
+    FHTML := SS.DataString;
+  finally
+    SS.Free;
+  end;
 end;
 
 function THTMLWriter.OpenBold: THTMLWriter;
@@ -593,6 +651,44 @@ begin
     Result := Result.AddAttribute(cType, TBulletShapeStrings[aBulletShape]);
   end;
   Result.FTagState := Result.FTagState + [tsInListTag];
+end;
+
+procedure THTMLWriter.SaveToFile(const FileName: string);
+begin
+  SaveToFile(FileName, nil);
+end;
+
+procedure THTMLWriter.SaveToFile(const FileName: string; Encoding: TEncoding);
+var
+  Stream: TStream;
+begin
+  Stream := TFileStream.Create(FileName, fmCreate);
+  try
+    SaveToStream(Stream, Encoding);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure THTMLWriter.SaveToStream(Stream: TStream; Encoding: TEncoding);
+var
+  SS: TStringStream;
+begin
+  if Encoding = nil then
+  begin
+    Encoding := TEncoding.Default;
+  end;
+  SS := TStringStream.Create(FHTML, Encoding);
+  try
+    Stream.CopyFrom(SS, SS.Size);
+  finally
+    SS.Free;
+  end;
+end;
+
+procedure THTMLWriter.SaveToStream(Stream: TStream);
+begin
+  SaveToStream(Stream, nil);
 end;
 
 function THTMLWriter.OpenOrderedList(aNumberType: TNumberType): THTMLWriter;
