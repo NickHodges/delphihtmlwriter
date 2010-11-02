@@ -27,6 +27,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestLoadSave;
     procedure TestOpenScript;
     procedure TestAddScript;
     procedure TestConstructorException;
@@ -767,7 +768,6 @@ begin
     Check(True, 'All is well -- the EMetaOnlyInHeadTagHTMLException was properly raised. ');
   end;
 
-
 end;
 
 procedure TestTHTMLWriter.TestOpenPre;
@@ -1044,9 +1044,7 @@ begin
     Check(True, 'EHeadTagRequiredHTMLException was properly raised');
   end;
 
-
-
-  end;
+end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth;
 var
@@ -1696,6 +1694,25 @@ begin
     begin
       Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
     end;
+  end;
+end;
+
+procedure TestTHTMLWriter.TestLoadSave;
+var
+  InString, OutString: string;
+  Temp: THTMLWriter;
+const
+  cFilename = 'test.html';
+begin
+  try
+    Temp := HTMLWriterFactory(cHTML).OpenHead.AddTitle('This is the title').CloseTag.OpenBody.AddBoldText('This is bold').CloseTag.CloseTag.CloseTag;
+    InString := Temp.AsHTML;
+    Temp.SaveToFile(cFilename);
+    Temp.LoadFromFile(cFilename);
+    OutString := Temp.AsHTML;
+    CheckEquals(OutString, InString);
+  finally
+    DeleteFile(cFilename);
   end;
 end;
 
