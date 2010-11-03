@@ -57,6 +57,7 @@ type
     function InBodyTag: Boolean;
     function InCommentTag: Boolean;
     function TagIsOpen: Boolean;
+    function InFormTag: Boolean;
     function InListTag: Boolean;
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
@@ -376,6 +377,7 @@ begin
   Exclude(FTagState, tsTagOpen);
 end;
 
+{ TODO -oNick : This routine needs to be cleaned up and made more efficient. }
 function THTMLWriter.CloseTag: THTMLWriter;
 begin
   if tsTagClosed in FTagState then
@@ -442,6 +444,11 @@ begin
   Result := tsCommentOpen in FTagState;
 end;
 
+function THTMLWriter.InFormTag: Boolean;
+begin
+  Result := tsInFormTag in FTagState;
+end;
+
 function THTMLWriter.TagIsOpen: Boolean;
 begin
   Result := tsTagOpen in FTagState;
@@ -500,6 +507,7 @@ end;
 function THTMLWriter.OpenForm: THTMLWriter;
 begin
   Result := AddTag(cForm);
+  Result.FTagState := Result.FTagState + [tsInFormTag];
 end;
 
 function THTMLWriter.OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
@@ -776,9 +784,15 @@ begin
   Result.FTagState := Result.FTagState + [tsInListTag];
 end;
 
+{ TODO -oNick : This method needs to be reworked and made more efficient. }
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cForm) and InFormTag then
+  begin
+    Exclude(FTagState, tsInFormTag);
+  end;
 
   if (FCurrentTagName = cUnorderedList) and InListTag then
   begin
