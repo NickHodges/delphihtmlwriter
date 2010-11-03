@@ -94,6 +94,9 @@ type
 
     TPercentage = 1 .. 100;
 
+    TBlockType = (btDiv, btSpan, btParagraph);
+
+
   const
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym',
                                                          'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp',
@@ -102,9 +105,12 @@ type
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
     TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
+    TBlockTypeStrings: array[TBlockType] of string  = ('div', 'span', 'p');
 
-    cDiv = 'div';
-    cSpan = 'span';
+    //cDiv = 'div';
+    //cSpan = 'span';
+    //cParagraph = 'p';
+
     cHTML = 'html';
     cHead = 'head';
     cBody = 'body';
@@ -115,7 +121,8 @@ type
     cMeta = 'meta';
     cName = 'name';
     cContent = 'content';
-    cParagraph = 'p';
+    cform = 'form';
+
     cAnchor = 'a';
     cHREF = 'href';
     cImage = 'img';
