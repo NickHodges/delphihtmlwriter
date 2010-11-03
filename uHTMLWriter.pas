@@ -310,6 +310,12 @@ type
     function OpenTableData: THTMLWriter;
     function AddTableData(aText: string): THTMLWriter;
 {$ENDREGION}
+
+
+{$REGION 'Form Methods'}
+    function OpenForm: THTMLWriter;
+  {$ENDREGION}
+
 {$REGION 'List Methods'}
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
@@ -489,6 +495,11 @@ end;
 function THTMLWriter.OpenFont: THTMLWriter;
 begin
   Result := OpenFormatTag(ftFont);
+end;
+
+function THTMLWriter.OpenForm: THTMLWriter;
+begin
+  Result := AddTag(cForm);
 end;
 
 function THTMLWriter.OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
@@ -1012,7 +1023,7 @@ end;
 
 function THTMLWriter.AddDivText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cDiv, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btDiv], chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddDivTextWithID(aString, aID: string): THTMLWriter;
@@ -1047,7 +1058,7 @@ end;
 
 function THTMLWriter.AddSpanText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cSpan, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btSpan], chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddSpanTextWithID(aString, aID: string): THTMLWriter;
@@ -1178,7 +1189,7 @@ end;
 
 function THTMLWriter.AddParagraphText(aString: string): THTMLWriter;
 begin
-  Result := AddTag(cParagraph, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btParagraph], chaCannotHaveAttributes).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddParagraphTextWithID(aString, aID: string): THTMLWriter;
@@ -1214,7 +1225,7 @@ end;
 
 function THTMLWriter.OpenParagraph: THTMLWriter;
 begin
-  Result := AddTag(cParagraph, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btParagraph], chaCanHaveAttributes);
 end;
 
 function THTMLWriter.OpenParagraphWithStyle(aStyle: string): THTMLWriter;
@@ -1249,7 +1260,7 @@ end;
 
 function THTMLWriter.OpenSpan: THTMLWriter;
 begin
-  Result := AddTag(cSpan, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btSpan], chaCanHaveAttributes);
 end;
 
 function THTMLWriter.AddStyle(aStyle: string): THTMLWriter;
@@ -1269,7 +1280,7 @@ end;
 
 function THTMLWriter.OpenDiv: THTMLWriter;
 begin
-  Result := AddTag(cDiv, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btDiv], chaCanHaveAttributes);
 end;
 
 function THTMLWriter.AddFontText(aString: string): THTMLWriter;

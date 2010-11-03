@@ -29,6 +29,10 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenForm;
+
+
+
     procedure TestAddAcronymText;
     procedure TestAddAbbreviationText;
     procedure TestAddAddressText;
@@ -1589,6 +1593,32 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
+
+procedure TestTHTMLWriter.TestOpenForm;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := cForm;
+
+  TestResult := HTMLWriterFactory('html').OpenForm.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 
 procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
