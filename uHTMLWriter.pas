@@ -63,10 +63,13 @@ type
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
 {$ENDREGION}
-    procedure CloseSlashBracket;
-    procedure CloseCommentTag;
-    procedure CleanUpTagState;
-{$REGION 'Check Methods'}
+{$REGION 'Close and Clean Methods'}
+      procedure CloseSlashBracket;
+      procedure CloseCommentTag;
+      function CloseBracket: THTMLWriter;
+      procedure CleanUpTagState;
+  
+{$ENDREGION}{$REGION 'Check Methods'}
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
@@ -74,9 +77,11 @@ type
     procedure CheckInTableTag;
     procedure CheckBracketOpen(aString: string);
 {$ENDREGION}
-    function CloseBracket: THTMLWriter;
 
   public
+
+  { TODO : Add support for <!DOCTYPE> tag }
+
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
     /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
@@ -104,6 +109,7 @@ type
     /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
     function OpenMeta: THTMLWriter;
+    function AddBase(aHREF: string; aTarget: string): THTMLWriter;
 
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: THTMLWriter;
@@ -312,15 +318,18 @@ type
     function OpenTableData: THTMLWriter;
     function AddTableData(aText: string): THTMLWriter;
 {$ENDREGION}
-
-
 {$REGION 'Form Methods'}
     function OpenForm: THTMLWriter;
-  {$ENDREGION}
-
-  //fieldset/legend
-  function OpenFieldSet: THTMLWriter;
-
+{$ENDREGION}
+    // fieldset/legend
+    function OpenFieldSet: THTMLWriter;
+{$REGION 'IFrame support'}
+    function OpenIFrame: THTMLWriter; overload;
+    function OpenIFrame(aURL: string): THTMLWriter; overload;
+    function OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
+    function AddIFrame(aURL: string; aAlternateText: string): THTMLWriter; overload;
+    function AddIFrame(aURL: string; aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
+{$ENDREGION}
 {$REGION 'List Methods'}
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
@@ -566,6 +575,21 @@ begin
   Include(Result.FTagState, tsUseSlashClose);
 end;
 
+function THTMLWriter.OpenIFrame: THTMLWriter;
+begin
+  Result := AddTag(cIFrame);
+end;
+
+function THTMLWriter.OpenIFrame(aURL: string): THTMLWriter;
+begin
+  Result := OpenIFrame.AddAttribute(cSource, aURL);
+end;
+
+function THTMLWriter.OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter;
+begin
+  Result := OpenIFrame(aURL).AddAttribute(cWidth, aWidth.WidthString).AddAttribute(cHeight, IntToStr(aHeight));
+end;
+
 function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
 begin
   Result := AddTag(cImage).AddAttribute(cSource, aImageSource);
@@ -653,7 +677,7 @@ begin
     end
     else
     begin
-      Result := Result.AddAttribute(cWidth, IntToStr(aWidth.Width));
+      Result := Result.AddAttribute(cWidth, aWidth.WidthString);
     end;
   end;
 
@@ -702,7 +726,7 @@ end;
 
 function THTMLWriter.OpenVariable: THTMLWriter;
 begin
-    Result := OpenFormatTag(ftVariable);
+  Result := OpenFormatTag(ftVariable);
 end;
 
 procedure THTMLWriter.SaveToFile(const FileName: string);
@@ -1000,6 +1024,11 @@ begin
   Result := AddTag(cBody, chaCanHaveAttributes);
 end;
 
+function THTMLWriter.AddBase(aHREF, aTarget: string): THTMLWriter;
+begin
+  { TODO : implement }
+end;
+
 function THTMLWriter.AddBDOText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftBDO);
@@ -1122,12 +1151,22 @@ end;
 
 function THTMLWriter.AddValiableText(aString: string): THTMLWriter;
 begin
- Result := AddFormattedText(aString, ftVariable)
+  Result := AddFormattedText(aString, ftVariable)
 end;
 
 function THTMLWriter.AddID(aID: string): THTMLWriter;
 begin
   Result := AddAttribute(cID, aID);
+end;
+
+function THTMLWriter.AddIFrame(aURL, aAlternateText: string): THTMLWriter;
+begin
+  Result := OpenIFrame(aURL).AddText(aAlternateText).CloseTag;
+end;
+
+function THTMLWriter.AddIFrame(aURL, aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter;
+begin
+  Result := OpenIFrame(aURL, aWidth, aHeight).AddText(aAlternateText).CloseTag;
 end;
 
 function THTMLWriter.AddItalicText(aString: string): THTMLWriter;
