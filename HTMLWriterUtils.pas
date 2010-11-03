@@ -65,6 +65,7 @@ type
     constructor Create(aWidth: integer; aIsPercentage: Boolean);
     function AsPercentage: string;
     function WidthString: string;
+    function WidthAsString: string;
   end;
 
 type
@@ -207,9 +208,14 @@ begin
   IsPercentage := aIsPercentage;
 end;
 
-function THTMLWidth.WidthString: string;
+function THTMLWidth.WidthAsString: string;
 begin
   Result := IntToStr(Width);
+end;
+
+function THTMLWidth.WidthString: string;
+begin
+  Result := Format('width="%s"', [IntToStr(Width)]);
 end;
 
 end.
