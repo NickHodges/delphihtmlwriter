@@ -31,7 +31,8 @@ type
   published
     procedure TestOpenForm;
     procedure TestOpenFieldSet;
-
+    procedure TestOpenIFrame;
+    procedure TestAddIFrame;
 
     procedure TestAddAcronymText;
     procedure TestAddAbbreviationText;
@@ -68,9 +69,6 @@ type
     procedure TestOpenStrike;
     procedure TestOpenTeletype;
     procedure TestOpenVariable;
-
-
-
 
     procedure TestLoadSave;
     procedure TestOpenScript;
@@ -477,7 +475,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestOpenDelete;
 var
   TestResult: string;
@@ -552,8 +549,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
-
 procedure TestTHTMLWriter.TestOpenAcronym;
 var
   TestResult: string;
@@ -603,7 +598,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestOpenAnchor;
 var
@@ -830,8 +824,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
-
 procedure TestTHTMLWriter.TestAddDivText;
 var
   TestResult, ExpectedResult: string;
@@ -970,7 +962,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestOpenStrike;
 var
@@ -1287,7 +1278,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestOpenQuotation;
 var
   TestResult: string;
@@ -1312,7 +1302,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestOpenCite;
 var
@@ -1361,7 +1350,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestOpenComment;
 var
@@ -1415,6 +1403,27 @@ begin
   ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddComment(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenIFrame;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  Temp: string;
+begin
+  ExpectedResult := HTML('<iframe></iframe>');
+  TestResult := HTMLWriterFactory(cHTML).OpenIFrame.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  Temp := 'http://www.nickhodges.com';
+  ExpectedResult := Format(HTML('<iframe src="%s"></iframe>'), [Temp]);
+  TestResult := HTMLWriterFactory(cHTML).OpenIFrame(Temp).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := Format(HTML('<iframe src="%s" width="42" height="300"></iframe>'), [Temp]);
+  TestResult := HTMLWriterFactory(cHTML).OpenIFrame(Temp, THTMLWidth.Create(42, False), 300).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestOpenImage;
@@ -1500,7 +1509,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestOpenMeta;
 var
@@ -1974,7 +1982,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestAddStrikeText;
 var
   TestResult, ExpectedResult: string;
@@ -2100,7 +2107,6 @@ begin
   TestResult := HTMLWriterFactory('html').AddAbbreviationText(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestAddPreformattedText;
 var
@@ -2476,6 +2482,21 @@ begin
   ExpectedResult := HTML(Format('<span id="%s"></span>', [TempClassName]));
   TestResult := HTMLWriterFactory('html').OpenSpan.AddID(TempClassName).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddIFrame;
+var
+  ExpectedResult: string;
+  TestResult: string;
+  Temp: string;
+  TempAlt: string;
+begin
+  Temp := 'http://www.nickhodges.com';
+  TempAlt := 'Hepger';
+  ExpectedResult := Format(HTML('<iframe src="%s" width="42" height="300">%s</iframe>'), [Temp, TempAlt]);
+  TestResult := HTMLWriterFactory(cHTML).AddIFrame(Temp, TempAlt, THTMLWidth.Create(42, False), 300).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestAddAttribute;

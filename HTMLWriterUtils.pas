@@ -64,6 +64,7 @@ type
     IsPercentage: Boolean;
     constructor Create(aWidth: integer; aIsPercentage: Boolean);
     function AsPercentage: string;
+    function WidthString: string;
   end;
 
 type
@@ -78,15 +79,12 @@ type
 
   type
 
-    TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
-    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym,
-                   ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation, ftSample,
-                   ftSmall, ftStrike, ftTeletype, ftVariable);
-    THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
-
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag,
-                 tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
     TTagStates = set of TTagState;
+
+    TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
+    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym, ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation, ftSample, ftSmall, ftStrike, ftTeletype, ftVariable);
+    THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
     TUseCloseSlash = (ucsUseCloseSlash, ucsDoNotUseCloseSlash);
@@ -97,16 +95,13 @@ type
 
     TBlockType = (btDiv, btSpan, btParagraph);
 
-
   const
-    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym',
-                                                         'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp',
-                                                         'small', 'strike', 'tt', 'var' );
+    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var');
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
     TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
-    TBlockTypeStrings: array[TBlockType] of string  = ('div', 'span', 'p');
+    TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
 
     cHTML = 'html';
     cHead = 'head';
@@ -139,14 +134,15 @@ type
     cCellPadding = 'cellpadding';
     cCellSpacing = 'cellspacing';
     cWidth = 'width';
+    cHeight = 'height';
     cTableRow = 'tr';
     cTableData = 'td';
     cTableHeader = 'th';
     cTitle = 'title';
     cScript = 'script';
+    cIFrame = 'iframe';
 
-    { TODO -oNick : Add these formatting tags }
-
+    { DONE -oNick : Add these formatting tags }
 
     cClosingTag = '%s</%s>';
     cOpenBracket = '<';
@@ -157,19 +153,21 @@ type
     cCloseComment = '-->';
     cSpace = ' ';
 
-
-    cHTML401Strict       = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+    cHTML401Strict = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
     cHTML401Transitional = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
-    cHTML401Frameset     = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">';
-    cXHTML10Strict       = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+    cHTML401Frameset = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">';
+    cXHTML10Strict = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
     cXHTML10Transitional = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-    cXHTML10Frameset     = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
-    cXHTML11             = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
-
+    cXHTML10Frameset = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
+    cXHTML11 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
 
     function StringIsEmpty(Str: string; aUseTrim: Boolean = True): Boolean;
-    function MakeOpenTag(aTag: string): string;
-    function MakeCloseTag(aTag: string): string;
+
+type
+  TTagMaker = class
+    class function MakeOpenTag(aTag: string): string; static;
+    class function MakeCloseTag(aTag: string): string; static;
+  end;
 
 implementation
 
@@ -182,12 +180,12 @@ begin
   end;
 end;
 
-function MakeOpenTag(aTag: string): string;
+class function TTagMaker.MakeOpenTag(aTag: string): string;
 begin
   Result := Format('<%s>', [aTag]);
 end;
 
-function MakeCloseTag(aTag: string): string;
+class function TTagMaker.MakeCloseTag(aTag: string): string;
 begin
   Result := Format('</%s>', [aTag]);
 end;
@@ -207,6 +205,11 @@ constructor THTMLWidth.Create(aWidth: integer; aIsPercentage: Boolean);
 begin
   Width := aWidth;
   IsPercentage := aIsPercentage;
+end;
+
+function THTMLWidth.WidthString: string;
+begin
+  Result := IntToStr(Width);
 end;
 
 end.
