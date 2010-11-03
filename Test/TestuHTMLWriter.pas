@@ -30,7 +30,7 @@ type
 
   published
     procedure TestOpenForm;
-
+    procedure TestOpenFieldSet;
 
 
     procedure TestAddAcronymText;
@@ -921,6 +921,31 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenFieldSet;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := cFieldSet;
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestOpenFont;
 var
   TestResult: string;
@@ -1618,7 +1643,6 @@ begin
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var

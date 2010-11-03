@@ -84,7 +84,8 @@ type
                    ftSmall, ftStrike, ftTeletype, ftVariable);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag,
+                 tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
     TTagStates = set of TTagState;
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
@@ -107,10 +108,6 @@ type
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
     TBlockTypeStrings: array[TBlockType] of string  = ('div', 'span', 'p');
 
-    //cDiv = 'div';
-    //cSpan = 'span';
-    //cParagraph = 'p';
-
     cHTML = 'html';
     cHead = 'head';
     cBody = 'body';
@@ -122,6 +119,8 @@ type
     cName = 'name';
     cContent = 'content';
     cform = 'form';
+    cFieldSet = 'fieldset';
+    cLegend = 'legend';
 
     cAnchor = 'a';
     cHREF = 'href';

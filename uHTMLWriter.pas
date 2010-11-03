@@ -58,6 +58,7 @@ type
     function InCommentTag: Boolean;
     function TagIsOpen: Boolean;
     function InFormTag: Boolean;
+    function InFieldSetTag: Boolean;
     function InListTag: Boolean;
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
@@ -317,6 +318,9 @@ type
     function OpenForm: THTMLWriter;
   {$ENDREGION}
 
+  //fieldset/legend
+  function OpenFieldSet: THTMLWriter;
+
 {$REGION 'List Methods'}
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
@@ -444,6 +448,11 @@ begin
   Result := tsCommentOpen in FTagState;
 end;
 
+function THTMLWriter.InFieldSetTag: Boolean;
+begin
+  Result := tsInFieldSetTag in FTagState;
+end;
+
 function THTMLWriter.InFormTag: Boolean;
 begin
   Result := tsInFormTag in FTagState;
@@ -497,6 +506,12 @@ end;
 procedure THTMLWriter.AddToHTML(const aString: string);
 begin
   FHTML := FHTML + aString;
+end;
+
+function THTMLWriter.OpenFieldSet: THTMLWriter;
+begin
+  Result := AddTag(cFieldSet);
+  Result.FTagState := Result.FTagState + [tsInFieldSetTag];
 end;
 
 function THTMLWriter.OpenFont: THTMLWriter;
@@ -788,6 +803,11 @@ end;
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cFieldSet) and InFieldSetTag then
+  begin
+    Exclude(FTagState, tsInFieldSetTag);
+  end;
 
   if (FCurrentTagName = cForm) and InFormTag then
   begin
