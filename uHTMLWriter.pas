@@ -98,6 +98,7 @@ type
 {$ENDREGION}
     constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
     constructor CreateDocument;
+    destructor Destroy; override;
 {$ENDREGION}
 {$REGION 'Main Section Methods'}
     /// <summary>Opens a&lt;head&gt; tag to the document.&#160;</summary>
@@ -360,7 +361,7 @@ function THTMLWriter.CloseBracket: THTMLWriter;
 begin
   if (tsBracketOpen in FTagState) and (not(tsCommentOpen in FTagState)) then
   begin
-    FHTML := FHTML + cCloseBracket;
+    FHTML := FHTML.Append(cCloseBracket);
     Include(FTagState, tsTagOpen);
     Exclude(FTagState, tsBracketOpen);
   end;
@@ -375,7 +376,7 @@ end;
 
 procedure THTMLWriter.CloseCommentTag;
 begin
-  FHTML := FHTML + cSpace + cCloseComment;
+  FHTML := FHTML.Append(cSpace).Append(cCloseComment);
   Exclude(FTagState, tsCommentOpen);
   Exclude(FTagState, tsTagOpen);
   Include(FTagState, tsTagClosed);
@@ -389,7 +390,7 @@ end;
 
 procedure THTMLWriter.CloseSlashBracket;
 begin
-  FHTML := FHTML + cSpace + cCloseSlashBracket;
+  FHTML := FHTML.Append(cSpace).Append(cCloseSlashBracket);
   Exclude(FTagState, tsUseSlashClose);
   Exclude(FTagState, tsTagOpen);
 end;
@@ -424,7 +425,7 @@ begin
 
   if TagIsOpen then
   begin
-    FHTML := Format(cClosingTag, [FHTML, FCurrentTagName]);
+    FHTML := FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket); //Format(cClosingTag, [FHTML, FCurrentTagName]);
   end;
 
   CleanUpTagState;
@@ -441,7 +442,8 @@ begin
   end;
   FCurrentTagName := aTagName;
   FCanHaveAttributes := chaCanHaveAttributes;
-  FHTML := cOpenBracket + FCurrentTagName;
+  FHTML := TStringBuilder.Create;
+  FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
 end;
@@ -449,6 +451,12 @@ end;
 constructor THTMLWriter.CreateDocument;
 begin
   Create(cHTML, chaCanHaveAttributes);
+end;
+
+destructor THTMLWriter.Destroy;
+begin
+  FHTML.Free;
+  inherited;
 end;
 
 function THTMLWriter.InBodyTag: Boolean;
@@ -518,7 +526,7 @@ end;
 
 procedure THTMLWriter.AddToHTML(const aString: string);
 begin
-  FHTML := FHTML + aString;
+  FHTML := FHTML.Append(aString);
 end;
 
 function THTMLWriter.OpenFieldSet: THTMLWriter;
@@ -796,7 +804,8 @@ begin
   SS := TStringStream.Create('', Encoding);
   try
     SS.LoadFromStream(Stream);
-    FHTML := SS.DataString;
+    FHTML.Clear;
+    FHTML.Append(SS.DataString);
   finally
     SS.Free;
   end;
@@ -810,7 +819,7 @@ begin
   begin
     Encoding := TEncoding.Default;
   end;
-  SS := TStringStream.Create(FHTML, Encoding);
+  SS := TStringStream.Create(FHTML.ToString, Encoding);
   try
     Stream.CopyFrom(SS, SS.Size);
   finally
@@ -890,7 +899,7 @@ function THTMLWriter.AddTag(aString: string; aCanAddAttributes: TCanHaveAttribut
 begin
   CloseBracket;
   Result := THTMLWriter.Create(aString, aCanAddAttributes);
-  Result.FHTML := Self.FHTML + Result.FHTML;
+  Result.FHTML := Self.FHTML.Append(Result.FHTML.ToString);
   Result.FTagState := Self.FTagState + [tsBracketOpen];
   Result.FParent := Self;
 end;
@@ -904,14 +913,14 @@ function THTMLWriter.OpenComment: THTMLWriter;
 begin
   CloseBracket;
   Result := THTMLWriter.Create(cComment, chaCannotHaveAttributes);
-  Result.FHTML := Self.FHTML + Result.FHTML + cSpace;
+  Result.FHTML := Self.FHTML.Append(Result.FHTML.ToString).Append(cSpace);
   Result.FTagState := Result.FTagState + [tsCommentOpen];
   Result.FParent := Self;
 end;
 
 function THTMLWriter.AsHTML: string;
 begin
-  Result := FHTML;
+  Result := FHTML.ToString;
 end;
 
 function THTMLWriter.AddTeletypeText(aString: string): THTMLWriter;
@@ -922,7 +931,7 @@ end;
 function THTMLWriter.AddText(aString: string): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + aString;
+  FHTML := FHTML.Append(aString);
   Result := Self;
 end;
 
@@ -935,19 +944,19 @@ end;
 function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + cOpenBracket + cHardRule;
+  FHTML := FHTML.Append(cOpenBracket).Append(cHardRule);
   if not StringIsEmpty(aAttributes) then
   begin
-    FHTML := FHTML + cSpace + aAttributes;
+    FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML + cSpace + cCloseSlashBracket;
+        FHTML := FHTML.Append(cSpace).Append(cCloseSlashBracket);
       end;
     ucsDoNotUseCloseSlash:
       begin
-        FHTML := FHTML + cCloseBracket;
+        FHTML := FHTML.Append(cCloseBracket);
       end;
   end;
   Result := Self;
@@ -1197,19 +1206,19 @@ end;
 function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
-  FHTML := FHTML + cOpenBracket + cBreak;
+  FHTML := FHTML.Append(cOpenBracket).Append(cBreak);
   if aClearValue <> cvNoValue then
   begin
-    FHTML := Format('%s %s="%s"', [FHTML, cClear, TClearValueStrings[aClearValue]]);
+    FHTML := FHTML.Append(cSpace).AppendFormat('%s="%s"', [cClear, TClearValueStrings[aClearValue]]);
   end;
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML + cSpace + cCloseSlashBracket;
+        FHTML := FHTML.Append(cSpace).Append(cCloseSlashBracket);
       end;
     ucsDoNotUseCloseSlash:
       begin
-        FHTML := FHTML + cCloseBracket;
+        FHTML := FHTML.Append(cCloseBracket);
       end;
   end;
 
@@ -1310,7 +1319,7 @@ end;
 
 function THTMLWriter.AddRawText(aString: string): THTMLWriter;
 begin
-  FHTML := FHTML + aString;
+  FHTML := FHTML.Append(aString);
   Result := Self;
 end;
 

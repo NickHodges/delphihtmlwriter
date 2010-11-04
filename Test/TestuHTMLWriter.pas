@@ -952,7 +952,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s>blah</%s>blah</%s></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;
