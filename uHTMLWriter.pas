@@ -64,11 +64,10 @@ type
     function InTableRowTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
-      procedure CloseSlashBracket;
-      procedure CloseCommentTag;
-      function CloseBracket: THTMLWriter;
-      procedure CleanUpTagState;
-  
+    procedure CloseSlashBracket;
+    procedure CloseCommentTag;
+    function CloseBracket: THTMLWriter;
+    procedure CleanUpTagState;
 {$ENDREGION}{$REGION 'Check Methods'}
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
@@ -78,11 +77,9 @@ type
     procedure CheckInTableTag;
     procedure CheckBracketOpen(aString: string);
 {$ENDREGION}
-
   public
 
-  { TODO : Add support for <!DOCTYPE> tag }
-
+    { TODO : Add support for <!DOCTYPE> tag }
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
     /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
@@ -111,7 +108,9 @@ type
     /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
     function OpenMeta: THTMLWriter;
-    function AddBase(aHREF: string; aTarget: string): THTMLWriter;
+    function OpenBase: THTMLWriter;
+    function AddBase(aHREF: string): THTMLWriter; overload;
+    function AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter; overload;
 
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: THTMLWriter;
@@ -327,7 +326,6 @@ type
     function OpenFieldSet: THTMLWriter;
     function OpenLegend: THTMLWriter;
     function AddLegend(aText: string): THTMLWriter;
-
 {$REGION 'IFrame support'}
     function OpenIFrame: THTMLWriter; overload;
     function OpenIFrame(aURL: string): THTMLWriter; overload;
@@ -425,7 +423,7 @@ begin
 
   if TagIsOpen then
   begin
-    FHTML := FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket); //Format(cClosingTag, [FHTML, FCurrentTagName]);
+    FHTML := FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket); // Format(cClosingTag, [FHTML, FCurrentTagName]);
   end;
 
   CleanUpTagState;
@@ -1023,6 +1021,13 @@ begin
   Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
 end;
 
+function THTMLWriter.OpenBase: THTMLWriter;
+begin
+  CheckInHeadTag;
+  Result := AddTag(cBase);
+  Result.FTagState := Result.FTagState + [tsUseSlashClose];
+end;
+
 function THTMLWriter.OpenBDO: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBDO);
@@ -1043,9 +1048,22 @@ begin
   Result := AddTag(cBody, chaCanHaveAttributes);
 end;
 
-function THTMLWriter.AddBase(aHREF, aTarget: string): THTMLWriter;
+function THTMLWriter.AddBase(aHREF: string): THTMLWriter;
 begin
-  { TODO : implement }
+  CheckInHeadTag;
+  Result := OpenBase.AddAttribute(cHREF, aHREF).CloseTag;
+end;
+
+function THTMLWriter.AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter;
+begin
+  if aTarget = ttFrameName then
+  begin
+    Result := OpenBase.AddAttribute(cTarget, aFrameName).CloseTag;
+  end
+  else
+  begin
+    Result := OpenBase.AddAttribute(cTarget, TTargetTypeStrings[aTarget]).CloseTag;
+  end;
 end;
 
 function THTMLWriter.AddBDOText(aString: string): THTMLWriter;
