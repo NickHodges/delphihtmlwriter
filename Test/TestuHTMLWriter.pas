@@ -29,8 +29,10 @@ type
     procedure TearDown; override;
 
   published
+
+    procedure TestFieldSetAndLegend;
+
     procedure TestOpenForm;
-    procedure TestOpenFieldSet;
     procedure TestOpenIFrame;
     procedure TestAddIFrame;
 
@@ -913,7 +915,7 @@ begin
 
 end;
 
-procedure TestTHTMLWriter.TestOpenFieldSet;
+procedure TestTHTMLWriter.TestFieldSetAndLegend;
 var
   TestResult: string;
   ExpectedResult: string;
@@ -936,6 +938,23 @@ begin
   TestResult := HTMLWriterFactory('html').OpenFieldSet.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.AsHTML;
+  ExpectedResult := Format('<html><%s><%s', [cFieldSet, cLegend]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s>blah</%s>blah</%s></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestOpenFont;
