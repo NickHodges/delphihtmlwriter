@@ -30,6 +30,7 @@ type
 
   published
 
+    procedure TestAddBase;
     procedure TestFieldSetAndLegend;
 
     procedure TestOpenForm;
@@ -2071,6 +2072,40 @@ begin
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
   TestResult := HTMLWriterFactory('html').AddAddressText(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddBase;
+var
+  TestResult, ExpectedResult: string;
+  Temp: string;
+  TempTarget: TTargetType;
+const
+  TempURL = 'http://www.nickhodges.com';
+begin
+  ExpectedResult := Format(HTML('<head><base /></head>'), [TempURL]);
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenBase.CloseTag.CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := Format(HTML('<head><base href="%s" /></head>'), [TempURL]);
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.AddBase(TempURL).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := Format(HTML('<head><base target="%s" /></head>'), [TTargetTypeStrings[ttBlank]]);
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.AddBase(ttBlank).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  for TempTarget := ttBlank to ttTop do
+  begin
+    ExpectedResult := Format(HTML('<head><base target="%s" /></head>'), [TTargetTypeStrings[TempTarget]]);
+    TestResult := HTMLWriterFactory(cHTML).OpenHead.AddBase(TempTarget).CloseTag.CloseTag.AsHTML;
+    CheckEquals(ExpectedResult, TestResult);
+  end;
+
+  Temp := 'flater';
+  ExpectedResult := Format(HTML('<head><base target="%s" /></head>'), [Temp]);
+  TestResult := HTMLWriterFactory(cHTML).OpenHead.AddBase(ttFrameName, Temp).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestAddBDOText;

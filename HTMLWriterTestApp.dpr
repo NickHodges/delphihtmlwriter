@@ -13,7 +13,7 @@ begin
   try
      Temp := THTMLWriter.CreateDocument;//('html', chaCanHaveAttributes);
      TempHTML := Temp
-                  .AddHead
+                  .OpenHead
                     .AddAttribute('dweezle')
                     .AddText('farble')
                   .CloseTag

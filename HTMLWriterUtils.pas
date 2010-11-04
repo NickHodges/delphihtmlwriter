@@ -94,6 +94,7 @@ type
     TUseCloseSlash = (ucsUseCloseSlash, ucsDoNotUseCloseSlash);
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
+    TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
 
     TPercentage = 1 .. 100;
 
@@ -106,6 +107,7 @@ type
     TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
+    TTargetTypeStrings: array[TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
 
     cHTML = 'html';
     cHead = 'head';
@@ -145,6 +147,8 @@ type
     cTitle = 'title';
     cScript = 'script';
     cIFrame = 'iframe';
+    cBase = 'base';
+    cTarget = 'target';
 
     { DONE -oNick : Add these formatting tags }
 
