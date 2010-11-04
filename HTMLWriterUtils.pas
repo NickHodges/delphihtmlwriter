@@ -53,6 +53,7 @@ resourcestring
   strMustBeInList = 'A list must be open in order to call CloseList.';
   strMustBeInTable = 'A table must be open in order to call this.';
   strMustBeInComment = 'A comment must be open in order to call CloseComment';
+  strNotInFieldTag = 'A fieldset must be open to add this tag.';
 
 type
   IGetHTML = interface
@@ -69,6 +70,7 @@ type
   end;
 
 type
+  { TODO -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
     EHTMLWriterEmptyTagException = class(EHTMLWriterException);
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
@@ -77,6 +79,7 @@ type
     ENotInListTagException = class(EHTMLWriterException);
     ENotInTableTagException = class(EHTMLWriterException);
     ENotInCommentTagException = class(EHTMLWriterException);
+    ENotInFieldsetTagException = class(EHTMLWriterException);
 
   type
 

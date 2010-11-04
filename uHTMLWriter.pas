@@ -73,6 +73,7 @@ type
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
+    procedure CheckInFieldSetTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
     procedure CheckBracketOpen(aString: string);
@@ -323,6 +324,9 @@ type
 {$ENDREGION}
     // fieldset/legend
     function OpenFieldSet: THTMLWriter;
+    function OpenLegend: THTMLWriter;
+    function AddLegend(aText: string): THTMLWriter;
+
 {$REGION 'IFrame support'}
     function OpenIFrame: THTMLWriter; overload;
     function OpenIFrame(aURL: string): THTMLWriter; overload;
@@ -587,7 +591,7 @@ end;
 
 function THTMLWriter.OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter;
 begin
-  Result := OpenIFrame(aURL).AddAttribute(cWidth, aWidth.WidthString).AddAttribute(cHeight, IntToStr(aHeight));
+  Result := OpenIFrame(aURL).AddAttribute(aWidth.WidthString).AddAttribute(cHeight, IntToStr(aHeight));
 end;
 
 function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
@@ -609,6 +613,12 @@ end;
 function THTMLWriter.OpenKeyboard: THTMLWriter;
 begin
   Result := OpenFormatTag(ftKeyboard);
+end;
+
+function THTMLWriter.OpenLegend: THTMLWriter;
+begin
+  CheckInFieldSetTag;
+  Result := AddTag(cLegend);
 end;
 
 function THTMLWriter.OpenListItem: THTMLWriter;
@@ -677,7 +687,7 @@ begin
     end
     else
     begin
-      Result := Result.AddAttribute(cWidth, aWidth.WidthString);
+      Result := Result.AddAttribute(aWidth.WidthString);
     end;
   end;
 
@@ -1179,6 +1189,11 @@ begin
   Result := AddFormattedText(aString, ftKeyboard)
 end;
 
+function THTMLWriter.AddLegend(aText: string): THTMLWriter;
+begin
+  Result := OpenLegend.AddText(aText).CloseTag;
+end;
+
 function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
 begin
   CloseBracket;
@@ -1243,6 +1258,14 @@ begin
   if not InCommentTag then
   begin
     raise ENotInCommentTagException.Create(strMustBeInComment);
+  end;
+end;
+
+procedure THTMLWriter.CheckInFieldSetTag;
+begin
+  if not InFieldSetTag then
+  begin
+    raise ENotInFieldsetTagException.Create(strNotInFieldTag);
   end;
 end;
 
