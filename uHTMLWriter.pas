@@ -42,7 +42,7 @@ type
 {$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
   private
-    FHTML: string;
+    FHTML: TStringBuilder;
     FCurrentTagName: string;
     FTagState: TTagStates;
     FParent: THTMLWriter;
