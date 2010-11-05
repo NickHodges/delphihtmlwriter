@@ -321,6 +321,9 @@ type
 {$ENDREGION}
 {$REGION 'Form Methods'}
     function OpenForm: THTMLWriter;
+
+    { TODO -oNick : Add all supporting tags to <form> }
+
 {$ENDREGION}
     // fieldset/legend
     function OpenFieldSet: THTMLWriter;
@@ -349,6 +352,13 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
+
+  { TODO -oNick : Add <frame>  support }
+
+  { TODO -oNick : add <map> <area> support }
+
+  { TODO -oNick : Add <object> <param> support }
+
   end;
 
 implementation
@@ -423,7 +433,7 @@ begin
 
   if TagIsOpen then
   begin
-    FHTML := FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket); // Format(cClosingTag, [FHTML, FCurrentTagName]);
+    FHTML := FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket);
   end;
 
   CleanUpTagState;
