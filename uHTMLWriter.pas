@@ -360,7 +360,7 @@ type
 
   { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously.   }
 
-  { TODO -oNick : add <map> <area> support so people can build image maps.   }
+  { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool.  }
 
   { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
 
