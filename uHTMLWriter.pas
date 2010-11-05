@@ -358,7 +358,7 @@ type
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
 
-  { TODO -oNick : Add <frame>  support }
+  { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. }
 
   { TODO -oNick : add <map> <area> support so people can build image maps. }
 
