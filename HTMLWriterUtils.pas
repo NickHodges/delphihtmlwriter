@@ -72,12 +72,12 @@ type
 type
   { TODO -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
-    EHTMLWriterEmptyTagException = class(EHTMLWriterException);
+    EHTMLWriterEmptyTagException = class(EHTMLWriterException);     // Tested
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
-    EHeadTagRequiredHTMLException = class(EHTMLWriterException);
-    ETryingToCloseClosedTag = class(EHTMLWriterException);
-    ENotInListTagException = class(EHTMLWriterException);
-    ENotInTableTagException = class(EHTMLWriterException);
+    EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
+    ETryingToCloseClosedTag = class(EHTMLWriterException);  // Tested
+    ENotInListTagException = class(EHTMLWriterException);  // Tested
+    ENotInTableTagException = class(EHTMLWriterException); // Tested
     ENotInCommentTagException = class(EHTMLWriterException);
     ENotInFieldsetTagException = class(EHTMLWriterException);
 

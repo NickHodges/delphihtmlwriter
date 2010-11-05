@@ -9,6 +9,7 @@ unit TestuHTMLWriter;
 
 }
 
+
 interface
 
 uses
@@ -1243,9 +1244,12 @@ begin
 
   try
     TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
-    Check(False, 'Failed to raise a EMetaOnlyInHeadTagHTMLException when adding a title outside of a <head> tag');
+    Check(False, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
   except
-    Check(True, 'All is well -- the EMetaOnlyInHeadTagHTMLException was properly raised. ');
+    on E: EHeadTagRequiredHTMLException do
+    begin
+      Check(True, 'All is well -- the EHeadTagRequiredHTMLException was properly raised. ');
+    end;
   end;
 
 end;
