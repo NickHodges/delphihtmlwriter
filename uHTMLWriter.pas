@@ -66,6 +66,8 @@ type
 {$REGION 'Close and Clean Methods'}
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
+
+    ///<summary>This
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
 {$ENDREGION}{$REGION 'Check Methods'}
@@ -184,7 +186,7 @@ type
     function OpenPre: THTMLWriter;
     /// <summary>Opens a &lt;cite&gt; tag.</summary>
     function OpenCite: THTMLWriter;
-
+    /// <summary>Opens a &lt;acronym&gt; tag.</summary>
     function OpenAcronym: THTMLWriter;
     function OpenAbbreviation: THTMLWriter;
     function OpenAddress: THTMLWriter;
