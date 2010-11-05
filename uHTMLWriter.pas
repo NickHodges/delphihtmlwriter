@@ -362,7 +362,7 @@ type
 
   { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool.  }
 
-  { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
+  { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. There are a lot. }
 
   end;
 
