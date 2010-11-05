@@ -94,6 +94,8 @@ type
     /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
 {$ENDREGION}
     constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
+
+    ///	<summary>The CreateDocument constructor will create a standard HTML document.</summary>
     constructor CreateDocument;
     destructor Destroy; override;
 {$ENDREGION}
@@ -110,6 +112,9 @@ type
     function OpenMeta: THTMLWriter;
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
+
+    ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
+    ///	<remarks>Note:&#160; this method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter; overload;
 
     /// <summary>Opens a &lt;title&gt; tag.</summary>
@@ -357,7 +362,7 @@ type
 
   { TODO -oNick : add <map> <area> support }
 
-  { TODO -oNick : Add <object> <param> support }
+  { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
 
   end;
 
