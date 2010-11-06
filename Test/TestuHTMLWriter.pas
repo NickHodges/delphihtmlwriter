@@ -1681,10 +1681,6 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
-  Check(true);
-  Exit;
-
-
   try
     TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
     Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
@@ -2625,7 +2621,6 @@ procedure TestTHTMLWriter.TestConstructorException;
 var
   TestValue: string;
 begin
-  Check(True); Exit;
 
   try
     TestValue := HTMLWriterFactory('').CloseTag.AsHTML;
