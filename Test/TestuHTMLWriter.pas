@@ -1761,7 +1761,6 @@ var
   TestResult, ExpectedResult: string;
   Temp: string;
 begin
-  Check(False);
   Temp := 'bloople';
 
   ExpectedResult := '<html><ul><li></li></ul></html>';
