@@ -1243,15 +1243,15 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 
-//  try
-//    TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
-//    Check(False, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
-//  except
-//    on E: EHeadTagRequiredHTMLException do
-//    begin
-//      Check(True, 'All is well -- the EHeadTagRequiredHTMLException was properly raised. ');
-//    end;
-//  end;
+  try
+    TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
+    Check(False, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
+  except
+    on E: EHeadTagRequiredHTMLException do
+    begin
+      Check(True, 'All is well -- the EHeadTagRequiredHTMLException was properly raised. ');
+    end;
+  end;
 
 end;
 
@@ -1787,13 +1787,13 @@ begin
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.AddAttribute('type', 'zoob').AddText(Temp).CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-//  try
-//    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML;
-//    Check(False, 'Failed to see that a list item was being added outside a list');
-//  except
-//    on E: ENotInListTagException do
-//      Check(True, 'Successfully raised the ENotInListTagException.  All is well.');
-//  end;
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to see that a list item was being added outside a list');
+  except
+    on E: ENotInListTagException do
+      Check(True, 'Successfully raised the ENotInListTagException.  All is well.');
+  end;
 
 end;
 
