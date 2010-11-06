@@ -1546,15 +1546,15 @@ begin
 
   { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
 
-//  try
-//    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
-//    Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
-//  except
-//    on E: EHeadTagRequiredHTMLException do
-//    begin
-//      Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
-//    end;
-//  end;
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
+  except
+    on E: EHeadTagRequiredHTMLException do
+    begin
+      Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
+    end;
+  end;
 
 end;
 
