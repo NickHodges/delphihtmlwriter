@@ -2,7 +2,7 @@
 		<PropertyGroup>
 			<ProjectGuid>{6776CF32-E2CB-422E-90B4-0DF1B244298F}</ProjectGuid>
 			<ProjectVersion>12.0</ProjectVersion>
-			<Config Condition="'$(Config)'==''">Release</Config>
+			<Config Condition="'$(Config)'==''">Console</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 			<MainSource>HTMLWriterTestAppTests.dpr</MainSource>
 		</PropertyGroup>
@@ -84,6 +84,7 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">&gt; c:\junk\output.txt</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>

@@ -29,7 +29,8 @@ type
     procedure TearDown; override;
 
   published
-
+    procedure TestTHTMLWidth1;
+    procedure TestTHTMLWidth2;
     procedure TestAddBase;
     procedure TestFieldSetAndLegend;
 
@@ -78,7 +79,7 @@ type
     procedure TestAddScript;
     procedure TestConstructorException;
     procedure TestThatExceptionsAreRaised;
-    procedure TestTHTMLWidth;
+
     procedure TestAddTableData;
     procedure TestAddLineBreak;
     procedure TestOpenListItem;
@@ -1726,23 +1727,34 @@ begin
 
 end;
 
-procedure TestTHTMLWriter.TestTHTMLWidth;
+procedure TestTHTMLWriter.TestTHTMLWidth1;
+var
+  TempWidth: THTMLWidth;
+  ExpectedResult: string;
+  TestResult: string;
+begin
+  TempWidth.IsPercentage := False;
+  TempWidth.Width := 42;
+  ExpectedResult := '';
+  TestResult := TempWidth.AsPercentage;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestTHTMLWidth2;
 var
   TempWidth: THTMLWidth;
   ExpectedResult: string;
   TestResult: string;
 begin
   TempWidth.Width := 42;
-  ExpectedResult := '';
-  TestResult := TempWidth.AsPercentage;
-  CheckEquals(ExpectedResult, TestResult);
-
   TempWidth.IsPercentage := True;
   ExpectedResult := '42%';
   TestResult := TempWidth.AsPercentage;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
+
 
 procedure TestTHTMLWriter.TestOpenListItem;
 var
