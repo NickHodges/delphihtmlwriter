@@ -29,7 +29,7 @@ uses
 begin
   Application.Initialize;
   if IsConsole then
-    TextTestRunner.RunRegisteredTests.Free
+    TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
   else
     GUITestRunner.RunRegisteredTests;
 end.
