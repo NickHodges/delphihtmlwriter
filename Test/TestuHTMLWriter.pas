@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
     procedure TestAddBase;
@@ -97,7 +98,7 @@ type
     procedure TestAddText;
     procedure TestAddHead;
     procedure TestOpenTitle;
-    procedure TestAddTitle;
+
     procedure TestOpenBody;
     procedure TestOpenTable;
     procedure TestOpenTableRow;
@@ -1708,16 +1709,6 @@ begin
     on E: ENotInTableTagException do
     begin
       Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
-    end;
-  end;
-
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenComment.AddDivText('graster').CloseComment.CloseTag.AsHTML;
-    Check(False, 'EHeadTagRequiredHTMLException was not raised when adding things to a comment');
-  except
-    on E: ENotInTableTagException do
-    begin
-      Check(True, 'EHeadTagRequiredHTMLException was properly raised');
     end;
   end;
 
