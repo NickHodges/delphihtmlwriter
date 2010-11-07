@@ -67,7 +67,6 @@ type
     procedure CloseSlashBracket;
     procedure CloseCommentTag;
 
-    ///<summary>This
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
 {$ENDREGION}{$REGION 'Check Methods'}
@@ -97,7 +96,7 @@ type
 {$ENDREGION}
     constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 
-    ///	<summary>The CreateDocument constructor will create a standard HTML document.</summary>
+    /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
     constructor CreateDocument;
     destructor Destroy; override;
 {$ENDREGION}
@@ -115,8 +114,8 @@ type
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
 
-    ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
-    ///	<remarks>Note:&#160; this method can only be called inside an open &lt;head&gt; tag.</remarks>
+    /// <summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
+    /// <remarks>Note:&#160; this method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter; overload;
 
     /// <summary>Opens a &lt;title&gt; tag.</summary>
@@ -191,18 +190,27 @@ type
     function OpenAbbreviation: THTMLWriter;
     function OpenAddress: THTMLWriter;
     function OpenBDO: THTMLWriter;
+    /// <summary>Opens a &lt;big&gt; tag.</summary>
     function OpenBig: THTMLWriter;
+    /// <summary>Opens a &lt;center&gt; tag.</summary>
     function OpenCenter: THTMLWriter;
+    /// <summary>Opens a &lt;code&gt; tag.</summary>
     function OpenCode: THTMLWriter;
+    /// <summary>Opens a &lt;delete&gt; tag.</summary>
     function OpenDelete: THTMLWriter;
+    /// <summary>Opens a &lt;dfn&gt; tag.</summary>
     function OpenDefinition: THTMLWriter;
+    /// <summary>Opens a &lt;font&gt; tag.</summary>
     function OpenFont: THTMLWriter;
+
     function OpenKeyboard: THTMLWriter;
     function OpenQuotation: THTMLWriter;
     function OpenSample: THTMLWriter;
+    /// <summary>Opens a &lt;small&gt; tag.</summary>
     function OpenSmall: THTMLWriter;
     function OpenStrike: THTMLWriter;
     function OpenTeletype: THTMLWriter;
+    /// <summary>Opens a &lt;var&gt; tag.</summary>
     function OpenVariable: THTMLWriter;
 
     function AddBoldText(aString: string): THTMLWriter;
@@ -330,7 +338,6 @@ type
     function OpenForm: THTMLWriter;
 
     { TODO -oNick : Add all supporting tags to <form> }
-
 {$ENDREGION}
     // fieldset/legend
     function OpenFieldSet: THTMLWriter;
@@ -359,12 +366,11 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
+    { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
-  { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck.  }
+    { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
 
-  { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool.  }
-
-  { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags.  }
+    { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
 
   end;
 
