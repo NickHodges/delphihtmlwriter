@@ -78,8 +78,8 @@ type
     ETryingToCloseClosedTag = class(EHTMLWriterException);  // Tested
     ENotInListTagException = class(EHTMLWriterException);  // Tested
     ENotInTableTagException = class(EHTMLWriterException); // Tested
-    ENotInCommentTagException = class(EHTMLWriterException);
-    ENotInFieldsetTagException = class(EHTMLWriterException);
+    ENotInCommentTagException = class(EHTMLWriterException); //Tested
+    ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
 
   type
 

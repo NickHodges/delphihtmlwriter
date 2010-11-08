@@ -958,6 +958,16 @@ begin
   ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult);
 
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise an exception adding a <legend> tag outside the <fieldset> tag. ');
+  except
+    on E: ENotInFieldsetTagException do
+    begin
+      Check(True, 'Successfully raised the ENotInFieldsetTagException.  All is well.');
+    end;
+  end;
+
 end;
 
 procedure TestTHTMLWriter.TestOpenFont;
@@ -1243,7 +1253,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.AddTitle('hethland').CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-
   try
     TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
     Check(False, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
@@ -1409,7 +1418,6 @@ begin
       Check(True, 'Successfully raised the ENotInCommentTagException.  All is well.');
     end;
   end;
-
 
 end;
 
@@ -1752,7 +1760,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
-
 
 procedure TestTHTMLWriter.TestOpenListItem;
 var
@@ -2605,15 +2612,15 @@ begin
   TestResult := HTMLWriterFactory(TempTagName).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-//  try
-//    TestResult := HTMLWriterFactory(cHTML).OpenHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
-//    Check(False, 'Failed to rais an exception when an extra Closetag was called.');
-//  except
-//    on E: ETryingToCloseClosedTag do
-//    begin
-//      Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
-//    end;
-//  end;
+  // try
+  // TestResult := HTMLWriterFactory(cHTML).OpenHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+  // Check(False, 'Failed to rais an exception when an extra Closetag was called.');
+  // except
+  // on E: ETryingToCloseClosedTag do
+  // begin
+  // Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
+  // end;
+  // end;
 
   { DONE : Make sure that an extra close tag raises an exception }
 
