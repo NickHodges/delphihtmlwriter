@@ -58,7 +58,6 @@
 			<DCCReference Include="TestuHTMLWriter.pas"/>
 			<DCCReference Include="..\uHTMLWriter.pas"/>
 			<DCCReference Include="..\HTMLWriterUtils.pas"/>
-			<DCCReference Include="..\..\dunit\trunk\contrib\XMLReporting\XMLTestRunner.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
