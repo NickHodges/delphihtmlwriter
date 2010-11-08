@@ -205,6 +205,7 @@ type
 
     function OpenKeyboard: THTMLWriter;
     function OpenQuotation: THTMLWriter;
+    /// <summary>Opens a &lt;sample&gt; tag.</summary>
     function OpenSample: THTMLWriter;
     /// <summary>Opens a &lt;small&gt; tag.</summary>
     function OpenSmall: THTMLWriter;
