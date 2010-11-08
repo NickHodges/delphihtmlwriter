@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
@@ -90,7 +91,6 @@ type
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
     procedure TestAddDivTextWithID;
-    procedure TestCloseComment;
     procedure TestOpenComment;
     procedure TestAddMetaNamedContent;
     procedure TestAddComment;
@@ -1399,6 +1399,18 @@ begin
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML;
+    Check(False, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
+  except
+    on E: ENotInCommentTagException do
+    begin
+      Check(True, 'Successfully raised the ENotInCommentTagException.  All is well.');
+    end;
+  end;
+
+
 end;
 
 procedure TestTHTMLWriter.TestAddCodeText;
@@ -1711,7 +1723,6 @@ begin
       Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
     end;
   end;
-
 end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth1;
