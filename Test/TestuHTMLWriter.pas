@@ -997,7 +997,7 @@ begin
 
   TempColor := 'red';
   TestResult := HTMLWriterFactory('html').OpenFont.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s color="%s"    >blah</%s></html>', [TempTag, TempColor, TempTag]);
+  ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;

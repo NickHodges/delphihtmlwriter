@@ -22,8 +22,7 @@ uses
   TextTestRunner,
   TestuHTMLWriter in 'TestuHTMLWriter.pas',
   uHTMLWriter in '..\uHTMLWriter.pas',
-  HTMLWriterUtils in '..\HTMLWriterUtils.pas',
-  XMLTestRunner in '..\..\dunit\trunk\contrib\XMLReporting\XMLTestRunner.pas';
+  HTMLWriterUtils in '..\HTMLWriterUtils.pas';
 
 {$R *.RES}
 
