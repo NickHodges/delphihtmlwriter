@@ -11,3 +11,4 @@ glob:*.old
 glob:*.txaPackage
 glob:*.tvsconfig
 glob:*.txvpck
+glob:Test/HTMLWriterTestAppTests.xml
