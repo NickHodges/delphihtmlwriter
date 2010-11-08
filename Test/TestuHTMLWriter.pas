@@ -975,6 +975,7 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag: string;
+  TempColor: string;
 begin
   TempTag := TFormatTypeStrings[ftFont];
 
@@ -993,6 +994,12 @@ begin
   TestResult := HTMLWriterFactory('html').OpenFont.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenFont.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s color="%s"    >blah</%s></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestOpenStrike;

@@ -22,7 +22,8 @@ uses
   TextTestRunner,
   TestuHTMLWriter in 'TestuHTMLWriter.pas',
   uHTMLWriter in '..\uHTMLWriter.pas',
-  HTMLWriterUtils in '..\HTMLWriterUtils.pas';
+  HTMLWriterUtils in '..\HTMLWriterUtils.pas',
+  XMLTestRunner in '..\..\dunit\trunk\contrib\XMLReporting\XMLTestRunner.pas';
 
 {$R *.RES}
 
@@ -30,6 +31,7 @@ begin
   Application.Initialize;
   if IsConsole then
     TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
+//    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
   else
     GUITestRunner.RunRegisteredTests;
 end.
