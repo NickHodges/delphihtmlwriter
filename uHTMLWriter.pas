@@ -208,6 +208,7 @@ type
     function OpenSample: THTMLWriter;
     /// <summary>Opens a &lt;small&gt; tag.</summary>
     function OpenSmall: THTMLWriter;
+    /// <summary>Opens a &lt;strike&gt; tag.</summary>
     function OpenStrike: THTMLWriter;
     function OpenTeletype: THTMLWriter;
     /// <summary>Opens a &lt;var&gt; tag.</summary>
