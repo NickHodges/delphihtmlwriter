@@ -69,7 +69,8 @@ type
 
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
-{$ENDREGION}{$REGION 'Check Methods'}
+{$ENDREGION}
+{$REGION 'Check Methods'}
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
@@ -79,7 +80,6 @@ type
     procedure CheckBracketOpen(aString: string);
 {$ENDREGION}
   public
-
     { TODO : Add support for <!DOCTYPE> tag }
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
@@ -97,7 +97,8 @@ type
     constructor Create(aTagName: string; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
-    constructor CreateDocument;
+    constructor CreateDocument; overload;
+    constructor CreateDocument(aDocType: THTMLDocType); overload;
     destructor Destroy; override;
 {$ENDREGION}
 {$REGION 'Main Section Methods'}
@@ -342,10 +343,13 @@ type
 
     { TODO -oNick : Add all supporting tags to <form> }
 {$ENDREGION}
-    // fieldset/legend
-    function OpenFieldSet: THTMLWriter;
-    function OpenLegend: THTMLWriter;
-    function AddLegend(aText: string): THTMLWriter;
+{$REGION 'FieldSet/Legend'}
+      // fieldset/legend
+          function OpenFieldSet: THTMLWriter;
+          function OpenLegend: THTMLWriter;
+          function AddLegend(aText: string): THTMLWriter;
+
+    {$ENDREGION}
 {$REGION 'IFrame support'}
     function OpenIFrame: THTMLWriter; overload;
     function OpenIFrame(aURL: string): THTMLWriter; overload;
@@ -369,6 +373,7 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
+
     { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
     { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
@@ -470,6 +475,14 @@ begin
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
+end;
+
+constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
+begin
+  { DONE -oNick : Not yet implemented }
+  inherited Create;
+  CreateDocument;
+  FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
 end;
 
 constructor THTMLWriter.CreateDocument;
