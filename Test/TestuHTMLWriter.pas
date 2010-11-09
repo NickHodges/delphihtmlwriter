@@ -29,6 +29,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestCreateDocument;
+
     procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
@@ -2647,6 +2649,21 @@ begin
       Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
     end;
   end;
+end;
+
+procedure TestTHTMLWriter.TestCreateDocument;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<html></html>';
+  TestResult := THTMLWriter.CreateDocument.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := THTMLDocTypeStrings[dtHTML401Strict] + '<html></html>';
+  TestResult := THTMLWriter.CreateDocument(dtHTML401Strict).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestLoadSave;
