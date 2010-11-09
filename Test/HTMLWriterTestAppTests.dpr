@@ -29,8 +29,11 @@ uses
 begin
   Application.Initialize;
   if IsConsole then
+  {$IFDEF USEXML}
+    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
+  {$ELSE}
     TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
-//    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
+  {$ENDIF}
   else
     GUITestRunner.RunRegisteredTests;
 end.
