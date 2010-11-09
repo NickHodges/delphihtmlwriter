@@ -13,3 +13,4 @@ glob:*.tvsconfig
 glob:*.txvpck
 glob:Test/HTMLWriterTestAppTests.xml
 glob:Test/*.orig
+glob:*.dcp
