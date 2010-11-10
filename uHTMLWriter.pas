@@ -3,7 +3,7 @@ unit uHTMLWriter;
 interface
 
 uses
-  SysUtils, HTMLWriterUtils, Classes;
+  SysUtils, HTMLWriterUtils, Classes, Generics.Collections;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -43,6 +43,7 @@ type
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
   private
     FHTML: TStringBuilder;
+    FClosingTags: TStack<string>;
     FCurrentTagName: string;
     FTagState: TTagStates;
     FParent: THTMLWriter;
@@ -52,6 +53,7 @@ type
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): THTMLWriter;
+
 {$REGION 'In Tag Type Methods'}
     function InHeadTag: Boolean;
     function InBodyTag: Boolean;
@@ -942,6 +944,7 @@ begin
   Result.FHTML := Self.FHTML.Append(Result.FHTML.ToString);
   Result.FTagState := Self.FTagState + [tsBracketOpen];
   Result.FParent := Self;
+  FClosingTags.Push(TTagMaker.MakeCloseTag(aString));
 end;
 
 function THTMLWriter.OpenCode: THTMLWriter;
