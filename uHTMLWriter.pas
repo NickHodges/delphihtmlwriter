@@ -277,11 +277,23 @@ type
     /// <summary>Opens a &lt;h6&gt; tag.</summary>
     function OpenHeading6: THTMLWriter;
 
+    ///	<summary>Inserts a &lt;h1&gt;&lt;/h1&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading1Text(aString: string): THTMLWriter;
+    ///	<summary>Inserts a &lt;h2&gt;&lt;/h2&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading2Text(aString: string): THTMLWriter;
+    ///	<summary>Inserts a &lt;h3&gt;&lt;/h3&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading3Text(aString: string): THTMLWriter;
+    ///	<summary>Inserts a &lt;h4&gt;&lt;/h4&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading4Text(aString: string): THTMLWriter;
+    ///	<summary>Inserts a &lt;h5&gt;&lt;/h5&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading5Text(aString: string): THTMLWriter;
+    ///	<summary>Inserts a &lt;h6&gt;&lt;/h6&gt; tag and places the given text in it.</summary>
+    ///	<param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading6Text(aString: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'CSS Formatting Methods'}
