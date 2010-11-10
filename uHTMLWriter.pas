@@ -427,7 +427,6 @@ var
 begin
   TempTag := FClosingTags.Pop;
   FHTML := FHTML.Append(TempTag);
-//  Exclude(FTagState, tsUseSlashClose);
   Exclude(FTagState, tsTagOpen);
 end;
 
@@ -635,7 +634,6 @@ end;
 function THTMLWriter.OpenImage: THTMLWriter;
 begin
   Result := AddTag(cImage, ctSlash);
-//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.OpenIFrame: THTMLWriter;
@@ -656,7 +654,6 @@ end;
 function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
 begin
   Result := AddTag(cImage, ctSlash).AddAttribute(cSource, aImageSource);
-//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
@@ -690,7 +687,6 @@ function THTMLWriter.OpenMeta: THTMLWriter;
 begin
   CheckInHeadTag;
   Result := AddTag(cMeta, ctSlash);
-//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.OpenStrike: THTMLWriter;
@@ -1092,7 +1088,6 @@ function THTMLWriter.OpenBase: THTMLWriter;
 begin
   CheckInHeadTag;
   Result := AddTag(cBase, ctSlash);
-//  Result.FTagState := Result.FTagState + [tsUseSlashClose];
 end;
 
 function THTMLWriter.OpenBDO: THTMLWriter;
