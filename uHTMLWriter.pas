@@ -57,6 +57,7 @@ type
     function InHeadTag: Boolean;
     function InBodyTag: Boolean;
     function InCommentTag: Boolean;
+    function InSlashOnlyTag: Boolean;
     function TagIsOpen: Boolean;
     function InFormTag: Boolean;
     function InFieldSetTag: Boolean;
@@ -413,15 +414,13 @@ end;
 function THTMLWriter.CloseTag: THTMLWriter;
 var
   TagToAppend: string;
-  PeekValue: string;
 begin
   if tsTagClosed in FTagState then
   begin
     raise ETryingToCloseClosedTag.Create(strClosingClosedTag);
   end;
 
-  PeekValue := FClosingTags.Peek;
-  if (PeekValue <> TTagMaker.MakeSlashCloseTag) and (not InCommentTag) then
+  if (not InSlashOnlyTag) and (not InCommentTag) then
   begin
     CloseBracket;
   end;
@@ -511,6 +510,14 @@ end;
 function THTMLWriter.InListTag: Boolean;
 begin
   Result := tsInListTag in FTagState;
+end;
+
+function THTMLWriter.InSlashOnlyTag: Boolean;
+var
+  PeekValue: string;
+begin
+   PeekValue := FClosingTags.Peek;
+   Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
 end;
 
 function THTMLWriter.InTableRowTag: Boolean;
