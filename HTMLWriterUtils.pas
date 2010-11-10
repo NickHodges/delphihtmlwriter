@@ -54,6 +54,7 @@ resourcestring
   strMustBeInTable = 'A table must be open in order to call this.';
   strMustBeInComment = 'A comment must be open in order to call CloseComment';
   strNotInFieldTag = 'A fieldset must be open to add this tag.';
+  strStackIsEmpty = 'The stack has nothing in it, but it should.';
 
 type
   IGetHTML = interface
@@ -80,6 +81,7 @@ type
     ENotInTableTagException = class(EHTMLWriterException); // Tested
     ENotInCommentTagException = class(EHTMLWriterException); //Tested
     ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
+    EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
 
   type
 
@@ -199,7 +201,7 @@ end;
 
 class function TTagMaker.MakeCommentCloseTag: string;
 begin
-  Result := cCloseComment;
+  Result := cSpace + cCloseComment;
 end;
 
 class function TTagMaker.MakeOpenTag(aTag: string): string;

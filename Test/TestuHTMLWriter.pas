@@ -29,14 +29,14 @@ type
     procedure TearDown; override;
 
   published
-    procedure TestAddBase;
-    procedure TestNonHTMLTag;
-    procedure TestCreateDocument;
 
     procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
+    procedure TestAddBase;
+    procedure TestNonHTMLTag;
+    procedure TestCreateDocument;
 
     procedure TestFieldSetAndLegend;
 
