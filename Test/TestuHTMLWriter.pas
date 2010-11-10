@@ -1414,10 +1414,12 @@ var
   TestResult: string;
   TempString: string;
   ExpectedResult: string;
+  Temp: THTMLWriter;
 begin
   TempString := 'gloppet';
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag;
+  TestResult := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   try
