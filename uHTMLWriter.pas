@@ -389,7 +389,7 @@ implementation
 
 function THTMLWriter.CloseBracket: THTMLWriter;
 begin
-  if (tsBracketOpen in FTagState) and (not(tsCommentOpen in FTagState)) then
+  if (tsBracketOpen in FTagState) and (not InCommentTag) then
   begin
     FHTML := FHTML.Append(cCloseBracket);
     Include(FTagState, tsTagOpen);
@@ -423,7 +423,7 @@ begin
   end;
 
   PeekValue := FClosingTags.Peek;
-  if PeekValue <> (cSpace + cCloseSlashBracket) then
+  if (PeekValue <> TTagMaker.MakeSlashCloseTag) and (not InCommentTag) then
   begin
     CloseBracket;
   end;
