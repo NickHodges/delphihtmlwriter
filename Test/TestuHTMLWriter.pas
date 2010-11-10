@@ -29,6 +29,8 @@ type
     procedure TearDown; override;
 
   published
+
+    procedure TestNonHTMLTag;
     procedure TestCreateDocument;
 
     procedure TestCloseComment;
@@ -2683,6 +2685,23 @@ begin
   finally
     SysUtils.DeleteFile(cFilename);
   end;
+end;
+
+procedure TestTHTMLWriter.TestNonHTMLTag;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempStr: string;
+begin
+  ExpectedResult := '<b></b>';
+  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempStr := 'mashtes';
+  ExpectedResult := Format('<b>%s</b>', [TempStr]);
+  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestAddSpanTextWithStyle;
