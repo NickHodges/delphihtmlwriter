@@ -426,8 +426,8 @@ var
   TempTag: string;
 begin
   TempTag := FClosingTags.Pop;
-  FHTML := FHTML.Append(cSpace).Append(TempTag);
-  Exclude(FTagState, tsUseSlashClose);
+  FHTML := FHTML.Append(TempTag);
+//  Exclude(FTagState, tsUseSlashClose);
   Exclude(FTagState, tsTagOpen);
 end;
 
@@ -435,25 +435,17 @@ end;
 function THTMLWriter.CloseTag: THTMLWriter;
 var
   TagToAppend: string;
+  PeekValue: string;
 begin
   if tsTagClosed in FTagState then
   begin
     raise ETryingToCloseClosedTag.Create(strClosingClosedTag);
   end;
 
-  if not(tsUseSlashClose in FTagState) and (not(tsCommentOpen in FTagState)) then
+  PeekValue := FClosingTags.Peek;
+  if PeekValue <> (cSpace + cCloseSlashBracket) then
   begin
     CloseBracket;
-  end;
-
-  if (tsBracketOpen in FTagState) and (not(tsUseSlashClose in FTagState)) and (not(tsCommentOpen in FTagState)) then
-  begin
-    Assert(False, strOpenBracketImpossible);
-  end;
-
-  if tsUseSlashClose in FTagState then
-  begin
-    CloseSlashBracket;
   end;
 
   if InCommentTag then
@@ -468,7 +460,7 @@ begin
       raise Exception.Create('The stack has nothing, but it should. ');
     end;
     TagToAppend := FClosingTags.Pop;
-    FHTML.Append(TagToAppend); // FHTML.Append(cOpenBracketSlash).Append(FCurrentTagName).Append(cCloseBracket);
+    FHTML.Append(TagToAppend);
   end;
 
   CleanUpTagState;
@@ -643,7 +635,7 @@ end;
 function THTMLWriter.OpenImage: THTMLWriter;
 begin
   Result := AddTag(cImage, ctSlash);
-  Include(Result.FTagState, tsUseSlashClose);
+//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.OpenIFrame: THTMLWriter;
@@ -664,7 +656,7 @@ end;
 function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
 begin
   Result := AddTag(cImage, ctSlash).AddAttribute(cSource, aImageSource);
-  Include(Result.FTagState, tsUseSlashClose);
+//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
@@ -698,7 +690,7 @@ function THTMLWriter.OpenMeta: THTMLWriter;
 begin
   CheckInHeadTag;
   Result := AddTag(cMeta, ctSlash);
-  Include(Result.FTagState, tsUseSlashClose);
+//  Include(Result.FTagState, tsUseSlashClose);
 end;
 
 function THTMLWriter.OpenStrike: THTMLWriter;
@@ -1100,7 +1092,7 @@ function THTMLWriter.OpenBase: THTMLWriter;
 begin
   CheckInHeadTag;
   Result := AddTag(cBase, ctSlash);
-  Result.FTagState := Result.FTagState + [tsUseSlashClose];
+//  Result.FTagState := Result.FTagState + [tsUseSlashClose];
 end;
 
 function THTMLWriter.OpenBDO: THTMLWriter;
