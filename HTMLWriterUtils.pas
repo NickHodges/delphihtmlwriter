@@ -95,6 +95,7 @@ type
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
+    TCloseTagType = (ctNormal, ctSlash, ctComment);
 
     TPercentage = 1 .. 100;
 
@@ -181,6 +182,8 @@ type
   TTagMaker = class
     class function MakeOpenTag(aTag: string): string; static;
     class function MakeCloseTag(aTag: string): string; static;
+    class function MakeSlashCloseTag: string; static;
+    class function MakeCommentCloseTag: string; static;
   end;
 
 implementation
@@ -194,9 +197,19 @@ begin
   end;
 end;
 
+class function TTagMaker.MakeCommentCloseTag: string;
+begin
+  Result := cCloseComment;
+end;
+
 class function TTagMaker.MakeOpenTag(aTag: string): string;
 begin
   Result := Format('<%s>', [aTag]);
+end;
+
+class function TTagMaker.MakeSlashCloseTag: string;
+begin
+  Result := cCloseSlashBracket;
 end;
 
 class function TTagMaker.MakeCloseTag(aTag: string): string;
