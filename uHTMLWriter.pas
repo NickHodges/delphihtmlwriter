@@ -40,14 +40,27 @@ type
   ///	complete HTML documents or chunks of HTML. By using the fluent interface, you can link together number of methods
   ///	to create a complete document.</summary>
   ///	<remarks>
-  ///	  <para>THTMLWriter is very method heavy, but relatively code light.&#160; Most of the code simply ends up
-  ///	  calling the AddTag method.&#160; The closing tags are tracked in a TStack&lt;string&gt; class.&#160;</para>
-  ///	  <para>Most&#160;most methods begin with either "Open" or "Add".&#160;</para>
-  ///	  <para>Methods that start with "Open" will add &lt;tag" to the HTML stream, leaving it ready for the addition of
-  ///	  attributes or other content.&#160; The system will close the tag when necessary.</para>
+  ///	  <para>THTMLWriter is very method heavy, but relatively code light. Most of the code simply ends up calling
+  ///	  the&#160;AddTag&#160;method. The closing tags are tracked in a&#160;TStack&lt;string&gt;&#160;class.</para>
+  ///	  <para>Most methods begin with either "Open" or "Add". Methods that start with "Open" will
+  ///	  add&#160;&lt;tag&#160;to the HTML stream, leaving it ready for the addition of attributes or other content. The
+  ///	  system will automatically close the tag when necessary.</para>
   ///	  <para>Methods that start with "Add" will normally take paramenters and then add content within a complete tag
-  ///	  pair. For example, a call to AddBoldText('blah') will result in '&lt;b&gt;blah&lt;/b&gt;' being added to the
-  ///	  HTML stream.</para>
+  ///	  pair. For example, a call toAddBoldText('blah') will result in&#160;&lt;b&gt;blah&lt;/b&gt;&#160;being added to
+  ///	  the HTML stream.</para>
+  ///	  <para>Some things to note:</para>
+  ///	  <list type="bullet">
+  ///	    <item>Any tag that is opened will need to be closed via&#160;CloseTag</item>
+  ///	    <item>Any tag that is added via a&#160;AddXXXX&#160;call will close itself.</item>
+  ///	    <item>The rule to follow: Close what you open. Additions take care of themselves.</item>
+  ///	    <item>As a general rule, THTMLWriter will raise an exception if a tag is placed somewhere that doesn't make
+  ///	    sense.</item>
+  ///	    <item>Certain tags like&#160;&lt;meta&gt;&#160;and&#160;&lt;base&gt;&#160;can only be added inside
+  ///	    at&#160;&lt;head&gt;&#160;tag.</item>
+  ///	    <item>Tags such as&#160;&lt;td&gt;,&#160;&lt;tr&gt;&#160;can only be added inside of
+  ///	    a&#160;&lt;table&gt;&#160;tag</item>
+  ///	    <item>The same is true for list items inside lists.</item>
+  ///	  </list>
   ///	</remarks>
   {$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
