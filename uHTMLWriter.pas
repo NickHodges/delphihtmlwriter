@@ -875,7 +875,7 @@ begin
   Result.FTagState := Result.FTagState + [tsInListTag];
 end;
 
-{ TODO -oNick : This method needs to be reworked and made more efficient. }
+{ DONE -oNick : This method needs to be reworked and made more efficient. }
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
