@@ -48,7 +48,6 @@ type
     FTagState: TTagStates;
     FParent: THTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
-    procedure AddToHTML(const aString: string);
     function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
@@ -546,11 +545,6 @@ end;
 function THTMLWriter.OpenEmphasis: THTMLWriter;
 begin
   Result := OpenFormatTag(ftEmphasis);
-end;
-
-procedure THTMLWriter.AddToHTML(const aString: string);
-begin
-  FHTML := FHTML.Append(aString);
 end;
 
 function THTMLWriter.OpenFieldSet: THTMLWriter;
@@ -1484,11 +1478,10 @@ end;
 function THTMLWriter.AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
 begin
   CheckBracketOpen(aString);
-  AddToHTML(' ');
-  AddToHTML(aString);
+  FHTML := FHTML.Append(cSpace).Append(aString);
   if aValue <> '' then
   begin
-    AddToHTML(Format('="%s"', [aValue]));
+    FHTML := FHTML.Append(Format('="%s"', [aValue]));
   end;
   Result := Self;
 end;
