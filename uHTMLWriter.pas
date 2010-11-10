@@ -65,8 +65,6 @@ type
     function InTableRowTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
-//    procedure CloseSlashBracket;
-//    procedure CloseCommentTag;
 
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
@@ -157,7 +155,7 @@ type
 {$ENDREGION}
     function AddParagraphText(aString: string): THTMLWriter;
 {$REGION 'Documentation'}
-    /// <summary>Adds theh passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
+    /// <summary>Adds the passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
     /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
     /// <param name="aStyle">The value for the Style attribute&#160;to be added to the &lt;p&gt; tag.</param>
 {$ENDREGION}
