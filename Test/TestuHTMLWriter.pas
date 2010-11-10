@@ -29,7 +29,7 @@ type
     procedure TearDown; override;
 
   published
-
+    procedure TestAddBase;
     procedure TestNonHTMLTag;
     procedure TestCreateDocument;
 
@@ -37,7 +37,7 @@ type
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
-    procedure TestAddBase;
+
     procedure TestFieldSetAndLegend;
 
     procedure TestOpenForm;
@@ -1414,12 +1414,10 @@ var
   TestResult: string;
   TempString: string;
   ExpectedResult: string;
-  Temp: THTMLWriter;
 begin
   TempString := 'gloppet';
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  Temp := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag;
-  TestResult := Temp.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   try
@@ -2120,11 +2118,13 @@ var
   TestResult, ExpectedResult: string;
   Temp: string;
   TempTarget: TTargetType;
+  TempWriter: THTMLWriter;
 const
   TempURL = 'http://www.nickhodges.com';
 begin
   ExpectedResult := Format(HTML('<head><base /></head>'), [TempURL]);
-  TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenBase.CloseTag.CloseTag.CloseTag.AsHTML;
+  TempWriter := HTMLWriterFactory(cHTML).OpenHead.OpenBase;
+  TestResult := TempWriter.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := Format(HTML('<head><base href="%s" /></head>'), [TempURL]);

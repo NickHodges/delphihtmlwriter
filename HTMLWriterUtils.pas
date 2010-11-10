@@ -209,7 +209,7 @@ end;
 
 class function TTagMaker.MakeSlashCloseTag: string;
 begin
-  Result := cCloseSlashBracket;
+  Result := cSpace + cCloseSlashBracket;
 end;
 
 class function TTagMaker.MakeCloseTag(aTag: string): string;
