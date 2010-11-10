@@ -34,12 +34,22 @@ uses
 {$ENDREGION}
 
 type
-{$REGION 'Documentation'}
-  /// <summary>A class for creating HTML.&#160; THTMLWriter uses the fluent
-  /// interface.  It can be used to create either complete HTML documents or
-  /// chunks of HTML.  By using the fluent interface, you can link together
-  /// number of methods to create a complete document.</summary>
-{$ENDREGION}
+
+  {$REGION 'Documentation'}
+  ///	<summary>A class for creating HTML.&#160; THTMLWriter uses the fluent interface. It can be used to create either
+  ///	complete HTML documents or chunks of HTML. By using the fluent interface, you can link together number of methods
+  ///	to create a complete document.</summary>
+  ///	<remarks>
+  ///	  <para>THTMLWriter is very method heavy, but relatively code light.&#160; Most of the code simply ends up
+  ///	  calling the AddTag method.&#160; The closing tags are tracked in a TStack&lt;string&gt; class.&#160;</para>
+  ///	  <para>Most&#160;most methods begin with either "Open" or "Add".&#160;</para>
+  ///	  <para>Methods that start with "Open" will add &lt;tag" to the HTML stream, leaving it ready for the addition of
+  ///	  attributes or other content.&#160; The system will close the tag when necessary.</para>
+  ///	  <para>Methods that start with "Add" will normally take paramenters and then add content within a complete tag
+  ///	  pair. For example, a call to AddBoldText('blah') will result in '&lt;b&gt;blah&lt;/b&gt;' being added to the
+  ///	  HTML stream.</para>
+  ///	</remarks>
+  {$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
   private
     FHTML: TStringBuilder;
@@ -188,8 +198,11 @@ type
     function OpenCite: THTMLWriter;
     /// <summary>Opens a &lt;acronym&gt; tag.</summary>
     function OpenAcronym: THTMLWriter;
+    ///	<summary>Opens an &lt;abbr&gt; tag.</summary>
     function OpenAbbreviation: THTMLWriter;
+    ///	<summary>Opens an &lt;addr&gt; tag</summary>
     function OpenAddress: THTMLWriter;
+    /// <summary>Opens a &lt;bdo&gt; tag.</summary>
     function OpenBDO: THTMLWriter;
     /// <summary>Opens a &lt;big&gt; tag.</summary>
     function OpenBig: THTMLWriter;
@@ -203,8 +216,9 @@ type
     function OpenDefinition: THTMLWriter;
     /// <summary>Opens a &lt;font&gt; tag.</summary>
     function OpenFont: THTMLWriter;
-
+    ///	<summary>Opens a &lt;kbd&gt; tag</summary>
     function OpenKeyboard: THTMLWriter;
+    ///	<summary>Opens a &lt;q&gt; tag.&#160;</summary>
     function OpenQuotation: THTMLWriter;
     /// <summary>Opens a &lt;sample&gt; tag.</summary>
     function OpenSample: THTMLWriter;
@@ -216,9 +230,14 @@ type
     function OpenTeletype: THTMLWriter;
     /// <summary>Opens a &lt;var&gt; tag.</summary>
     function OpenVariable: THTMLWriter;
-
+    ///	<summary>Adds a &lt;b&gt;&lt;/b&gt; containing the passed text</summary>
+    ///	<param name="aString">The text to be placed within the bold tag.</param>
     function AddBoldText(aString: string): THTMLWriter;
+    ///	<summary>Adds a &lt;i&gt;&lt;/i&gt; containing the passed text</summary>
+    ///	<param name="aString">The text to be placed within the italic tag.</param>
     function AddItalicText(aString: string): THTMLWriter;
+    ///	<summary>Adds a &lt;u&gt;&lt;/u&gt; containing the passed text</summary>
+    ///	<param name="aString">The text to be placed within the underline tag.</param>
     function AddUnderlinedText(aString: string): THTMLWriter;
     function AddEmphasisText(aString: string): THTMLWriter;
     function AddStrongText(aString: string): THTMLWriter;
@@ -245,11 +264,17 @@ type
     function AddValiableText(aString: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'Heading Methods'}
+    /// <summary>Opens a &lt;h1&gt; tag.</summary>
     function OpenHeading1: THTMLWriter;
+    /// <summary>Opens a &lt;h2&gt; tag.</summary>
     function OpenHeading2: THTMLWriter;
+    /// <summary>Opens a &lt;h3&gt; tag.</summary>
     function OpenHeading3: THTMLWriter;
+    /// <summary>Opens a &lt;h4&gt; tag.</summary>
     function OpenHeading4: THTMLWriter;
+    /// <summary>Opens a &lt;h5&gt; tag.</summary>
     function OpenHeading5: THTMLWriter;
+    /// <summary>Opens a &lt;h6&gt; tag.</summary>
     function OpenHeading6: THTMLWriter;
 
     function AddHeading1Text(aString: string): THTMLWriter;
@@ -310,8 +335,12 @@ type
     function CloseTag: THTMLWriter;
     function CloseComment: THTMLWriter;
     function CloseList: THTMLWriter;
+    { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
 {$ENDREGION}
 {$REGION 'Image Methods'}
+
+    ///	<summary>Opens in &lt;img&gt; tag.</summary>
+    ///	<remarks>This tag will always be closed by " /&gt;"</remarks>
     function OpenImage: THTMLWriter; overload;
     function OpenImage(aImageSource: string): THTMLWriter; overload;
     function AddImage(aImageSource: string): THTMLWriter;
@@ -327,6 +356,7 @@ type
     /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
     /// open.</remarks>
 {$ENDREGION}
+
     function OpenTable: THTMLWriter; overload;
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
