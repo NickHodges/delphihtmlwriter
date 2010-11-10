@@ -66,7 +66,6 @@ type
     function InTableRowTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
-
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
 {$ENDREGION}
@@ -409,7 +408,6 @@ begin
   Result := CloseTag;
 end;
 
-
 { DONE -oNick : This routine needs to be cleaned up and made more efficient. }
 function THTMLWriter.CloseTag: THTMLWriter;
 var
@@ -516,8 +514,8 @@ function THTMLWriter.InSlashOnlyTag: Boolean;
 var
   PeekValue: string;
 begin
-   PeekValue := FClosingTags.Peek;
-   Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
+  PeekValue := FClosingTags.Peek;
+  Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
 end;
 
 function THTMLWriter.InTableRowTag: Boolean;
@@ -885,6 +883,11 @@ begin
   if (FCurrentTagName = cFieldSet) and InFieldSetTag then
   begin
     Exclude(FTagState, tsInFieldSetTag);
+  end;
+
+  if (FCurrentTagName = cComment) and InCommentTag then
+  begin
+    Exclude(FTagState, tsCommentOpen);
   end;
 
   if (FCurrentTagName = cForm) and InFormTag then
