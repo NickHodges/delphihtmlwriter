@@ -83,7 +83,7 @@ type
 
   type
 
-    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsUseSlashClose, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
+    TTagState = (tsBracketOpen, tsCommentOpen, tsTagOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
