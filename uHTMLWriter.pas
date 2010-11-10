@@ -65,8 +65,8 @@ type
     function InTableRowTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
-    procedure CloseSlashBracket;
-    procedure CloseCommentTag;
+//    procedure CloseSlashBracket;
+//    procedure CloseCommentTag;
 
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
@@ -404,33 +404,14 @@ begin
   Result := CloseTag;
 end;
 
-procedure THTMLWriter.CloseCommentTag;
-var
-  TempTag: string;
-begin
-  TempTag := FClosingTags.Pop;
-  FHTML := FHTML.Append(cSpace).Append(TempTag);
-  Exclude(FTagState, tsCommentOpen);
-  Exclude(FTagState, tsTagOpen);
-  Include(FTagState, tsTagClosed);
-end;
-
 function THTMLWriter.CloseList: THTMLWriter;
 begin
   CheckInListTag;
   Result := CloseTag;
 end;
 
-procedure THTMLWriter.CloseSlashBracket;
-var
-  TempTag: string;
-begin
-  TempTag := FClosingTags.Pop;
-  FHTML := FHTML.Append(TempTag);
-  Exclude(FTagState, tsTagOpen);
-end;
 
-{ TODO -oNick : This routine needs to be cleaned up and made more efficient. }
+{ DONE -oNick : This routine needs to be cleaned up and made more efficient. }
 function THTMLWriter.CloseTag: THTMLWriter;
 var
   TagToAppend: string;
@@ -447,16 +428,11 @@ begin
     CloseBracket;
   end;
 
-  if InCommentTag then
-  begin
-    CloseCommentTag;
-  end;
-
-  if TagIsOpen then
+  if TagIsOpen or InCommentTag then
   begin
     if FClosingTags.Count = 0 then
     begin
-      raise Exception.Create('The stack has nothing, but it should. ');
+      raise EEmptyStackHTMLWriterExeption.Create(strStackIsEmpty);
     end;
     TagToAppend := FClosingTags.Pop;
     FHTML.Append(TagToAppend);
@@ -464,13 +440,10 @@ begin
 
   CleanUpTagState;
 
-  FParent.FHTML := Self.FHTML;
   Result := FParent;
 end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
-var
-  TagToPush: string;
 begin
   if StringIsEmpty(aTagName) then
   begin
@@ -485,8 +458,6 @@ begin
   FClosingTags := TStack<string>.Create;
   PushClosingTagOnStack(aCloseTagType, aTagName);
 
-//  TagToPush := TTagMaker.MakeCloseTag(aTagName);
-//  FClosingTags.Push(TagToPush);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
@@ -945,6 +916,7 @@ begin
   begin
     Exclude(FTagState, tsInTableRowTag);
   end;
+
   FCurrentTagName := '';
 end;
 
@@ -961,7 +933,6 @@ begin
   Result.FHTML := Self.FHTML.Append(Result.FHTML.ToString);
   Result.FTagState := Self.FTagState + [tsBracketOpen];
   Result.FParent := Self;
-//  PushClosingTagOnStack(aCloseTagType, aString);
 end;
 
 function THTMLWriter.OpenCode: THTMLWriter;
@@ -976,7 +947,6 @@ begin
   Result.FHTML := Self.FHTML.Append(Result.FHTML.ToString).Append(cSpace);
   Result.FTagState := Result.FTagState + [tsCommentOpen];
   Result.FParent := Self;
-  // PushClosingTagOnStack(ctComment);
 end;
 
 function THTMLWriter.AsHTML: string;
