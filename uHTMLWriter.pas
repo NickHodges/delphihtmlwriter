@@ -80,7 +80,10 @@ type
     procedure CheckBracketOpen(aString: string);
 {$ENDREGION}
   public
-    { TODO : Add support for <!DOCTYPE> tag }
+    { DONE : Add support for <!DOCTYPE> tag }
+    { TODO : Add support for CRLF }
+
+
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
     /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
