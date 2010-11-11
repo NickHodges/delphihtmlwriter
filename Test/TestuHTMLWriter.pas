@@ -28,6 +28,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestStringIsEmpty;
     procedure TestMap;
     procedure TestArea;
 
@@ -1816,6 +1817,17 @@ begin
   TestResult := HTMLWriterFactory('html').OpenVariable.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestStringIsEmpty;
+begin
+  CheckTrue(StringIsEmpty(''), 'StringIsEmpty failed in a horrible, disgusting way #1');
+  CheckTrue(StringIsEmpty('', True), 'StringIsEmpty failed in a horrible, disgusting way #2');
+  CheckTrue(StringIsEmpty('', False), 'StringIsEmpty failed in a horrible, disgusting way #3');
+
+  CheckFalse(StringIsEmpty('   '), 'StringIsEmpty failed in a horrible, disgusting way #4');
+  CheckTrue(StringIsEmpty('   ', True), 'StringIsEmpty failed in a horrible, disgusting way #5');
+  CheckFalse(StringIsEmpty('   ', False), 'StringIsEmpty failed in a horrible, disgusting way #6');
 end;
 
 procedure TestTHTMLWriter.TestOpenForm;
