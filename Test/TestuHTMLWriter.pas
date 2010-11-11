@@ -22,12 +22,14 @@ type
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
+  private
 
   public
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
+    procedure TestBaseFont;
     procedure TestStringIsEmpty;
     procedure TestMap;
     procedure TestArea;
@@ -934,37 +936,37 @@ var
 begin
   TempTag := cFieldSet;
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.AsHTML;
-  ExpectedResult := Format('<html><%s', [TempTag]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AsHTML;
+  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult, '#1');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult, '#2');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s></%s></form></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult, '#3');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.AddText('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s>blah</%s></form></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult, '#4');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.AsHTML;
-  ExpectedResult := Format('<html><%s><%s', [cFieldSet, cLegend]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.AsHTML;
+  ExpectedResult := Format('<html><form><%s><%s', [cFieldSet, cLegend]);
+  CheckEquals(ExpectedResult, TestResult, '#4');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
+  CheckEquals(ExpectedResult, TestResult, '#5');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.OpenLegend.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  CheckEquals(ExpectedResult, TestResult, '#6');
 
-  TestResult := HTMLWriterFactory('html').OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
-  CheckEquals(ExpectedResult, TestResult);
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  CheckEquals(ExpectedResult, TestResult, '#7');
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML;
@@ -1066,6 +1068,34 @@ begin
   TempColor := 'red';
   TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).CloseTag.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><map><%s color="%s" /></map></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestBaseFont;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempName: string;
+begin
+  TempTag := cBaseFont;
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenBaseFont.AsHTML;
+  ExpectedResult := Format('<html><head><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenBaseFont.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s />', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenBaseFont.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s /></head></html>', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempName := 'Verdana';
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenBaseFont.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s face="%s" /></head></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;
