@@ -22,13 +22,14 @@ type
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
-  private
 
   public
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
+    procedure TestMap;
+    procedure TestArea;
 
     procedure TestFrameset;
     procedure TestFrame;
@@ -1039,6 +1040,73 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
+
+procedure TestTHTMLWriter.TestArea;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cArea;
+
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AsHTML;
+  ExpectedResult := Format('<html><map><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s></%s></map></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s>blah</%s></map></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s color="%s">blah</%s></map></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestMap;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cMap;
+
+  TestResult := HTMLWriterFactory('html').OpenMap.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMap.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenMap.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+
+
 
 procedure TestTHTMLWriter.TestOpenFont;
 var
