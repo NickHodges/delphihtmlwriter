@@ -462,7 +462,6 @@ type
     /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
     /// open.</remarks>
 {$ENDREGION}
-
     function OpenTable: THTMLWriter; overload;
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
@@ -610,7 +609,6 @@ begin
   FParent := Self;
   FClosingTags := TStack<string>.Create;
   PushClosingTagOnStack(aCloseTagType, aTagName);
-
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
@@ -1006,7 +1004,7 @@ begin
   try
     SS.LoadFromStream(Stream);
     FHTML.Clear;
-    FHTML.Append(SS.DataString);
+    FHTML := FHTML.Append(SS.DataString);
   finally
     SS.Free;
   end;
@@ -1255,7 +1253,7 @@ end;
 function THTMLWriter.OpenArea: THTMLWriter;
 begin
   CheckInMapTag;
-  Result := AddTag(cArea);
+  Result := AddTag(cArea, ctSlash);
 end;
 
 function THTMLWriter.OpenBase: THTMLWriter;
