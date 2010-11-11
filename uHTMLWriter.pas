@@ -385,6 +385,14 @@ type
     /// have it's bracket open.</exception>
 {$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Adds a &lt;br /&gt; tag</summary>
+    ///	<param name="aClearValue">An optional parameter that determines if a clear attribute will be added.&#160; The
+    ///	default value is not to include the clear attribute.</param>
+    ///	<param name="aUseCloseSlash">An optional parameter that determines if the tag will close with a /&gt;.&#160;
+    ///	The default is to do so.</param>
+    {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function OpenComment: THTMLWriter;
@@ -409,13 +417,13 @@ type
     /// open, attributes hanging undone, etc.&#160;</remarks>
 {$ENDREGION}
     function AsHTML: string;
-
     ///	<summary>Adds a comment to the HTML stream</summary>
     ///	<param name="aCommentText">The text to be added inside the comment</param>
     function AddComment(aCommentText: string): THTMLWriter;
-
     ///	<summary>Opens a &lt;script&gt; tag</summary>
     function OpenScript: THTMLWriter;
+    ///	<summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
+    ///	<param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
@@ -425,7 +433,6 @@ type
     function CloseTag: THTMLWriter;
     ///	<summary>Closes an open comment tag.</summary>
     function CloseComment: THTMLWriter;
-
     ///	<summary>Closes and open &lt;list&gt; tag</summary>
     function CloseList: THTMLWriter;
     { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
