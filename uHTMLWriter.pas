@@ -97,6 +97,7 @@ type
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
+    procedure CheckInFormTag;
     procedure CheckInFieldSetTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
@@ -155,6 +156,7 @@ type
     {$ENDREGION}
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
+    function OpenBaseFont: THTMLWriter;
 
     /// <summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
     /// <remarks>Note:&#160; this method can only be called inside an open &lt;head&gt; tag.</remarks>
@@ -189,6 +191,11 @@ type
 
     /// <summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: THTMLWriter;
+
+
+
+
+
 {$REGION 'Documentation'}
     /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
     /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
@@ -248,7 +255,7 @@ type
     /// <summary>Opens a &lt;dfn&gt; tag.</summary>
     function OpenDefinition: THTMLWriter;
     /// <summary>Opens a &lt;font&gt; tag.</summary>
-    function OpenFont: THTMLWriter;
+    function OpenFont: THTMLWriter;  { TODO -oNick : Tag this one as deprecated. }
     ///	<summary>Opens a &lt;kbd&gt; tag</summary>
     function OpenKeyboard: THTMLWriter;
     ///	<summary>Opens a &lt;q&gt; tag.&#160;</summary>
@@ -263,6 +270,10 @@ type
     function OpenTeletype: THTMLWriter;
     /// <summary>Opens a &lt;var&gt; tag.</summary>
     function OpenVariable: THTMLWriter;
+    /// <summary>Opens a &lt;ins&gt; tag.</summary>
+    function OpenInsert: THTMLWriter;
+
+
     ///	<summary>Adds a &lt;b&gt;&lt;/b&gt; containing the passed text</summary>
     ///	<param name="aString">The text to be placed within the bold tag.</param>
     function AddBoldText(aString: string): THTMLWriter;
@@ -338,6 +349,12 @@ type
     ///	<summary>Adds the passed in text to a &lt;var&gt;&lt;/var&gt; tag</summary>
     ///	<param name="aString">The text to be passed to the variable tag.</param>
     function AddVariableText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;ins&gt;&lt;/ins&gt; tag</summary>
+    ///	<param name="aString">The text to be passed to the insert tag.</param>
+    function AddInsertText(aString: string): THTMLWriter;
+
+
+
 {$ENDREGION}
 {$REGION 'Heading Methods'}
     /// <summary>Opens a &lt;h1&gt; tag.</summary>
@@ -476,11 +493,34 @@ type
     ///	<remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
     function AddTableData(aText: string): THTMLWriter;
+
+    {
+    Additional Table support required:
+
+    <caption>
+    <th>
+    <col>
+    <colgroup>
+    <thead>
+
+
+    }
+
+
 {$ENDREGION}
 {$REGION 'Form Methods'}
     function OpenForm: THTMLWriter;
 
     { TODO -oNick : Add all supporting tags to <form> }
+    {
+      <button>
+      <input>
+
+
+
+
+     }
+
 {$ENDREGION}
 {$REGION 'FieldSet/Legend'}
 
@@ -716,6 +756,7 @@ end;
 
 function THTMLWriter.OpenFieldSet: THTMLWriter;
 begin
+  CheckInFormTag;
   Result := AddTag(cFieldSet);
   Result.FTagState := Result.FTagState + [tsInFieldSetTag];
 end;
@@ -803,9 +844,19 @@ begin
   Result := AddTag(cImage, ctSlash).AddAttribute(cSource, aImageSource);
 end;
 
+function THTMLWriter.OpenInsert: THTMLWriter;
+begin
+  Result := OpenFormatTag(ftInsert);
+end;
+
 function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
 begin
   Result := OpenImage(aImageSource).CloseTag;
+end;
+
+function THTMLWriter.AddInsertText(aString: string): THTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftInsert);
 end;
 
 function THTMLWriter.OpenItalic: THTMLWriter;
@@ -1262,6 +1313,12 @@ begin
   Result := AddTag(cBase, ctSlash);
 end;
 
+function THTMLWriter.OpenBaseFont: THTMLWriter;
+begin
+  CheckInHeadTag;
+  Result := AddTag(cBaseFont, ctSlash);
+end;
+
 function THTMLWriter.OpenBDO: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBDO);
@@ -1535,6 +1592,14 @@ begin
   if not InFieldSetTag then
   begin
     raise ENotInFieldsetTagException.Create(strNotInFieldTag);
+  end;
+end;
+
+procedure THTMLWriter.CheckInFormTag;
+begin
+  if not InFormTag then
+  begin
+    raise ENotInFormTagHTMLException.Create(strNotInFormTag);
   end;
 end;
 
