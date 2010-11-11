@@ -185,12 +185,15 @@ type
 {$REGION 'Documentation'}
 ///	<summary>Function to determine if a string is empty.</summary>
 ///	<param name="aString">The string to be examined for emptiness.</param>
-///	<param name="aCountSpacesAsEmpty">An optional parameter that determines if empty spaces should be included.&#160; If
-///	passed in as true, a string with nothign but spaces in it will be counted as empty.&#160; Defaults to true.</param>
+///	<param name="aCountSpacesAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
+///	If passed in as True, a string with nothing but spaces in it will be counted as empty.&#160; Defaults to
+///	True.</param>
 {$ENDREGION}
-function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = True): Boolean;
+function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = False): Boolean;
 
 type
+
+  ///	<summary>A class for producing tags, including opening and closing tags.</summary>
   TTagMaker = class
     class function MakeOpenTag(aTag: string): string; static;
     class function MakeCloseTag(aTag: string): string; static;
