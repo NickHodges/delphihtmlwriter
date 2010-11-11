@@ -1997,11 +1997,11 @@ begin
   TempTag := TFormatTypeStrings[ftVariable];
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
-  TestResult := HTMLWriterFactory('html').AddValiableText(TempString).AsHTML;
+  TestResult := HTMLWriterFactory('html').AddVariableText(TempString).AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
-  TestResult := HTMLWriterFactory('html').AddValiableText(TempString).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').AddVariableText(TempString).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 

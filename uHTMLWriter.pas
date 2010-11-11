@@ -98,6 +98,12 @@ type
     procedure CheckInFieldSetTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
+
+    {$REGION 'Documentation'}
+    ///	<param name="aString">Takes this parameter to report what the current tag is if there is an error.</param>
+    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if an attempt is made to add an attribute to a tag
+    ///	that doesn't have an open bracket.&#160; This is theoretically not possible. :-)</exception>
+    {$ENDREGION}
     procedure CheckBracketOpen(aString: string);
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
 {$ENDREGION}
@@ -105,18 +111,20 @@ type
     { DONE : Add support for <!DOCTYPE> tag }
     { TODO : Add support for CRLF }
 {$REGION 'Constructors'}
-{$REGION 'Documentation'}
-    /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if
-    /// you want to create a chunk of HTML code not associated with a document.</summary>
-    /// <param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
-    /// &lt;span&gt; tag, you should pass 'span' as the value</param>
-    /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
-    /// normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag
-    /// will not have any attributes.</param>
-    /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
-    /// parameter</exception>
-    /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-{$ENDREGION}
+
+    {$REGION 'Documentation'}
+    ///	<summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.&#160; Use this constructur if you
+    ///	want to create a chunk of HTML code not associated with a document.</summary>
+    ///	<param name="aTagName">The text for the tag you are creating.&#160; For instance, if you want to create a
+    ///	&lt;span&gt; tag, you should pass 'span' as the value</param>
+    ///	<param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
+    ///	<param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
+    ///	normally the &lt;b&gt; doesn't have attributes.&#160; Set this to False if you want to ensure that the tag will
+    ///	not have any attributes.</param>
+    ///	<exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
+    ///	parameter</exception>
+    ///	<seealso cref="CreateDocument">The CreateDocument constructor</seealso>
+    {$ENDREGION}
     constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
@@ -135,6 +143,12 @@ type
     /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
     function OpenMeta: THTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Opens a &lt;base /&gt; tag.&#160;</summary>
+    ///	<remarks>This tag will always be closed with the '/&gt;' tag.&#160; In addition, this tag can only be added
+    ///	inside of a &lt;head&gt; tag.</remarks>
+    {$ENDREGION}
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
 
@@ -190,6 +204,8 @@ type
     function AddSpanTextWithStyle(aString: string; aStyle: string): THTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): THTMLWriter;
 
+    ///	<summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
+    ///	<param name="aString">The text to be added inside teh &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): THTMLWriter;
     function AddDivTextWithStyle(aString: string; aStyle: string): THTMLWriter;
     function AddDivTextWithID(aString: string; aID: string): THTMLWriter;
@@ -252,8 +268,14 @@ type
     ///	<summary>Adds a &lt;u&gt;&lt;/u&gt; containing the passed text</summary>
     ///	<param name="aString">The text to be placed within the underline tag.</param>
     function AddUnderlinedText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed text inside of a &lt;em&gt;&lt;/em&gt; tag</summary>
+    ///	<param name="aString">The text to be added inside the Emphasis tag.</param>
     function AddEmphasisText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;strong&gt;&lt;/strong&gt; tag.</summary>
+    ///	<param name="aString">The text to be added to the strong tag.</param>
     function AddStrongText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;pre&gt;&lt;/pre&gt; tag</summary>
+    ///	<param name="aString">The text to be added inside a preformatted tag</param>
     function AddPreformattedText(aString: string): THTMLWriter;
     function AddCitationText(aString: string): THTMLWriter;
     function AddBlockQuoteText(aString: string): THTMLWriter;
@@ -269,12 +291,24 @@ type
     function AddDefinitionText(aString: string): THTMLWriter;
     function AddFontText(aString: string): THTMLWriter;
     function AddKeyboardText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;q&gt;&lt;/q&gt; tag</summary>
+    ///	<param name="aString">The string that will be included inside the quotation tag.</param>
     function AddQuotationText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;samp&gt;&lt;/samp&gt; tag.</summary>
+    ///	<param name="aString">The text to be inserted into the sample tag.</param>
     function AddSampleText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;small&gt;&lt;/small&gt; tag</summary>
+    ///	<param name="aString">The text to be included in a small tag.</param>
     function AddSmallText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text inside a &lt;strike&gt;&lt;/strike&gt; tag</summary>
+    ///	<param name="aString">The text to be included in the strike tag.</param>
     function AddStrikeText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;tt&gt;&lt;/tt&gt; tag.</summary>
+    ///	<param name="aString">The text to be added into the teletype tag.</param>
     function AddTeletypeText(aString: string): THTMLWriter;
-    function AddValiableText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;var&gt;&lt;/var&gt; tag</summary>
+    ///	<param name="aString">The text to be passed to the variable tag.</param>
+    function AddVariableText(aString: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'Heading Methods'}
     /// <summary>Opens a &lt;h1&gt; tag.</summary>
@@ -360,7 +394,9 @@ type
     function AddScript(aScriptText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
-    /// <summary>Closes an open tag.</summary>
+
+    ///	<summary>Closes an open tag.</summary>
+    ///	<exception cref="ETryingToCloseClosedTag">Raised if you try to close a tag when no tag is open.</exception>
     function CloseTag: THTMLWriter;
     ///	<summary>Closes an open comment tag.</summary>
     function CloseComment: THTMLWriter;
@@ -1289,7 +1325,7 @@ begin
   Result := AddFormattedText(aString, ftUnderline)
 end;
 
-function THTMLWriter.AddValiableText(aString: string): THTMLWriter;
+function THTMLWriter.AddVariableText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftVariable)
 end;
