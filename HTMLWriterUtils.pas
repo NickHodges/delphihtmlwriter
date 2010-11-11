@@ -32,6 +32,9 @@ interface
 uses SysUtils, Classes;
 
 type
+
+  ///	<summary>Interface that describes the functions of loading and saving entities to and from both files and
+  ///	streams.</summary>
   ILoadSave = interface
     procedure LoadFromFile(const FileName: string); overload;
     procedure LoadFromFile(const FileName: string; Encoding: TEncoding); overload;
@@ -63,6 +66,8 @@ type
   end;
 
   THTMLWidth = record
+    ///	<summary>A data structure that holds a width, and then publishes that width in various ways useful in
+    ///	HTML.</summary>
     Width: integer;
     IsPercentage: Boolean;
     constructor Create(aWidth: integer; aIsPercentage: Boolean);
@@ -100,6 +105,7 @@ type
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
     TCloseTagType = (ctNormal, ctSlash, ctComment);
+    THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
 
     TPercentage = 1 .. 100;
 
@@ -161,21 +167,13 @@ type
 
     { DONE -oNick : Add these formatting tags }
 
-    cClosingTag = '%s</%s>';
     cOpenBracket = '<';
-    cOpenBracketSlash = '</';
     cCloseBracket = '>';
     cCloseSlashBracket = '/>';
     cComment = '!--';
     cCloseComment = '-->';
     cSpace = ' ';
 
-type
-  THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
-
-
-
-const
     THTMLDocTypeStrings: array[THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
                                                           '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
                                                           '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">',
@@ -184,7 +182,13 @@ const
                                                           '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
                                                           '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 
-    function StringIsEmpty(Str: string; aUseTrim: Boolean = True): Boolean;
+{$REGION 'Documentation'}
+///	<summary>Function to determine if a string is empty.</summary>
+///	<param name="aString">The string to be examined for emptiness.</param>
+///	<param name="aCountSpacesAsEmpty">An optional parameter that determines if empty spaces should be included.&#160; If
+///	passed in as true, a string with nothign but spaces in it will be counted as empty.&#160; Defaults to true.</param>
+{$ENDREGION}
+function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = True): Boolean;
 
 type
   TTagMaker = class
@@ -196,12 +200,12 @@ type
 
 implementation
 
-function StringIsEmpty(Str: string; aUseTrim: Boolean = True): Boolean;
+function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = False): Boolean;
 begin
-  Result := Str = EmptyStr;
-  if (not Result) and aUseTrim then
+  Result := aString = EmptyStr;
+  if (not Result) and aCountSpacesAsEmpty then
   begin
-    Result := Trim(Str) = EmptyStr;
+    Result := Trim(aString) = EmptyStr;
   end;
 end;
 
