@@ -58,7 +58,7 @@ type
   ///	    <item>Certain tags like&#160;&lt;meta&gt;&#160;and&#160;&lt;base&gt;&#160;can only be added inside
   ///	    at&#160;&lt;head&gt;&#160;tag.</item>
   ///	    <item>Tags such as&#160;&lt;td&gt;,&#160;&lt;tr&gt;&#160;can only be added inside of
-  ///	    a&#160;&lt;table&gt;&#160;tag</item>
+  ///	    a&#160;&lt;table&gt;&#160;tag.</item>
   ///	    <item>The same is true for list items inside lists.</item>
   ///	  </list>
   ///	</remarks>
@@ -350,15 +350,22 @@ type
     /// open, attributes hanging undone, etc.&#160;</remarks>
 {$ENDREGION}
     function AsHTML: string;
+
+    ///	<summary>Adds a comment to the HTML stream</summary>
+    ///	<param name="aCommentText">The text to be added inside the comment</param>
     function AddComment(aCommentText: string): THTMLWriter;
 
+    ///	<summary>Opens a &lt;script&gt; tag</summary>
     function OpenScript: THTMLWriter;
     function AddScript(aScriptText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
     /// <summary>Closes an open tag.</summary>
     function CloseTag: THTMLWriter;
+    ///	<summary>Closes an open comment tag.</summary>
     function CloseComment: THTMLWriter;
+
+    ///	<summary>Closes and open &lt;list&gt; tag</summary>
     function CloseList: THTMLWriter;
     { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
 {$ENDREGION}
@@ -389,7 +396,11 @@ type
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
     { DONE -oNick : Think about how to do percentage widths }
 
+    ///	<summary>Opens a &lt;tr&gt; tag.</summary>
     function OpenTableRow: THTMLWriter;
+
+    ///	<summary>Opens a &lt;td&gt; tag.</summary>
+    ///	<remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
     function AddTableData(aText: string): THTMLWriter;
 {$ENDREGION}
@@ -401,6 +412,9 @@ type
 {$REGION 'FieldSet/Legend'}
     // fieldset/legend
     function OpenFieldSet: THTMLWriter;
+
+    ///	<summary>Opens a &lt;legend&gt; tag.</summary>
+    ///	<remarks>This method will raise an exception if called outside of an open &lt;fieldset&gt; tag.</remarks>
     function OpenLegend: THTMLWriter;
     function AddLegend(aText: string): THTMLWriter;
 {$ENDREGION}
