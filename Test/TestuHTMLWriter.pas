@@ -29,6 +29,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestAddInsertText;
+    procedure TestOpenInsert;
     procedure TestBaseFont;
     procedure TestStringIsEmpty;
     procedure TestMap;
@@ -902,6 +904,28 @@ begin
 
   TestResult := HTMLWriterFactory('html').OpenBold.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><b>blah</b></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenInsert;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenInsert.AsHTML;
+  ExpectedResult := '<html><ins';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenInsert.CloseTag.AsHTML;
+  ExpectedResult := '<html><ins></ins>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenInsert.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><ins></ins></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenInsert.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><ins>blah</ins></html>';
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -2046,6 +2070,24 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
+
+procedure TestTHTMLWriter.TestAddInsertText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><ins>' + TempString + '</ins>';
+  TestResult := HTMLWriterFactory('html').AddInsertText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<ins>' + TempString + '</ins>');
+  TestResult := HTMLWriterFactory('html').AddInsertText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
 
 procedure TestTHTMLWriter.TestAddItalicText;
 var
