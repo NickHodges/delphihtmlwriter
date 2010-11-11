@@ -55,6 +55,7 @@ resourcestring
   strMustBeInComment = 'A comment must be open in order to call CloseComment';
   strNotInFieldTag = 'A fieldset must be open to add this tag.';
   strStackIsEmpty = 'The stack has nothing in it, but it should.';
+  strNotInFrameSet = 'A <frame> tag can only be added inside of a <frameset> tag.';
 
 type
   IGetHTML = interface
@@ -82,10 +83,11 @@ type
     ENotInCommentTagException = class(EHTMLWriterException); //Tested
     ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
     EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
+    ENotInFrameSetHTMLException = class(EHTMLWriterException);
 
   type
 
-    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag);
+    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag);
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
@@ -125,6 +127,8 @@ type
     cform = 'form';
     cFieldSet = 'fieldset';
     cLegend = 'legend';
+    cFrameset = 'frameset';
+    cFrame = 'frame';
 
     cAnchor = 'a';
     cHREF = 'href';

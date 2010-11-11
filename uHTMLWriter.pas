@@ -86,6 +86,7 @@ type
     function InListTag: Boolean;
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
+    function InFrameSetTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
@@ -98,6 +99,7 @@ type
     procedure CheckInFieldSetTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
+    procedure CheckInFramesetTag;
 
     {$REGION 'Documentation'}
     ///	<param name="aString">Takes this parameter to report what the current tag is if there is an error.</param>
@@ -511,6 +513,10 @@ type
 {$ENDREGION}
     { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
+    function OpenFrameset: THTMLWriter;
+    function OpenFrame: THTMLWriter;
+
+
     { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
 
     { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
@@ -631,6 +637,11 @@ begin
   Result := tsInFormTag in FTagState;
 end;
 
+function THTMLWriter.InFrameSetTag: Boolean;
+begin
+  Result := tsInFramesetTag in FTagState;
+end;
+
 function THTMLWriter.TagIsOpen: Boolean;
 begin
   Result := tsTagOpen in FTagState;
@@ -704,6 +715,18 @@ end;
 function THTMLWriter.OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
 begin
   Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal, chaCannotHaveAttributes);
+end;
+
+function THTMLWriter.OpenFrame: THTMLWriter;
+begin
+  CheckInFrameSetTag;
+  Result := AddTag(cFrame);
+end;
+
+function THTMLWriter.OpenFrameset: THTMLWriter;
+begin
+  Result := AddTag(cFrameSet);
+  Include(Result.FTagState, tsInFramesetTag);
 end;
 
 function THTMLWriter.OpenHeading1: THTMLWriter;
@@ -1464,6 +1487,14 @@ begin
   if not InFieldSetTag then
   begin
     raise ENotInFieldsetTagException.Create(strNotInFieldTag);
+  end;
+end;
+
+procedure THTMLWriter.CheckInFramesetTag;
+begin
+  if not InFrameSetTag then
+  begin
+    raise ENotInFrameSetHTMLException.Create(strNotInFrameSet);
   end;
 end;
 

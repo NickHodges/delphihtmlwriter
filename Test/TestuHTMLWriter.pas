@@ -30,6 +30,8 @@ type
 
   published
 
+    procedure TestFrameset;
+    procedure TestFrame;
     procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
@@ -971,6 +973,70 @@ begin
       Check(True, 'Successfully raised the ENotInFieldsetTagException.  All is well.');
     end;
   end;
+
+end;
+
+procedure TestTHTMLWriter.TestFrame;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cFrame;
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.OpenFrame.AsHTML;
+  ExpectedResult := Format('<html><frameset><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.OpenFrame.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><frameset><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.OpenFrame.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><frameset><%s></%s></frameset></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.OpenFrame.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><frameset><%s>blah</%s></frameset></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.OpenFrame.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><frameset><%s color="%s">blah</%s></frameset></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestFrameset;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cFrameset;
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenFrameSet.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
