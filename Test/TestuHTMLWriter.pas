@@ -1056,20 +1056,16 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s></%s>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><map><%s />', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s></%s></map></html>', [TempTag, TempTag]);
-  CheckEquals(ExpectedResult, TestResult);
-
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s>blah</%s></map></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><map><%s /></map></html>', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TempColor := 'red';
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s color="%s">blah</%s></map></html>', [TempTag, TempColor, TempTag]);
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s color="%s" /></map></html>', [TempTag, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;
