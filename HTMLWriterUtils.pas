@@ -59,6 +59,7 @@ resourcestring
   strNotInFieldTag = 'A fieldset must be open to add this tag.';
   strStackIsEmpty = 'The stack has nothing in it, but it should.';
   strNotInFrameSet = 'A <frame> tag can only be added inside of a <frameset> tag.';
+  strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
 
 type
   IGetHTML = interface
@@ -89,6 +90,7 @@ type
     ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
     EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
     ENotInFrameSetHTMLException = class(EHTMLWriterException);
+    ENotInMapTagHTMLException = class(EHTMLWriterException);
 
   type
 

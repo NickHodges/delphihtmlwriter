@@ -1181,7 +1181,7 @@ begin
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML.Append(cSpace).Append(cCloseSlashBracket);
+        FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
       end;
     ucsDoNotUseCloseSlash:
       begin
@@ -1468,7 +1468,7 @@ begin
   case aUseCloseSlash of
     ucsUseCloseSlash:
       begin
-        FHTML := FHTML.Append(cSpace).Append(cCloseSlashBracket);
+        FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
       end;
     ucsDoNotUseCloseSlash:
       begin
@@ -1520,7 +1520,7 @@ procedure THTMLWriter.CheckInMapTag;
 begin
   if not InMapTag then
   begin
-
+    raise ENotInMapTagHTMLException.Create(strNotInMapTag);
   end;
 end;
 
