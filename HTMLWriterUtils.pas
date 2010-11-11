@@ -60,6 +60,7 @@ resourcestring
   strStackIsEmpty = 'The stack has nothing in it, but it should.';
   strNotInFrameSet = 'A <frame> tag can only be added inside of a <frameset> tag.';
   strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
+  strNotInFormTag = 'This tag can only be placed inside of a <form> tag.';
 
 type
   IGetHTML = interface
@@ -91,6 +92,7 @@ type
     EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
     ENotInFrameSetHTMLException = class(EHTMLWriterException);
     ENotInMapTagHTMLException = class(EHTMLWriterException);
+    ENotInFormTagHTMLException = class(EHTMLWriterException);
 
   type
 
@@ -139,6 +141,7 @@ type
     cFrame = 'frame';
     cMap = 'map';
     cArea = 'area';
+    cBaseFont = 'basefont';
 
     cAnchor = 'a';
     cHREF = 'href';
