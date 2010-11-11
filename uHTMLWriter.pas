@@ -277,19 +277,44 @@ type
     ///	<summary>Adds the passed in text to a &lt;pre&gt;&lt;/pre&gt; tag</summary>
     ///	<param name="aString">The text to be added inside a preformatted tag</param>
     function AddPreformattedText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;cite&lt;&lt;/cite&gt; tag</summary>
+    ///	<param name="aString">The text to be added inside the Citation tag.</param>
     function AddCitationText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text inside of a &lt;blockquote&gt;&lt;/blockquote&gt; tag.</summary>
+    ///	<param name="aString">The text to be included inside the block quote tag.</param>
     function AddBlockQuoteText(aString: string): THTMLWriter;
-
+    ///	<summary>Adds the passed in text to an &lt;acronym&gt;&lt;/acronym&gt; tag.</summary>
+    ///	<param name="aString">The string that will be included in the Acronym tag.</param>
     function AddAcronymText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text inside a &lt;abbr&gt;&lt;/abbr&gt; tag.</summary>
+    ///	<param name="aString">The text to be added inside the Abbreviation tag.</param>
     function AddAbbreviationText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;addr&gt;&lt;/addr&gt; tag.</summary>
+    ///	<param name="aString">The text to be included in the Address tag.</param>
     function AddAddressText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;bdo&gt;&lt;/bdo&gt; tag.</summary>
+    ///	<param name="aString">The text to be added inside the Bi-Directional tag.</param>
     function AddBDOText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;big&gt;&lt;/big&gt; tag.</summary>
+    ///	<param name="aString">The text to eb added to the Big tag.</param>
     function AddBigText(aString: string): THTMLWriter;
+    ///	<summary>Addes the passed in text to a &lt;center&gt;&lt;/center&gt; tag.</summary>
+    ///	<param name="aString">The text to be added to the Center tag.</param>
     function AddCenterText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;code&gt;&lt;/code&gt; tag.</summary>
+    ///	<param name="aString">The text to be added to the Code tag.</param>
     function AddCodeText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;delete&gt;&lt;/delete&gt; tag.</summary>
+    ///	<param name="aString">The text to be added to the Delete tag.</param>
     function AddDeleteText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;dfn&gt;&lt;/dfn&gt; tag.</summary>
+    ///	<param name="aString">The text to be added inside of the Definition tag.</param>
     function AddDefinitionText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;font&gt;&lt;/font&gt; tag.</summary>
+    ///	<param name="aString">The text to be included in the Font tag.</param>
     function AddFontText(aString: string): THTMLWriter;
+    ///	<summary>Adds the passed in text to a &lt;kbd&gt;&lt;/kbd&gt; tag.</summary>
+    ///	<param name="aString">The text to be added to the Keyboard tag.</param>
     function AddKeyboardText(aString: string): THTMLWriter;
     ///	<summary>Adds the passed in text to a &lt;q&gt;&lt;/q&gt; tag</summary>
     ///	<param name="aString">The string that will be included inside the quotation tag.</param>
