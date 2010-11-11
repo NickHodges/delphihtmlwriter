@@ -87,6 +87,7 @@ type
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
     function InFrameSetTag: Boolean;
+    function InMapTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
@@ -100,6 +101,7 @@ type
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
     procedure CheckInFramesetTag;
+    procedure CheckInMapTag;
 
     {$REGION 'Documentation'}
     ///	<param name="aString">Takes this parameter to report what the current tag is if there is an error.</param>
@@ -397,6 +399,8 @@ type
     {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+
+    ///	<summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: THTMLWriter;
 {$REGION 'Documentation'}
     /// <summary>Adds any text to the HTML.&#160;</summary>
@@ -480,22 +484,32 @@ type
     { TODO -oNick : Add all supporting tags to <form> }
 {$ENDREGION}
 {$REGION 'FieldSet/Legend'}
-    // fieldset/legend
+
+    ///	<summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: THTMLWriter;
 
     ///	<summary>Opens a &lt;legend&gt; tag.</summary>
     ///	<remarks>This method will raise an exception if called outside of an open &lt;fieldset&gt; tag.</remarks>
     function OpenLegend: THTMLWriter;
+
+    ///	<summary>Adds the passed in text to a &lt;legend&gt;&lt;/legend&gt; tag</summary>
+    ///	<param name="aText">The text to be included in the Legend tag.</param>
     function AddLegend(aText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'IFrame support'}
+
+    ///	<summary>Opens an &lt;iframe&gt; tag.</summary>
     function OpenIFrame: THTMLWriter; overload;
+
+    ///	<summary>Opens an &lt;iframe&gt; tag and adds a url parameter</summary>
+    ///	<param name="aURL">The value to be added with the url parameter.</param>
     function OpenIFrame(aURL: string): THTMLWriter; overload;
     function OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
     function AddIFrame(aURL: string; aAlternateText: string): THTMLWriter; overload;
     function AddIFrame(aURL: string; aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
 {$ENDREGION}
 {$REGION 'List Methods'}
+
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
     function OpenListItem: THTMLWriter;
@@ -518,6 +532,8 @@ type
 
 
     { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
+    function OpenMap: THTMLWriter;
+    function OpenArea: THTMLWriter;
 
     { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
 
@@ -655,6 +671,11 @@ end;
 function THTMLWriter.InListTag: Boolean;
 begin
   Result := tsInListTag in FTagState;
+end;
+
+function THTMLWriter.InMapTag: Boolean;
+begin
+  Result := tsInMapTag in FTagState;
 end;
 
 function THTMLWriter.InSlashOnlyTag: Boolean;
@@ -811,6 +832,12 @@ begin
   Result := AddTag(cListItem);
 end;
 
+function THTMLWriter.OpenMap: THTMLWriter;
+begin
+  Result := AddTag(cMap);
+  Include(Result.FTagState, tsInMapTag);
+end;
+
 function THTMLWriter.OpenMeta: THTMLWriter;
 begin
   CheckInHeadTag;
@@ -875,7 +902,6 @@ begin
   end;
 
   Result.FTagState := Result.FTagState + [tsInTableTag];
-
 end;
 
 function THTMLWriter.OpenTableData: THTMLWriter;
@@ -1033,6 +1059,16 @@ end;
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cMap) and InMapTag then
+  begin
+    Exclude(FTagState, tsInMapTag);
+  end;
+
+  if (FCurrentTagName = cFrameset) and InFramesetTag then
+  begin
+    Exclude(FTagState, tsInFrameSetTag);
+  end;
 
   if (FCurrentTagName = cFieldSet) and InFieldSetTag then
   begin
@@ -1214,6 +1250,12 @@ end;
 function THTMLWriter.OpenAnchor(const aHREF: string; aText: string): THTMLWriter;
 begin
   Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
+end;
+
+function THTMLWriter.OpenArea: THTMLWriter;
+begin
+  CheckInMapTag;
+  Result := AddTag(cArea);
 end;
 
 function THTMLWriter.OpenBase: THTMLWriter;
@@ -1471,6 +1513,14 @@ begin
   if not InListTag then
   begin
     raise ENotInListTagException.Create(strMustBeInList);
+  end;
+end;
+
+procedure THTMLWriter.CheckInMapTag;
+begin
+  if not InMapTag then
+  begin
+
   end;
 end;
 

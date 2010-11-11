@@ -87,7 +87,7 @@ type
 
   type
 
-    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag);
+    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag, tsInMapTag);
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
@@ -129,6 +129,8 @@ type
     cLegend = 'legend';
     cFrameset = 'frameset';
     cFrame = 'frame';
+    cMap = 'map';
+    cArea = 'area';
 
     cAnchor = 'a';
     cHREF = 'href';
