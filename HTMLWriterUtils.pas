@@ -104,11 +104,11 @@ type
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
-    TUseCloseSlash = (ucsUseCloseSlash, ucsDoNotUseCloseSlash);
+    TIsEmptyTag = (ietIsEmptyTag, ietIsNotEmptyTag);
     TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
-    TCloseTagType = (ctNormal, ctSlash, ctComment);
+    TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
 
     TPercentage = 1 .. 100;

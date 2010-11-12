@@ -414,8 +414,8 @@ type
     ///	<param name="aUseCloseSlash">An optional parameter that determines if the tag will close with a /&gt;.&#160;
     ///	The default is to do so.</param>
     {$ENDREGION}
-    function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
-    function AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+    function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
+    function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
 
     ///	<summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: THTMLWriter;
@@ -828,7 +828,7 @@ end;
 
 function THTMLWriter.OpenImage: THTMLWriter;
 begin
-  Result := AddTag(cImage, ctSlash);
+  Result := AddTag(cImage, ctEmpty);
 end;
 
 function THTMLWriter.OpenIFrame: THTMLWriter;
@@ -848,7 +848,7 @@ end;
 
 function THTMLWriter.OpenImage(aImageSource: string): THTMLWriter;
 begin
-  Result := AddTag(cImage, ctSlash).AddAttribute(cSource, aImageSource);
+  Result := AddTag(cImage, ctEmpty).AddAttribute(cSource, aImageSource);
 end;
 
 function THTMLWriter.OpenInsert: THTMLWriter;
@@ -884,7 +884,7 @@ end;
 
 function THTMLWriter.OpenLink: THTMLWriter;
 begin
-  Result := AddTag(cLink, ctSlash);
+  Result := AddTag(cLink, ctEmpty);
 end;
 
 function THTMLWriter.OpenListItem: THTMLWriter;
@@ -902,7 +902,7 @@ end;
 function THTMLWriter.OpenMeta: THTMLWriter;
 begin
   CheckInHeadTag;
-  Result := AddTag(cMeta, ctSlash);
+  Result := AddTag(cMeta, ctEmpty);
 end;
 
 function THTMLWriter.OpenNoFrames: THTMLWriter;
@@ -1104,7 +1104,7 @@ begin
   case aCloseTagType of
     ctNormal:
       FClosingTags.Push(TTagMaker.MakeCloseTag(aString));
-    ctSlash:
+    ctEmpty:
       FClosingTags.Push(TTagMaker.MakeSlashCloseTag);
     ctComment:
       FClosingTags.Push(TTagMaker.MakeCommentCloseTag);
@@ -1241,7 +1241,7 @@ begin
   Result := OpenTitle.AddText(aTitleText).CloseTag;
 end;
 
-function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML.Append(cOpenBracket).Append(cHardRule);
@@ -1249,12 +1249,12 @@ begin
   begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
-  case aUseCloseSlash of
-    ucsUseCloseSlash:
+  case aUseEmptyTag of
+    ietIsEmptyTag:
       begin
         FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
       end;
-    ucsDoNotUseCloseSlash:
+    ietIsNotEmptyTag:
       begin
         FHTML := FHTML.Append(cCloseBracket);
       end;
@@ -1326,19 +1326,19 @@ end;
 function THTMLWriter.OpenArea: THTMLWriter;
 begin
   CheckInMapTag;
-  Result := AddTag(cArea, ctSlash);
+  Result := AddTag(cArea, ctEmpty);
 end;
 
 function THTMLWriter.OpenBase: THTMLWriter;
 begin
   CheckInHeadTag;
-  Result := AddTag(cBase, ctSlash);
+  Result := AddTag(cBase, ctEmpty);
 end;
 
 function THTMLWriter.OpenBaseFont: THTMLWriter;
 begin
   CheckInHeadTag;
-  Result := AddTag(cBaseFont, ctSlash);
+  Result := AddTag(cBaseFont, ctEmpty);
 end;
 
 function THTMLWriter.OpenBDO: THTMLWriter;
@@ -1534,7 +1534,7 @@ begin
   Result := OpenLegend.AddText(aText).CloseTag;
 end;
 
-function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseCloseSlash: TUseCloseSlash = ucsUseCloseSlash): THTMLWriter;
+function THTMLWriter.AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML.Append(cOpenBracket).Append(cBreak);
@@ -1542,12 +1542,12 @@ begin
   begin
     FHTML := FHTML.Append(cSpace).AppendFormat('%s="%s"', [cClear, TClearValueStrings[aClearValue]]);
   end;
-  case aUseCloseSlash of
-    ucsUseCloseSlash:
+  case aUseEmptyTag of
+    ietIsEmptyTag:
       begin
         FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
       end;
-    ucsDoNotUseCloseSlash:
+    ietIsNotEmptyTag:
       begin
         FHTML := FHTML.Append(cCloseBracket);
       end;
