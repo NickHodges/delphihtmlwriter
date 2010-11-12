@@ -29,6 +29,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestNoFrames;
+    procedure TestNoScript;
     procedure TestAddLink;
     procedure TestAddInsertText;
     procedure TestOpenInsert;
@@ -260,11 +262,11 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<hr>');
-  TestResult := HTMLWriterFactory(cHTML).AddHardRule('', ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddHardRule('', ietIsNotEmptyTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<hr clear="left" />');
-  TestResult := HTMLWriterFactory(cHTML).AddHardRule('clear="left"', ucsUseCloseSlash).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddHardRule('clear="left"', ietIsEmptyTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1157,6 +1159,37 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestNoFrames;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cNoFrames;
+
+  TestResult := HTMLWriterFactory('html').OpenNoFrames.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoFrames.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoFrames.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoFrames.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenNoFrames.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
 
 
 
@@ -2135,15 +2168,15 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<br>');
-  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvNoValue, ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvNoValue, ietIsNotEmptyTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<br clear="left">');
-  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ucsDoNotUseCloseSlash).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ietIsNotEmptyTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML('<br clear="left" />');
-  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ucsUseCloseSlash).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ietIsEmptyTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2945,6 +2978,38 @@ begin
   TempStr := 'mashtes';
   ExpectedResult := Format('<b>%s</b>', [TempStr]);
   TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestNoScript;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempColor: string;
+begin
+  TempTag := cNoScript;
+
+  TestResult := HTMLWriterFactory('html').OpenNoScript.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoScript.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoScript.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNoScript.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempColor := 'red';
+  TestResult := HTMLWriterFactory('html').OpenNoScript.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;
