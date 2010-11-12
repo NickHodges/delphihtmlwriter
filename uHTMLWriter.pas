@@ -573,6 +573,7 @@ type
 
     function OpenFrameset: THTMLWriter;
     function OpenFrame: THTMLWriter;
+    function OpenNoFrames: THTMLWriter;
 
 
     { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
@@ -901,6 +902,11 @@ function THTMLWriter.OpenMeta: THTMLWriter;
 begin
   CheckInHeadTag;
   Result := AddTag(cMeta, ctSlash);
+end;
+
+function THTMLWriter.OpenNoFrames: THTMLWriter;
+begin
+  Result := AddTag(cNoFrames);
 end;
 
 function THTMLWriter.OpenStrike: THTMLWriter;
