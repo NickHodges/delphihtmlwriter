@@ -139,9 +139,11 @@ type
     cLegend = 'legend';
     cFrameset = 'frameset';
     cFrame = 'frame';
+    cNoFrames = 'noframes';
     cMap = 'map';
     cArea = 'area';
     cBaseFont = 'basefont';
+    cLink = 'link';
 
     cAnchor = 'a';
     cHREF = 'href';
