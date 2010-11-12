@@ -168,6 +168,7 @@ type
     cTableHeader = 'th';
     cTitle = 'title';
     cScript = 'script';
+    cNoScript = 'noscript';
     cIFrame = 'iframe';
     cBase = 'base';
     cTarget = 'target';
