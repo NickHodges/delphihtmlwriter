@@ -25,11 +25,13 @@ type
   private
 
   public
+
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
     procedure TestNoFrames;
+    procedure TestArbitraryTag;
     procedure TestNoScript;
     procedure TestAddLink;
     procedure TestAddInsertText;
@@ -1071,6 +1073,18 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestArbitraryTag;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := 'fritle';
+  ExpectedResult := Format('<%s></%s>', [TempTag, TempTag]);
+  TestResult := THTMLWriter.Create(TempTag).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestArea;
 var
   TestResult: string;
@@ -1190,8 +1204,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
-
-
 
 procedure TestTHTMLWriter.TestOpenFont;
 var
@@ -2121,7 +2133,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
-
 
 procedure TestTHTMLWriter.TestAddItalicText;
 var

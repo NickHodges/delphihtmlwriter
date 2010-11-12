@@ -111,6 +111,7 @@ type
     {$ENDREGION}
     procedure CheckBracketOpen(aString: string);
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
+    procedure CloseTheTag;
 {$ENDREGION}
   public
     { DONE : Add support for <!DOCTYPE> tag }
@@ -450,6 +451,7 @@ type
     function AddScript(aScriptText: string): THTMLWriter;
     function OpenNoScript: THTMLWriter;
 
+    ///	<summary>Opens a &lt;link /&gt; tag.</summary>
     function OpenLink: THTMLWriter;
 
 {$ENDREGION}
@@ -489,10 +491,8 @@ type
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
     { DONE -oNick : Think about how to do percentage widths }
-
     ///	<summary>Opens a &lt;tr&gt; tag.</summary>
     function OpenTableRow: THTMLWriter;
-
     ///	<summary>Opens a &lt;td&gt; tag.</summary>
     ///	<remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
@@ -506,7 +506,8 @@ type
     <col>
     <colgroup>
     <thead>
-
+    <tbody>
+    <tfoot>
 
     }
 
@@ -520,9 +521,10 @@ type
       <button>
       <input>
       <label>
-
-
-
+      <select>
+      <optgroup>
+      <option>
+      <textarea>
 
 
      }
@@ -574,11 +576,12 @@ type
 
     function OpenFrameset: THTMLWriter;
     function OpenFrame: THTMLWriter;
+    ///	<summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
-
 
     { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
     function OpenMap: THTMLWriter;
+    ///	<summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
 
     { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
@@ -614,8 +617,6 @@ end;
 
 { DONE -oNick : This routine needs to be cleaned up and made more efficient. }
 function THTMLWriter.CloseTag: THTMLWriter;
-var
-  TagToAppend: string;
 begin
   if tsTagClosed in FTagState then
   begin
@@ -627,15 +628,7 @@ begin
     CloseBracket;
   end;
 
-  if TagIsOpen or InCommentTag then
-  begin
-    if FClosingTags.Count = 0 then
-    begin
-      raise EEmptyStackHTMLWriterExeption.Create(strStackIsEmpty);
-    end;
-    TagToAppend := FClosingTags.Pop;
-    FHTML.Append(TagToAppend);
-  end;
+  CloseTheTag;
 
   CleanUpTagState;
 
@@ -1327,6 +1320,21 @@ function THTMLWriter.OpenArea: THTMLWriter;
 begin
   CheckInMapTag;
   Result := AddTag(cArea, ctEmpty);
+end;
+
+procedure THTMLWriter.CloseTheTag;
+var
+  TagToAppend: string;
+begin
+  if TagIsOpen or InCommentTag then
+  begin
+    if FClosingTags.Count = 0 then
+    begin
+      raise EEmptyStackHTMLWriterExeption.Create(strStackIsEmpty);
+    end;
+    TagToAppend := FClosingTags.Pop;
+    FHTML.Append(TagToAppend);
+  end;
 end;
 
 function THTMLWriter.OpenBase: THTMLWriter;
