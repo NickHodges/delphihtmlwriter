@@ -448,6 +448,7 @@ type
     ///	<summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
     ///	<param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
+    function OpenNoScript: THTMLWriter;
 
     function OpenLink: THTMLWriter;
 
@@ -907,6 +908,11 @@ end;
 function THTMLWriter.OpenNoFrames: THTMLWriter;
 begin
   Result := AddTag(cNoFrames);
+end;
+
+function THTMLWriter.OpenNoScript: THTMLWriter;
+begin
+  Result := AddTag(cNoScript);
 end;
 
 function THTMLWriter.OpenStrike: THTMLWriter;
