@@ -29,6 +29,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestAddLink;
     procedure TestAddInsertText;
     procedure TestOpenInsert;
     procedure TestBaseFont;
@@ -2143,6 +2144,34 @@ begin
 
   ExpectedResult := HTML('<br clear="left" />');
   TestResult := HTMLWriterFactory(cHTML).AddLineBreak(cvLeft, ucsUseCloseSlash).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestAddLink;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempName: string;
+begin
+  TempTag := cLink;
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenLink.AsHTML;
+  ExpectedResult := Format('<html><head><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenLink.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s />', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenLink.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s /></head></html>', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempName := 'Verdana';
+  TestResult := HTMLWriterFactory('html').OpenHead.OpenLink.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><head><%s face="%s" /></head></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;

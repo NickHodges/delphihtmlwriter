@@ -448,6 +448,9 @@ type
     ///	<summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
     ///	<param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
+
+    function OpenLink: THTMLWriter;
+
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
 
@@ -515,6 +518,8 @@ type
     {
       <button>
       <input>
+      <label>
+
 
 
 
@@ -873,6 +878,11 @@ function THTMLWriter.OpenLegend: THTMLWriter;
 begin
   CheckInFieldSetTag;
   Result := AddTag(cLegend);
+end;
+
+function THTMLWriter.OpenLink: THTMLWriter;
+begin
+  Result := AddTag(cLink, ctSlash);
 end;
 
 function THTMLWriter.OpenListItem: THTMLWriter;
