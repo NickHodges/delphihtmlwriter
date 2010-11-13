@@ -144,6 +144,7 @@ type
     cArea = 'area';
     cBaseFont = 'basefont';
     cLink = 'link';
+    cCRLF = #13#10;
 
     cAnchor = 'a';
     cHREF = 'href';
