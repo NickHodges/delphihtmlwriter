@@ -71,7 +71,6 @@ type
     FTagState: TTagStates;
     FParent: THTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
-    function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): THTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): THTMLWriter;
@@ -103,16 +102,10 @@ type
     procedure CheckInTableTag;
     procedure CheckInFramesetTag;
     procedure CheckInMapTag;
-
-    {$REGION 'Documentation'}
-    ///	<param name="aString">Takes this parameter to report what the current tag is if there is an error.</param>
-    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if an attempt is made to add an attribute to a tag
-    ///	that doesn't have an open bracket.&#160; This is theoretically not possible. :-)</exception>
-    {$ENDREGION}
     procedure CheckBracketOpen(aString: string);
+{$ENDREGION}
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
     procedure CloseTheTag;
-{$ENDREGION}
   public
     { DONE : Add support for <!DOCTYPE> tag }
     { TODO : Add support for CRLF }
@@ -138,6 +131,9 @@ type
     constructor CreateDocument(aDocType: THTMLDocType); overload;
     destructor Destroy; override;
 {$ENDREGION}
+
+function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): THTMLWriter;
+
 {$REGION 'Main Section Methods'}
     /// <summary>Opens a&lt;head&gt; tag to the document.&#160;</summary>
     function OpenHead: THTMLWriter;
@@ -417,7 +413,8 @@ type
     {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
-
+    function CRLF: THTMLWriter;
+    function Indent(aNumberofSpaces: integer): THTMLWriter;
     ///	<summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: THTMLWriter;
 {$REGION 'Documentation'}
@@ -572,14 +569,15 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-    { TODO -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
+    { DONE -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
     function OpenFrameset: THTMLWriter;
     function OpenFrame: THTMLWriter;
     ///	<summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
 
-    { TODO -oNick : add <map> <area> support so people can build image maps. Which are cool. }
+    { DONE -oNick : add <map> <area> support so people can build image maps. Which are cool. }
+    ///	<summary>Opens a &lt;map /&gt; tag</summary>
     function OpenMap: THTMLWriter;
     ///	<summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
@@ -659,6 +657,13 @@ begin
   FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
 end;
 
+function THTMLWriter.CRLF: THTMLWriter;
+begin
+  CloseBracket;
+  FHTML.Append(cCRLF);
+  Result := Self;
+end;
+
 constructor THTMLWriter.CreateDocument;
 begin
   Create(cHTML, ctNormal, chaCanHaveAttributes);
@@ -679,6 +684,17 @@ end;
 function THTMLWriter.InCommentTag: Boolean;
 begin
   Result := tsCommentOpen in FTagState;
+end;
+
+function THTMLWriter.Indent(aNumberofSpaces: integer): THTMLWriter;
+var
+  i: Integer;
+begin
+  for i := 1 to aNumberofSpaces do
+  begin
+    FHTML.Append(cSpace);
+  end;
+  Result := Self;
 end;
 
 function THTMLWriter.InFieldSetTag: Boolean;
