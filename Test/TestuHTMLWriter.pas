@@ -1413,8 +1413,8 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddTableData('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := '<html><table><tr><td>blah</td></tr></table></html>';
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddTableData('blah').CloseTag(ucoUseCRLF).CloseTag(ucoUseCRLF).CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><td>blah</td></tr>' + cCRLF + '</table>' +  cCRLF +'</html>';
   CheckEquals(ExpectedResult, TestResult);
 end;
 
