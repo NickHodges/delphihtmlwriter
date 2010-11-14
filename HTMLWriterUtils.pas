@@ -110,6 +110,7 @@ type
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
+    TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
 
     TPercentage = 1 .. 100;
 

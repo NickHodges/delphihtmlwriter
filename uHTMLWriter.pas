@@ -414,6 +414,9 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
     function CRLF: THTMLWriter;
+
+    ///	<summary>Adds spaces to the HTML stream</summary>
+    ///	<param name="aNumberofSpaces">An integer indicating how many spaces should be added to the HTML.</param>
     function Indent(aNumberofSpaces: integer): THTMLWriter;
     ///	<summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: THTMLWriter;
@@ -456,7 +459,7 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
 
     ///	<summary>Closes an open tag.</summary>
     ///	<exception cref="ETryingToCloseClosedTag">Raised if you try to close a tag when no tag is open.</exception>
-    function CloseTag: THTMLWriter;
+    function CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): THTMLWriter;
     ///	<summary>Closes an open comment tag.</summary>
     function CloseComment: THTMLWriter;
     ///	<summary>Closes and open &lt;list&gt; tag</summary>
@@ -614,7 +617,7 @@ begin
 end;
 
 { DONE -oNick : This routine needs to be cleaned up and made more efficient. }
-function THTMLWriter.CloseTag: THTMLWriter;
+function THTMLWriter.CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): THTMLWriter;
 begin
   if tsTagClosed in FTagState then
   begin
@@ -631,6 +634,10 @@ begin
   CleanUpTagState;
 
   Result := FParent;
+  if aUseCRLF =  ucoUseCRLF then
+  begin
+    Result.FHTML.Append(cCRLF);
+  end;
 end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
