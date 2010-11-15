@@ -1302,23 +1302,23 @@ begin
   ExpectedResult := '<html><table';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable.CloseTable.AsHTML;
   ExpectedResult := '<html><table></table>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable.CloseTable.CloseTag.AsHTML;
   ExpectedResult := '<html><table></table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable.AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable.AddText('blah').CloseTable.CloseTag.AsHTML;
   ExpectedResult := '<html><table>blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3).AddText('blah').CloseTable.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, 4).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4).AddText('blah').CloseTable.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
