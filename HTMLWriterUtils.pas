@@ -54,13 +54,15 @@ resourcestring
   strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
   strMustBeInList = 'A list must be open in order to call CloseList.';
-  strMustBeInTable = 'A table must be open in order to call this.';
+  strMustBeInTable = 'A <table> tag must be open in order to call this.';
+  strMustBeInTableRow = 'A <tr> tag must be open to call this.';
   strMustBeInComment = 'A comment must be open in order to call CloseComment';
   strNotInFieldTag = 'A fieldset must be open to add this tag.';
   strStackIsEmpty = 'The stack has nothing in it, but it should.';
   strNotInFrameSet = 'A <frame> tag can only be added inside of a <frameset> tag.';
   strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
-  strNotInFormTag = 'This tag can only be placed inside of a <form> tag.';
+  strNotInFormTag = 'A <form> tag must be open in order to call this.';
+  strMustBeInObject = 'An <object> tag must be open in order to call this.';
 
 type
   IGetHTML = interface
@@ -93,10 +95,11 @@ type
     ENotInFrameSetHTMLException = class(EHTMLWriterException);
     ENotInMapTagHTMLException = class(EHTMLWriterException);
     ENotInFormTagHTMLException = class(EHTMLWriterException);
+    ENotInObjectTagException = class(EHTMLWriterException);
 
   type
 
-    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag, tsInMapTag);
+    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInObjectTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag, tsInMapTag);
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
@@ -145,6 +148,9 @@ type
     cArea = 'area';
     cBaseFont = 'basefont';
     cLink = 'link';
+    cObject = 'object';
+
+
     cCRLF = #13#10;
 
     cAnchor = 'a';
