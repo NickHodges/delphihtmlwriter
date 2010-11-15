@@ -87,6 +87,7 @@ type
     function InTableRowTag: Boolean;
     function InFrameSetTag: Boolean;
     function InMapTag: Boolean;
+    function InObjectTag: Boolean;
 {$ENDREGION}
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
@@ -97,6 +98,7 @@ type
     procedure CheckInCommentTag;
     procedure CheckInListTag;
     procedure CheckInFormTag;
+    procedure CheckInObjectTag;
     procedure CheckInFieldSetTag;
     procedure CheckInTableRowTag;
     procedure CheckInTableTag;
@@ -108,7 +110,7 @@ type
     procedure CloseTheTag;
   public
     { DONE : Add support for <!DOCTYPE> tag }
-    { TODO : Add support for CRLF }
+    { DONE : Add support for CRLF }
 {$REGION 'Constructors'}
 
     {$REGION 'Documentation'}
@@ -457,13 +459,20 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
 
+    {$REGION 'Documentation'}
     ///	<summary>Closes an open tag.</summary>
+    ///	<param name="aUseCRLF">Determines if CRLF should be added after the closing of the tag.</param>
     ///	<exception cref="ETryingToCloseClosedTag">Raised if you try to close a tag when no tag is open.</exception>
+    {$ENDREGION}
     function CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): THTMLWriter;
     ///	<summary>Closes an open comment tag.</summary>
     function CloseComment: THTMLWriter;
-    ///	<summary>Closes and open &lt;list&gt; tag</summary>
+    ///	<summary>Closes an open &lt;list&gt; tag</summary>
     function CloseList: THTMLWriter;
+    function CloseTable: THTMLWriter;
+    function CloseForm: THTMLWriter;
+
+
     { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
 {$ENDREGION}
 {$REGION 'Image Methods'}
@@ -586,6 +595,7 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
     function OpenArea: THTMLWriter;
 
     { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
+    function OpenObject: THTMLWriter;
 
   end;
 
@@ -610,6 +620,12 @@ begin
   Result := CloseTag;
 end;
 
+function THTMLWriter.CloseForm: THTMLWriter;
+begin
+  CheckInFormTag;
+  Result := CloseTag;
+end;
+
 function THTMLWriter.CloseList: THTMLWriter;
 begin
   CheckInListTag;
@@ -617,6 +633,12 @@ begin
 end;
 
 { DONE -oNick : This routine needs to be cleaned up and made more efficient. }
+function THTMLWriter.CloseTable: THTMLWriter;
+begin
+  CheckInTableTag;
+  Result := CloseTag;
+end;
+
 function THTMLWriter.CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): THTMLWriter;
 begin
   if tsTagClosed in FTagState then
@@ -737,6 +759,11 @@ end;
 function THTMLWriter.InMapTag: Boolean;
 begin
   Result := tsInMapTag in FTagState;
+end;
+
+function THTMLWriter.InObjectTag: Boolean;
+begin
+  Result := tsInObjectTag in FTagState;
 end;
 
 function THTMLWriter.InSlashOnlyTag: Boolean;
@@ -1132,6 +1159,12 @@ begin
   SaveToStream(Stream, nil);
 end;
 
+function THTMLWriter.OpenObject: THTMLWriter;
+begin
+  Result := AddTag(cObject);
+  Include(Result.FTagState, tsInObjectTag);
+end;
+
 function THTMLWriter.OpenOrderedList(aNumberType: TNumberType): THTMLWriter;
 begin
   Result := AddTag(cOrderedList);
@@ -1146,6 +1179,11 @@ end;
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if (FCurrentTagName = cObject) and InObjectTag then
+  begin
+    Exclude(FTagState, tsInObjectTag);
+  end;
 
   if (FCurrentTagName = cMap) and InMapTag then
   begin
@@ -1604,7 +1642,7 @@ procedure THTMLWriter.CheckInTableTag;
 begin
   if not InTableTag then
   begin
-    raise ENotInTableTagException.Create(strMustBeInList);
+    raise ENotInTableTagException.Create(strMustBeInTable);
   end;
 end;
 
@@ -1612,7 +1650,7 @@ procedure THTMLWriter.CheckInTableRowTag;
 begin
   if not InTableRowTag then
   begin
-    raise ENotInTableTagException.Create(strMustBeInList);
+    raise ENotInTableTagException.Create(strMustBeInTableRow);
   end;
 end;
 
@@ -1630,6 +1668,15 @@ begin
   begin
     raise ENotInMapTagHTMLException.Create(strNotInMapTag);
   end;
+end;
+
+procedure THTMLWriter.CheckInObjectTag;
+begin
+  if not InObjectTag then
+  begin
+    raise ENotInObjectTagException.Create(strMustBeInObject);
+  end;
+
 end;
 
 procedure THTMLWriter.CheckInCommentTag;

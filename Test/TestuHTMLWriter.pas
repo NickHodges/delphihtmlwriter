@@ -1414,7 +1414,7 @@ var
   ExpectedResult: string;
 begin
   TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.AddTableData('blah').CloseTag(ucoUseCRLF).CloseTag(ucoUseCRLF).CloseTag.AsHTML;
-  ExpectedResult := '<html><table><tr><td>blah</td></tr>' + cCRLF + '</table>' +  cCRLF +'</html>';
+  ExpectedResult := '<html><table><tr><td>blah</td></tr>' + cCRLF + '</table>' + cCRLF + '</html>';
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -1931,6 +1931,11 @@ begin
   CheckFalse(StringIsEmpty('   '), 'StringIsEmpty failed in a horrible, disgusting way #4');
   CheckTrue(StringIsEmpty('   ', True), 'StringIsEmpty failed in a horrible, disgusting way #5');
   CheckFalse(StringIsEmpty('   ', False), 'StringIsEmpty failed in a horrible, disgusting way #6');
+
+  CheckFalse(StringIsEmpty('Gruthy'), 'StringIsEmpty failed in a horrible, disgusting way #7');
+  CheckFalse(StringIsEmpty('quilet', True), 'StringIsEmpty failed in a horrible, disgusting way #8');
+  CheckFalse(StringIsEmpty('crefting', False), 'StringIsEmpty failed in a horrible, disgusting way #9');
+
 end;
 
 procedure TestTHTMLWriter.TestOpenForm;
