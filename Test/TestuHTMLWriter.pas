@@ -30,6 +30,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenObject;
     procedure TestCRLFIndent;
     procedure TestNoFrames;
     procedure TestArbitraryTag;
@@ -1826,6 +1827,31 @@ begin
     end;
   end;
 
+end;
+
+procedure TestTHTMLWriter.TestOpenObject;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := cObject;
+
+  TestResult := HTMLWriterFactory('html').OpenObject.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenOrderedList;
