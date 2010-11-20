@@ -115,6 +115,9 @@ type
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
 
+    TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
+
+
     TPercentage = 1 .. 100;
 
     TBlockType = (btDiv, btSpan, btParagraph);
@@ -127,6 +130,8 @@ type
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
     TTargetTypeStrings: array[TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
+    TInputTypeString: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
+
 
     cHTML = 'html';
     cHead = 'head';
@@ -139,6 +144,8 @@ type
     cName = 'name';
     cContent = 'content';
     cform = 'form';
+    cInput = 'input';
+
     cFieldSet = 'fieldset';
     cLegend = 'legend';
     cFrameset = 'frameset';

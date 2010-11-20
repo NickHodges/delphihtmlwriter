@@ -524,6 +524,9 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
 {$ENDREGION}
 {$REGION 'Form Methods'}
     function OpenForm: THTMLWriter;
+    function AddInput: THTMLWriter;
+
+
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
@@ -902,6 +905,12 @@ end;
 function THTMLWriter.AddImage(aImageSource: string): THTMLWriter;
 begin
   Result := OpenImage(aImageSource).CloseTag;
+end;
+
+function THTMLWriter.AddInput: THTMLWriter;
+begin
+  CheckInFormTag;
+  Result := AddTag(cInput, ctEmpty);
 end;
 
 function THTMLWriter.AddInsertText(aString: string): THTMLWriter;
