@@ -524,7 +524,8 @@ function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAd
 {$ENDREGION}
 {$REGION 'Form Methods'}
     function OpenForm: THTMLWriter;
-    function AddInput: THTMLWriter;
+    function OpenInput: THTMLWriter; overload;
+    function OpenInput(aType: TInputType): THTMLWriter; overload;
 
 
 
@@ -897,6 +898,11 @@ begin
   Result := AddTag(cImage, ctEmpty).AddAttribute(cSource, aImageSource);
 end;
 
+function THTMLWriter.OpenInput(aType: TInputType): THTMLWriter;
+begin
+  Result := OpenInput.AddAttribute(cType, TInputTypeStrings[aType]);
+end;
+
 function THTMLWriter.OpenInsert: THTMLWriter;
 begin
   Result := OpenFormatTag(ftInsert);
@@ -907,7 +913,7 @@ begin
   Result := OpenImage(aImageSource).CloseTag;
 end;
 
-function THTMLWriter.AddInput: THTMLWriter;
+function THTMLWriter.OpenInput: THTMLWriter;
 begin
   CheckInFormTag;
   Result := AddTag(cInput, ctEmpty);
