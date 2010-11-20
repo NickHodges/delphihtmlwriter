@@ -30,6 +30,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestInput;
+
     procedure TestOpenObject;
     procedure TestCRLFIndent;
     procedure TestNoFrames;
@@ -1072,6 +1074,37 @@ begin
   TestResult := HTMLWriterFactory('html').OpenFrameSet.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestInput;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempName: string;
+begin
+  TempTag := cInput;
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AsHTML;
+  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s />', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.CloseForm.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s /></form></html>', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempName := 'Verdana';
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+
+
 
 end;
 
@@ -3002,10 +3035,10 @@ var
   TempStr: string;
   TempWriter: THTMLWriter;
 begin
-  try
     TempStr := 'prittle';
     ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
     TempWriter := HTMLWriterFactory(cHTML).CRLF.Indent(2).OpenBold.CRLF.Indent(4).AddText(TempStr).CRLF.Indent(2).CloseTag.CRLF.CloseTag;
+  try
     TestResult := TempWriter.AsHTML;
     CheckEquals(ExpectedResult, TestResult);
   finally
