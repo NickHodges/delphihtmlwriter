@@ -130,7 +130,7 @@ type
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
     TTargetTypeStrings: array[TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
-    TInputTypeString: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
+    TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
 
 
     cHTML = 'html';

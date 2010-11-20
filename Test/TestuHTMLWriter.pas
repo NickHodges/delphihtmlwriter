@@ -1083,6 +1083,7 @@ var
   ExpectedResult: string;
   TempTag: string;
   TempName: string;
+  TempType: TInputType;
 begin
   TempTag := cInput;
 
@@ -1102,6 +1103,15 @@ begin
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><form><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+  for TempType :=  Low(TInputType) to High(TInputType) do
+  begin
+//  TempType := itButton;
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  end;
 
 
 
