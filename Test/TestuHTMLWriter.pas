@@ -2101,15 +2101,27 @@ begin
     end;
   end;
 
+//  try
+//    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
+//    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
+//  except
+//    on E: ENotInObjectTagException do
+//    begin
+//      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
+//    end;
+//  end;
+
+
   try
-    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
+    TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML;
+    Check(False, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
   except
-    on E: ENotInObjectTagException do
+    on E: EHTMLWriterOpenTagRequiredException do
     begin
-      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
+      Check(True, 'Properly called EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag..');
     end;
   end;
+
 
 end;
 
