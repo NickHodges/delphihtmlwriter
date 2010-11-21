@@ -194,6 +194,7 @@ type
     cCaption = 'caption';
     cLabel = 'label';
     cTextArea = 'textarea';
+    cSelect = 'select';
 
     { DONE -oNick : Add these formatting tags }
 
