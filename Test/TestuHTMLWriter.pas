@@ -1104,17 +1104,12 @@ begin
   ExpectedResult := Format('<html><form><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
-  for TempType :=  Low(TInputType) to High(TInputType) do
+  for TempType := Low(TInputType) to High(TInputType) do
   begin
-//  TempType := itButton;
-  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
-  CheckEquals(ExpectedResult, TestResult);
-
+    TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseDocument.AsHTML;
+    ExpectedResult := Format('<html><form><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
+    CheckEquals(ExpectedResult, TestResult);
   end;
-
-
-
 
 end;
 
@@ -1158,7 +1153,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   TempColor := 'red';
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).CloseTag.CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).CloseTag.CloseTag.CloseDocument.AsHTML;
   ExpectedResult := Format('<html><map><%s color="%s" /></map></html>', [TempTag, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
@@ -1648,7 +1643,7 @@ begin
   ExpectedResult := '<html><cite></cite></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenCite.AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenCite.AddText('blah').CloseTag.CloseDocument.AsHTML;
   ExpectedResult := '<html><cite>blah</cite></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -2065,6 +2060,17 @@ begin
       Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
     end;
   end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
+    Check(False, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when trying to add a Table Row outside of a table');
+  except
+    on E: EClosingDocumentWithOpenTagsHTMLException do
+    begin
+      Check(True, 'Properly called EClosingDocumentWithOpenTagsHTMLException when adding a TableRow outside of a table.');
+    end;
+  end;
+
 end;
 
 procedure TestTHTMLWriter.TestTHTMLWidth1;
@@ -3045,9 +3051,9 @@ var
   TempStr: string;
   TempWriter: THTMLWriter;
 begin
-    TempStr := 'prittle';
-    ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
-    TempWriter := HTMLWriterFactory(cHTML).CRLF.Indent(2).OpenBold.CRLF.Indent(4).AddText(TempStr).CRLF.Indent(2).CloseTag.CRLF.CloseTag;
+  TempStr := 'prittle';
+  ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
+  TempWriter := HTMLWriterFactory(cHTML).CRLF.Indent(2).OpenBold.CRLF.Indent(4).AddText(TempStr).CRLF.Indent(2).CloseTag.CRLF.CloseTag;
   try
     TestResult := TempWriter.AsHTML;
     CheckEquals(ExpectedResult, TestResult);

@@ -63,6 +63,7 @@ resourcestring
   strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
   strNotInFormTag = 'A <form> tag must be open in order to call this.';
   strMustBeInObject = 'An <object> tag must be open in order to call this.';
+  strOtherTagsOpen = 'The document cannot yet be closed -- there are non-<html> tags still open.';
 
 type
   IGetHTML = interface
@@ -96,6 +97,7 @@ type
     ENotInMapTagHTMLException = class(EHTMLWriterException);
     ENotInFormTagHTMLException = class(EHTMLWriterException);
     ENotInObjectTagException = class(EHTMLWriterException);
+    EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);
 
   type
 
