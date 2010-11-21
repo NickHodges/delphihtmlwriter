@@ -33,6 +33,7 @@ type
     procedure TestInput;
 
     procedure TestOpenObject;
+    procedure TestOpenParam;
     procedure TestCRLFIndent;
     procedure TestNoFrames;
     procedure TestArbitraryTag;
@@ -351,6 +352,32 @@ begin
   TempStyle := 'nerster: hormle';
   ExpectedResult := HTML(Format('<p style="%s"></p>', [TempStyle]));
   TestResult := HTMLWriterFactory('html').OpenParagraphWithStyle(TempStyle).CloseTag.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenParam;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag1, TempTag2: string;
+begin
+  TempTag1 := cObject;
+  TempTag2 := cParam;
+
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AsHTML;
+  ExpectedResult := Format('<html><%s><%s', [TempTag1, TempTag2]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s></%s>', [TempTag1, TempTag2, TempTag2]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s></%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -2101,15 +2128,15 @@ begin
     end;
   end;
 
-//  try
-//    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
-//    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
-//  except
-//    on E: ENotInObjectTagException do
-//    begin
-//      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
-//    end;
-//  end;
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
+  except
+    on E: ENotInObjectTagException do
+    begin
+      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
+    end;
+  end;
 
 
   try
