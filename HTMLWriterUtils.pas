@@ -160,7 +160,6 @@ type
     cObject = 'object';
     cParam = 'param';
 
-
     cCRLF = #13#10;
 
     cAnchor = 'a';
@@ -190,6 +189,9 @@ type
     cIFrame = 'iframe';
     cBase = 'base';
     cTarget = 'target';
+    cOption = 'option';
+    cOptGroup = 'optgroup';
+    cCaption = 'caption';
 
     { DONE -oNick : Add these formatting tags }
 
