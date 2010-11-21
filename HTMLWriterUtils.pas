@@ -192,6 +192,8 @@ type
     cOption = 'option';
     cOptGroup = 'optgroup';
     cCaption = 'caption';
+    cLabel = 'label';
+    cTextArea = 'textarea';
 
     { DONE -oNick : Add these formatting tags }
 
