@@ -3074,7 +3074,7 @@ begin
     TestValue := HTMLWriterFactory('').CloseTag.AsHTML;
     Check(False, 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
   except
-    on E: EHTMLWriterEmptyTagException do
+    on E: EEmptyTagHTMLWriterException do
     begin
       Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
     end;
