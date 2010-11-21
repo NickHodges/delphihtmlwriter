@@ -508,6 +508,7 @@ type
     function OpenForm: THTMLWriter;
     function OpenInput: THTMLWriter; overload;
     function OpenInput(aType: TInputType): THTMLWriter; overload;
+    function OpenButton(aName: string): THTMLWriter;
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
@@ -772,6 +773,12 @@ end;
 function THTMLWriter.OpenBold: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBold);
+end;
+
+function THTMLWriter.OpenButton(aName: string): THTMLWriter;
+begin
+  CheckInFormTag;
+  Result := AddTag(cButton).AddAttribute(cName, aName);
 end;
 
 function THTMLWriter.OpenCenter: THTMLWriter;

@@ -147,6 +147,7 @@ type
     cContent = 'content';
     cform = 'form';
     cInput = 'input';
+    cButton = 'button';
 
     cFieldSet = 'fieldset';
     cLegend = 'legend';
