@@ -97,7 +97,7 @@ type
     ENotInMapTagHTMLException = class(EHTMLWriterException);
     ENotInFormTagHTMLException = class(EHTMLWriterException);
     ENotInObjectTagException = class(EHTMLWriterException);
-    EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);
+    EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);   // Tested.
 
   type
 

@@ -2043,7 +2043,7 @@ begin
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a lise');
+    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a list');
   except
     on E: ENotInListTagException do
     begin
@@ -2063,11 +2063,51 @@ begin
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
-    Check(False, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when trying to add a Table Row outside of a table');
+    Check(False, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
   except
     on E: EClosingDocumentWithOpenTagsHTMLException do
     begin
-      Check(True, 'Properly called EClosingDocumentWithOpenTagsHTMLException when adding a TableRow outside of a table.');
+      Check(True, 'Properly called EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
+  except
+    on E: ENotInFrameSetHTMLException do
+    begin
+      Check(True, 'Properly called ENotInFrameSetHTMLException when adding a frame outside of a frameset.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
+  except
+    on E: ENotInMapTagHTMLException do
+    begin
+      Check(True, 'Properly called ENotInMapTagHTMLException when adding an area outside of a map tag.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
+  except
+    on E: ENotInFormTagHTMLException do
+    begin
+      Check(True, 'Properly called ENotInFormTagHTMLException when adding an <input> outside of a <form>.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
+  except
+    on E: ENotInObjectTagException do
+    begin
+      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
     end;
   end;
 
