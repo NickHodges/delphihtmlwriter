@@ -575,7 +575,7 @@ type
 
     { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
     function OpenObject: THTMLWriter;
-
+    function OpenParam: THTMLWriter;
   end;
 
 implementation
@@ -1774,6 +1774,12 @@ end;
 function THTMLWriter.OpenParagraphWithStyle(aStyle: string): THTMLWriter;
 begin
   Result := OpenParagraph.AddStyle(aStyle);
+end;
+
+function THTMLWriter.OpenParam: THTMLWriter;
+begin
+  CheckInObjectTag;
+  Result := AddTag(cParam);
 end;
 
 function THTMLWriter.OpenPre: THTMLWriter;
