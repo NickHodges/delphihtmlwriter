@@ -84,7 +84,7 @@ type
 type
   { TODO -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
-    EHTMLWriterEmptyTagException = class(EHTMLWriterException);     // Tested
+    EEmptyTagHTMLWriterException = class(EHTMLWriterException);     // Tested
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
     EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
     ETryingToCloseClosedTag = class(EHTMLWriterException);  // Tested
@@ -158,6 +158,7 @@ type
     cBaseFont = 'basefont';
     cLink = 'link';
     cObject = 'object';
+    cParam = 'param';
 
 
     cCRLF = #13#10;

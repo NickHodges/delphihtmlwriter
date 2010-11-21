@@ -651,7 +651,7 @@ constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = 
 begin
   if StringIsEmpty(aTagName) then
   begin
-    raise EHTMLWriterEmptyTagException.Create(strTagNameRequired);
+    raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
   FCurrentTagName := aTagName;
   FCanHaveAttributes := chaCanHaveAttributes;
