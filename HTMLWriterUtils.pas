@@ -93,9 +93,9 @@ type
     ENotInCommentTagException = class(EHTMLWriterException); //Tested
     ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
     EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
-    ENotInFrameSetHTMLException = class(EHTMLWriterException);
-    ENotInMapTagHTMLException = class(EHTMLWriterException);
-    ENotInFormTagHTMLException = class(EHTMLWriterException);
+    ENotInFrameSetHTMLException = class(EHTMLWriterException); // Tested
+    ENotInMapTagHTMLException = class(EHTMLWriterException);  // Tested
+    ENotInFormTagHTMLException = class(EHTMLWriterException); // Tested
     ENotInObjectTagException = class(EHTMLWriterException);
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);   // Tested.
 
