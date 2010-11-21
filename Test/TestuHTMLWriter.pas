@@ -30,6 +30,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestButton;
     procedure TestInput;
 
     procedure TestOpenObject;
@@ -1214,6 +1215,30 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestButton;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempName: string;
+begin
+  TempName := 'loople';
+  ExpectedResult := Format(HTML('<form><button name="%s"></button></form>'), [TempName]);
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenButton(TempName).CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+  except
+    on E: ENotInFormTagHTMLException do
+    begin
+      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
+    end;
+  end;
+
+end;
+
 procedure TestTHTMLWriter.TestMap;
 var
   TestResult: string;
@@ -2137,7 +2162,6 @@ begin
       Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
     end;
   end;
-
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML;
