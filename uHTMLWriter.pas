@@ -145,11 +145,14 @@ type
     /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
     function OpenMeta: THTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Opens a &lt;base /&gt; tag.&#160;</summary>
-    /// <remarks>This tag will always be closed with the '/&gt;' tag.&#160; In addition, this tag can only be added
-    /// inside of a &lt;head&gt; tag.</remarks>
-{$ENDREGION}
+
+    {$REGION 'Documentation'}
+    ///	<summary>Opens a &lt;base /&gt; tag.</summary>
+    ///	<exception cref="EHeadTagRequiredHTMLException">Raised if this tag is added outside of the &lt;head&gt;
+    ///	tag.</exception>
+    ///	<remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
+    ///	a &lt;head&gt; tag.</remarks>
+    {$ENDREGION}
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
     function OpenBaseFont: THTMLWriter;
@@ -562,6 +565,7 @@ type
 {$ENDREGION}
     { DONE -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
+    ///	<summary>Opens a &lt;frameset&gt; tag.</summary>
     function OpenFrameset: THTMLWriter;
 
     {$REGION 'Documentation'}
