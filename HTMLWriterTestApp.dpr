@@ -11,29 +11,26 @@ var
   Temp: THTMLWriter;
 begin
   try
-     Temp := THTMLWriter.CreateDocument;//('html', chaCanHaveAttributes);
+     Temp := THTMLWriter.CreateDocument;
      TempHTML := Temp
                   .OpenHead
                     .AddAttribute('dweezle')
                     .AddText('farble')
                   .CloseTag
-                  .OpenBody
-                  .AddAttribute('ding')
-                    .OpenSpan
-                      .AddAttribute('this', 'that')
-                      .AddStyle('font: italic')
-                      .OpenDiv
-                        .AddAttribute('floo')
-                        .AddText('Blah')
+                  .OpenBody.AddAttribute('ding')
+                      .OpenSpan
+                        .AddAttribute('this', 'that')
+                        .AddStyle('font: italic')
+                        .OpenDiv
+                          .AddAttribute('floo')
+                          .AddText('Blah')
+                        .CloseTag
                       .CloseTag
-                    .CloseTag
-                    .AddText('Hoorah')
-                    .AddBoldText(' Shadooby')
-                    .OpenBold
-                      .AddText('Goombah')
-                    .CloseTag
-                  .CloseTag
-                  .CloseTag
+                      .AddText('Hoorah')
+                      .AddBoldText(' Shadooby')
+                      .OpenBold
+                        .AddText('Goombah')
+                      .CloseTag
                   .CloseTag
               .AsHTML;
      WriteLn(TempHTML);

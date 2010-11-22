@@ -512,7 +512,6 @@ type
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
-      <button>
       <label>
       <select>
       <optgroup>
@@ -564,6 +563,12 @@ type
     { DONE -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
     function OpenFrameset: THTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Opens a &lt;frame&gt; tag.</summary>
+    ///	<exception cref="ENotInFrameSetHTMLException">Raised if this is called outside of a &lt;frameset&gt;
+    ///	tag.</exception>
+    {$ENDREGION}
     function OpenFrame: THTMLWriter;
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
@@ -574,8 +579,17 @@ type
     /// <summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
 
-    { TODO -oNick : Add <object> <param> support.  Need to make complete list of missing tags. }
+    { DONE -oNick : Add <object> <param> support. }
+    { TODO -oNick : Need to make complete list of missing tags. }
+
+    ///	<summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Opens a &lt;param&gt; tag</summary>
+    ///	<exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
+    ///	tag</exception>
+    {$ENDREGION}
     function OpenParam: THTMLWriter;
   end;
 
@@ -618,7 +632,6 @@ begin
   Result := CloseTag;
 end;
 
-{ DONE -oNick : This routine needs to be cleaned up and made more efficient. }
 function THTMLWriter.CloseTable: THTMLWriter;
 begin
   CheckInTableTag;
