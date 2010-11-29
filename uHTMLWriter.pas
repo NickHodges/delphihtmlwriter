@@ -108,7 +108,7 @@ type
 {$ENDREGION}
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
     procedure CloseTheTag;
-
+    function GetAttribute(const Name, Value: string): THTMLWriter;
   public
     { DONE : Add support for <!DOCTYPE> tag }
     { DONE : Add support for CRLF }
@@ -595,6 +595,9 @@ type
     ///	tag</exception>
     {$ENDREGION}
     function OpenParam: THTMLWriter;
+
+    property Attribute[const Name: string; const Value: string] : THTMLWriter read GetAttribute; default;
+
   end;
 
 implementation
@@ -706,6 +709,11 @@ begin
   FHTML.Free;
   FClosingTags.Free;
   inherited;
+end;
+
+function THTMLWriter.GetAttribute(const Name, Value: string): THTMLWriter;
+begin
+  Result := Self.AddAttribute(Name, Value);
 end;
 
 function THTMLWriter.InBodyTag: Boolean;
