@@ -1284,6 +1284,14 @@ begin
   ExpectedResult := '<html this="that"><b>grested</b></html>';
   CheckEquals(ExpectedResult, TestResult);
 
+  TestResult := HTMLWriterFactory(cHTML)['this', 'that']['brethal', 'trooter'].AddBoldText('grested').CloseTag.AsHTML;
+  ExpectedResult := '<html this="that" brethal="trooter"><b>grested</b></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory(cHTML).OpenDiv['this', 'that']['brethal', 'trooter'].AddBoldText('grested').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><div this="that" brethal="trooter"><b>grested</b></div></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestNoFrames;
