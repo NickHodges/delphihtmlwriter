@@ -62,7 +62,11 @@ type
   /// </list>
   /// </remarks>
 {$ENDREGION}
-  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
+  TTagWriter = class(TInterfacedObject)
+
+  end;
+
+  THTMLWriter = class(TTagWriter, IGetHTML, ILoadSave)
   private
     FHTML: TStringBuilder;
     FClosingTags: TStack<string>;
@@ -145,14 +149,13 @@ type
     /// anywhere else, it will raise an exception.</remarks>
 {$ENDREGION}
     function OpenMeta: THTMLWriter;
-
-    {$REGION 'Documentation'}
-    ///	<summary>Opens a &lt;base /&gt; tag.</summary>
-    ///	<exception cref="EHeadTagRequiredHTMLException">Raised if this tag is added outside of the &lt;head&gt;
-    ///	tag.</exception>
-    ///	<remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
-    ///	a &lt;head&gt; tag.</remarks>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;base /&gt; tag.</summary>
+    /// <exception cref="EHeadTagRequiredHTMLException">Raised if this tag is added outside of the &lt;head&gt;
+    /// tag.</exception>
+    /// <remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
+    /// a &lt;head&gt; tag.</remarks>
+{$ENDREGION}
     function OpenBase: THTMLWriter;
     function AddBase(aHREF: string): THTMLWriter; overload;
     function OpenBaseFont: THTMLWriter;
@@ -565,14 +568,13 @@ type
 {$ENDREGION}
     { DONE -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
 
-    ///	<summary>Opens a &lt;frameset&gt; tag.</summary>
+    /// <summary>Opens a &lt;frameset&gt; tag.</summary>
     function OpenFrameset: THTMLWriter;
-
-    {$REGION 'Documentation'}
-    ///	<summary>Opens a &lt;frame&gt; tag.</summary>
-    ///	<exception cref="ENotInFrameSetHTMLException">Raised if this is called outside of a &lt;frameset&gt;
-    ///	tag.</exception>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;frame&gt; tag.</summary>
+    /// <exception cref="ENotInFrameSetHTMLException">Raised if this is called outside of a &lt;frameset&gt;
+    /// tag.</exception>
+{$ENDREGION}
     function OpenFrame: THTMLWriter;
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
@@ -586,14 +588,13 @@ type
     { DONE -oNick : Add <object> <param> support. }
     { TODO -oNick : Need to make complete list of missing tags. }
 
-    ///	<summary>Opens an &lt;object&gt; tag</summary>
+    /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
-
-    {$REGION 'Documentation'}
-    ///	<summary>Opens a &lt;param&gt; tag</summary>
-    ///	<exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
-    ///	tag</exception>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;param&gt; tag</summary>
+    /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
+    /// tag</exception>
+{$ENDREGION}
     function OpenParam: THTMLWriter;
   end;
 
