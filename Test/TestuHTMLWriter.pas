@@ -30,6 +30,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestNewAtttributes;
     procedure TestButton;
     procedure TestInput;
 
@@ -1226,7 +1227,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-
   try
     TestResult := HTMLWriterFactory(cHTML).OpenButton(TempName).CloseTag.CloseTag.AsHTML;
     Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
@@ -1267,6 +1267,21 @@ begin
   TempColor := 'red';
   TestResult := HTMLWriterFactory('html').OpenMap.AddAttribute('color', TempColor).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s color="%s">blah</%s></html>', [TempTag, TempColor, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
+procedure TestTHTMLWriter.TestNewAtttributes;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory(cHTML)['this', 'that'].CloseTag.AsHTML;
+  ExpectedResult := '<html this="that"></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory(cHTML)['this', 'that'].AddBoldText('grested').CloseTag.AsHTML;
+  ExpectedResult := '<html this="that"><b>grested</b></html>';
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2172,7 +2187,6 @@ begin
       Check(True, 'Properly called EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag..');
     end;
   end;
-
 
 end;
 
