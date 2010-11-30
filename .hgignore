@@ -14,11 +14,4 @@ glob:*.txvpck
 glob:Test/HTMLWriterTestAppTests.xml
 glob:Test/*.orig
 glob:*.dcp
-glob:out/*.*
-glob:out/doc/*.*
-glob:out/doc/model-tree/*.*
-glob:out/doc/HTMLWriterUtils/*.*
-glob:out/doc/HTMLWriterUtils/doc-files/*.*
-glob:out/doc/uHTMLWriter/*.*
-glob:out/doc/doc-files/*.*
-glob:out/doc/uHTMLWriter/doc-files/*.*
+glob:out/**
