@@ -30,6 +30,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestEmptyStack
+
     procedure TestNewAtttributes;
     procedure TestButton;
     procedure TestInput;
@@ -2193,6 +2195,16 @@ begin
     on E: EHTMLWriterOpenTagRequiredException do
     begin
       Check(True, 'Properly called EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag..');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInObjectTagException when trying to add a <param> tag outside of a <object> tag.');
+  except
+    on E: ENotInObjectTagException do
+    begin
+      Check(True, 'Properly called ENotInObjectTagException when trying to add a <param> tag outside of a <object> tag.');
     end;
   end;
 
