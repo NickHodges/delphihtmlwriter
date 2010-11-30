@@ -588,7 +588,6 @@ type
 
     ///	<summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
-
     {$REGION 'Documentation'}
     ///	<summary>Opens a &lt;param&gt; tag</summary>
     ///	<exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
