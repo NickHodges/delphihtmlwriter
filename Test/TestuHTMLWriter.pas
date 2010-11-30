@@ -30,7 +30,6 @@ type
     procedure TearDown; override;
 
   published
-    procedure TestEmptyStack
 
     procedure TestNewAtttributes;
     procedure TestButton;
