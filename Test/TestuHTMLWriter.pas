@@ -670,8 +670,13 @@ begin
   ExpectedResult := '<html><a></a>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenAnchor.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := '<html><a></a></html>';
+  TempText := 'farbler';
+  TestResult := HTMLWriterFactory('html').OpenAnchor(TempText).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><a name="%s"></a>', [TempText]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAnchor(TempText).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><a name="%s"></a></html>', [TempText]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenAnchor.AddText('blah').CloseTag.CloseTag.AsHTML;
@@ -2120,7 +2125,6 @@ begin
   ExpectedResult := Format('<html><%s action="%s" method="get">blah</%s></html>', [TempTag, TempURL, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
-
 end;
 
 procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
@@ -2467,12 +2471,18 @@ procedure TestTHTMLWriter.TestAddAnchor;
 var
   TestResult: string;
   ExpectedResult: string;
+  TempText: string;
 const
   TempHREF = 'http://www.nickhodges.com';
-  TempText = 'Nick Hodges';
 begin
+  TempText := 'Nick Hodges';
   ExpectedResult := Format(HTML('<a href="%s">%s</a>'), [TempHREF, TempText]);
   TestResult := HTMLWriterFactory(cHTML).AddAnchor(TempHREF, TempText).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempText := 'scaffer';
+  ExpectedResult := Format(HTML('<a name="%s">%s</a>'), [TempText, TempText]);
+  TestResult := HTMLWriterFactory(cHTML).OpenAnchor[cName, TempText].AddText(TempText).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;

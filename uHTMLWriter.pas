@@ -471,8 +471,9 @@ type
 {$ENDREGION}
 {$REGION 'Anchor Methods'}
     function OpenAnchor: THTMLWriter; overload;
+    function OpenAnchor(aName: string): THTMLWriter; overload;
     function OpenAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
-    function AddAnchor(const aHREF: string; aText: string): THTMLWriter;
+    function AddAnchor(const aHREF: string; aText: string): THTMLWriter; overload;
 {$ENDREGION}
 {$REGION 'Table Support Methods'}
 {$REGION 'Documentation'}
@@ -1413,6 +1414,11 @@ begin
   Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
 end;
 
+function THTMLWriter.OpenAnchor(aName: string): THTMLWriter;
+begin
+  Result := OpenAnchor[cName, aName];
+end;
+
 function THTMLWriter.OpenArea: THTMLWriter;
 begin
   CheckInMapTag;
@@ -1903,7 +1909,7 @@ end;
 
 function THTMLWriter.AddAnchor(const aHREF: string; aText: string): THTMLWriter;
 begin
-  Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText).CloseTag;
+  Result := OpenAnchor[cHREF, aHREF].AddText(aText).CloseTag;
 end;
 
 function THTMLWriter.AddAttribute(aString: string; aValue: string = ''): THTMLWriter;
