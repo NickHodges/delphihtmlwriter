@@ -1000,35 +1000,35 @@ begin
   TempTag := cFieldSet;
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AsHTML;
-  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s', [TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#1');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s></%s>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s></%s>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#2');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s></%s></form></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s></%s></form></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#3');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s>blah</%s></form></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s>blah</%s></form></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#4');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s', [cFieldSet, cLegend]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s', [cFieldSet, cLegend]);
   CheckEquals(ExpectedResult, TestResult, '#4');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
   CheckEquals(ExpectedResult, TestResult, '#5');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult, '#6');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult, '#7');
 
   try
@@ -1118,26 +1118,26 @@ begin
   TempTag := cInput;
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AsHTML;
-  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s />', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s />', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.CloseForm.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s /></form></html>', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s /></form></html>', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TempName := 'Verdana';
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   for TempType := Low(TInputType) to High(TInputType) do
   begin
     TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseDocument.AsHTML;
-    ExpectedResult := Format('<html><form><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
+    ExpectedResult := Format('<html><form method="get"><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
     CheckEquals(ExpectedResult, TestResult);
   end;
 
@@ -1224,7 +1224,7 @@ var
   TempName: string;
 begin
   TempName := 'loople';
-  ExpectedResult := Format(HTML('<form><button name="%s"></button></form>'), [TempName]);
+  ExpectedResult := Format(HTML('<form method="get"><button name="%s"></button></form>'), [TempName]);
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
@@ -2083,24 +2083,44 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag: string;
+  TempURL: string;
 begin
   TempTag := cForm;
 
   TestResult := HTMLWriterFactory('html').OpenForm.AsHTML;
-  ExpectedResult := Format('<html><%s', [TempTag]);
+  ExpectedResult := Format('<html><%s method="get"', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get"></%s>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get"></%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.AddText('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get">blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TempURL := 'http://www.nickhodges.com';
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"', [TempTag, TempURL]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"></%s>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"></%s></html>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get">blah</%s></html>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+
 end;
 
 procedure TestTHTMLWriter.TestThatExceptionsAreRaised;

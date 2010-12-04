@@ -116,6 +116,7 @@ type
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
+    TFormMethod = (fmGet, fmPost);
 
     TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
 
@@ -160,6 +161,7 @@ type
     cLink = 'link';
     cObject = 'object';
     cParam = 'param';
+    cAction = 'action';
 
     cCRLF = #13#10;
 
