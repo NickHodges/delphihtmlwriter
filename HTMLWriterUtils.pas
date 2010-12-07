@@ -116,7 +116,7 @@ type
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
-    TFormMethod = (fmGet, fmPost);
+    TFormMethod = (fmNone, fmGet, fmPost);
 
     TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
 
@@ -134,7 +134,7 @@ type
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
     TTargetTypeStrings: array[TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
     TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
-
+    TFormMethodStrings: array[TFormMethod] of string = ('', 'get', 'post');
 
     cHTML = 'html';
     cHead = 'head';
@@ -162,6 +162,7 @@ type
     cObject = 'object';
     cParam = 'param';
     cAction = 'action';
+    cMethod = 'method';
 
     cCRLF = #13#10;
 
