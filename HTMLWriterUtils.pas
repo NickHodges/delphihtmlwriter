@@ -200,8 +200,6 @@ type
     cTextArea = 'textarea';
     cSelect = 'select';
 
-    { DONE -oNick : Add these formatting tags }
-
     cOpenBracket = '<';
     cCloseBracket = '>';
     cCloseSlashBracket = '/>';
