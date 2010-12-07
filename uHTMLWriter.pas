@@ -110,8 +110,6 @@ type
     procedure CloseTheTag;
     function GetAttribute(const Name, Value: string): THTMLWriter;
   public
-    { DONE : Add support for <!DOCTYPE> tag }
-    { DONE : Add support for CRLF }
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
     /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.   Use this constructur if you
@@ -248,7 +246,7 @@ type
     /// <summary>Opens a &lt;dfn&gt; tag.</summary>
     function OpenDefinition: THTMLWriter;
     /// <summary>Opens a &lt;font&gt; tag.</summary>
-    function OpenFont: THTMLWriter; { TODO -oNick : Tag this one as deprecated. }
+    function OpenFont: THTMLWriter;
     /// <summary>Opens a &lt;kbd&gt; tag</summary>
     function OpenKeyboard: THTMLWriter;
     /// <summary>Opens a &lt;q&gt; tag.  </summary>
@@ -486,7 +484,7 @@ type
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): THTMLWriter; overload;
-    { DONE -oNick : Think about how to do percentage widths }
+
     /// <summary>Opens a &lt;tr&gt; tag.</summary>
     function OpenTableRow: THTMLWriter;
     /// <summary>Opens a &lt;td&gt; tag.</summary>
@@ -564,7 +562,7 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-    { DONE -oNick : Add <frame>  support even though frames are the spawn of satan. Seriously. They suck. }
+
 
     /// <summary>Opens a &lt;frameset&gt; tag.</summary>
     function OpenFrameset: THTMLWriter;
@@ -577,13 +575,11 @@ type
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
 
-    { DONE -oNick : add <map> <area> support so people can build image maps. Which are cool. }
     /// <summary>Opens a &lt;map /&gt; tag</summary>
     function OpenMap: THTMLWriter;
     /// <summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
 
-    { DONE -oNick : Add <object> <param> support. }
     { TODO -oNick : Need to make complete list of missing tags. }
 
     /// <summary>Opens an &lt;object&gt; tag</summary>
@@ -685,7 +681,7 @@ end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
 begin
-  { DONE -oNick : Not yet implemented }
+
   inherited Create;
   CreateDocument;
   FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
@@ -1212,7 +1208,7 @@ begin
   Result.FTagState := Result.FTagState + [tsInListTag];
 end;
 
-{ DONE -oNick : This method needs to be reworked and made more efficient. }
+
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];

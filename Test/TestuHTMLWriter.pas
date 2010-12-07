@@ -1934,8 +1934,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
-
   try
     TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
     Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
@@ -3175,7 +3173,7 @@ begin
   // end;
   // end;
 
-  { DONE : Make sure that an extra close tag raises an exception }
+
 
 end;
 
