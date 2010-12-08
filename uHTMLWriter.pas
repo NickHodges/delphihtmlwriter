@@ -111,19 +111,15 @@ type
     function GetAttribute(const Name, Value: string): THTMLWriter;
   public
 {$REGION 'Constructors'}
-{$REGION 'Documentation'}
-    /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag.   Use this constructur if you
-    /// want to create a chunk of HTML code not associated with a document.</summary>
-    /// <param name="aTagName">The text for the tag you are creating.   For instance, if you want to create a
-    /// &lt;span&gt; tag, you should pass 'span' as the value</param>
-    /// <param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
-    /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance,
-    /// normally the &lt;b&gt; doesn't have attributes.   Set this to False if you want to ensure that the tag will
-    /// not have any attributes.</param>
-    /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName
-    /// parameter</exception>
-    /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-{$ENDREGION}
+
+    {$REGION 'Documentation'}
+    ///	<summary>Creates an instance of THTMLWriter by passing in any arbitrary tag. Use this constructur if you want to create a chunk of HTML code not associated with a document.</summary>
+    ///	<param name="aTagName">The text for the tag you are creating. For instance, if you want to create a &lt;span&gt; tag, you should pass 'span' as the value</param>
+    ///	<param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
+    ///	<param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance, normally the &lt;b&gt; doesn't have attributes. Set this to False if you want to ensure that the tag will not have any attributes.</param>
+    ///	<exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName parameter</exception>
+    ///	<seealso cref="CreateDocument">The CreateDocument constructor</seealso>
+    {$ENDREGION}
     constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
@@ -401,7 +397,15 @@ type
     /// The default is to do so.</param>
 {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Adds an &lt;hr&gt; tag to the HTML</summary>
+    ///	<param name="aAttributes">Attributes that should be added to the &lt;hr&gt; tag.</param>
+    ///	<param name="aUseEmptyTag">Determines if the &lt;hr&gt; tag should be rendered as &lt;hr /&gt;</param>
+    {$ENDREGION}
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
+
+    ///	<summary>Adds a Carriage Return and a Line Feed to the HTML.</summary>
     function CRLF: THTMLWriter;
 
     /// <summary>Adds spaces to the HTML stream</summary>
@@ -438,6 +442,8 @@ type
     /// <summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
     /// <param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
+
+    ///	<summary>Opens a &lt;noscript&gt; tag</summary>
     function OpenNoScript: THTMLWriter;
 
     /// <summary>Opens a &lt;link /&gt; tag.</summary>
@@ -454,8 +460,11 @@ type
     function CloseComment: THTMLWriter;
     /// <summary>Closes an open &lt;list&gt; tag</summary>
     function CloseList: THTMLWriter;
+    ///	<summary>Closes an open &lt;table&gt; tag.</summary>
     function CloseTable: THTMLWriter;
+    ///	<summary>Closes and open &lt;form&gt; tag.</summary>
     function CloseForm: THTMLWriter;
+    ///	<summary>Closes and open &lt;html&gt; tag.</summary>
     function CloseDocument: THTMLWriter;
 
     { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
@@ -580,7 +589,7 @@ type
     /// <summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
 
-    { TODO -oNick : Need to make complete list of missing tags. }
+
 
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
