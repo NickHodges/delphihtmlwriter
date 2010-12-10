@@ -29,7 +29,10 @@ unit HTMLWriterUtils;
 
 interface
 
-uses SysUtils, Classes;
+uses    SysUtils
+      , Classes
+      , Generics.Collections
+      ;
 
 type
 
@@ -69,6 +72,8 @@ type
   IGetHTML = interface
     function AsHTML: string;
   end;
+
+  TStackOfStrings = TStack<string>;
 
   THTMLWidth = record
     ///	<summary>A data structure that holds a width, and then publishes that width in various ways useful in
