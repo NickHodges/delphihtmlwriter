@@ -588,9 +588,6 @@ type
     function OpenMap: THTMLWriter;
     /// <summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
-
-
-
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
 {$REGION 'Documentation'}
@@ -684,7 +681,7 @@ begin
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
-  FClosingTags := TStack<string>.Create;
+  FClosingTags := TStackOfStrings.Create;
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
 
