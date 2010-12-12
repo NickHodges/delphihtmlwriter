@@ -84,6 +84,7 @@ type
     function InListTag: Boolean;
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
+    function TableIsOpen: Boolean;
     function InFrameSetTag: Boolean;
     function InMapTag: Boolean;
     function InObjectTag: Boolean;
@@ -109,6 +110,7 @@ type
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
     procedure CloseTheTag;
     function GetAttribute(const Name, Value: string): THTMLWriter;
+
   public
 {$REGION 'Constructors'}
 
@@ -500,6 +502,7 @@ type
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
     function AddTableData(aText: string): THTMLWriter;
+    function AddCaption(aCaption: string): THTMLWriter;
 
     {
       Additional Table support required:
@@ -746,6 +749,11 @@ end;
 function THTMLWriter.InFormTag: Boolean;
 begin
   Result := tsInFormTag in FTagState;
+end;
+
+function THTMLWriter.TableIsOpen: Boolean;
+begin
+  Result := tsTableIsOpen in FTagState;
 end;
 
 function THTMLWriter.InFrameSetTag: Boolean;
@@ -1054,7 +1062,7 @@ begin
     end;
   end;
 
-  Result.FTagState := Result.FTagState + [tsInTableTag];
+  Result.FTagState := Result.FTagState + [tsInTableTag, tsTableIsOpen];
 end;
 
 function THTMLWriter.OpenTableData: THTMLWriter;
@@ -1218,6 +1226,11 @@ end;
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+
+  if TableIsOpen  then
+  begin
+    Exclude(FTagState, tsTableIsOpen);
+  end;
 
   if (FCurrentTagName = cObject) and InObjectTag then
   begin
@@ -1510,6 +1523,15 @@ end;
 function THTMLWriter.AddBoldText(aString: string): THTMLWriter;
 begin
   Result := AddFormattedText(aString, ftBold)
+end;
+
+function THTMLWriter.AddCaption(aCaption: string): THTMLWriter;
+begin
+  if not TableIsOpen then
+  begin
+    raise ETableTagNotOpenHTMLWriterException.Create('Error Message');
+  end;
+  Result := AddTag(cCaption).AddText(aCaption).CloseTag;
 end;
 
 function THTMLWriter.AddCenterText(aString: string): THTMLWriter;
