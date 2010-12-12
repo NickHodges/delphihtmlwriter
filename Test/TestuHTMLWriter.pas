@@ -32,6 +32,7 @@ type
   published
     procedure TestThatExceptionsAreRaised;
 
+    procedure TestLabel;
 
     procedure TestCaption;
     procedure TestNewAtttributes;
@@ -1240,17 +1241,26 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenButton(TempName).CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
-  except
-    on E: ENotInFormTagHTMLException do
-    begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
-    end;
-  end;
 
 end;
+
+procedure TestTHTMLWriter.TestLabel;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempName: string;
+begin
+  TempName := 'kreetom';
+  ExpectedResult := Format(HTML('<form method="get"><%s></%s></form>'), [cLabel, cLabel]);
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenLabel.CloseTag.CloseForm.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+
+
+
+end;
+
+
 
 procedure TestTHTMLWriter.TestMap;
 var
@@ -2147,6 +2157,27 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenLabel.CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+  except
+    on E: ENotInFormTagHTMLException do
+    begin
+      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
+    end;
+  end;
+
+  try
+    TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+  except
+    on E: ENotInFormTagHTMLException do
+    begin
+      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
+    end;
+  end;
+
   try
     TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
     Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
@@ -3242,6 +3273,7 @@ begin
   end;
 
 end;
+
 
 procedure TestTHTMLWriter.TestLoadSave;
 var

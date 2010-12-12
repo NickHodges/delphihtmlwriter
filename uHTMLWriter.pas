@@ -522,6 +522,8 @@ type
     function OpenInput: THTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): THTMLWriter; overload;
     function OpenButton(aName: string): THTMLWriter;
+    function OpenLabel: THTMLWriter; overload;
+    function OpenLabel(aFor: string): THTMLWriter; overload;
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
@@ -967,6 +969,17 @@ end;
 function THTMLWriter.OpenKeyboard: THTMLWriter;
 begin
   Result := OpenFormatTag(ftKeyboard);
+end;
+
+function THTMLWriter.OpenLabel: THTMLWriter;
+begin
+  CheckInFormTag;
+  Result := AddTag(cLabel);
+end;
+
+function THTMLWriter.OpenLabel(aFor: string): THTMLWriter;
+begin
+  Result := OpenLabel[cFor, aFor];
 end;
 
 function THTMLWriter.OpenLegend: THTMLWriter;
