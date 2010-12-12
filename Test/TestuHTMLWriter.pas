@@ -1136,9 +1136,14 @@ begin
   ExpectedResult := Format('<html><form method="get"><%s /></form></html>', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.CloseForm.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s /></form></html>', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
   TempName := 'Verdana';
-  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form method="get"><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
+  TempType := itHidden;
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType, 'farble').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s type="%s" name="farble" /></form></html>', [TempTag,  TInputTypeStrings[TempType]]);
   CheckEquals(ExpectedResult, TestResult);
 
   for TempType := Low(TInputType) to High(TInputType) do

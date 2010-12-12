@@ -507,7 +507,6 @@ type
     {
       Additional Table support required:
 
-      <caption>
       <th>
       <col>
       <colgroup>
@@ -521,7 +520,7 @@ type
     // function OpenForm: THTMLWriter;
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): THTMLWriter;
     function OpenInput: THTMLWriter; overload;
-    function OpenInput(aType: TInputType): THTMLWriter; overload;
+    function OpenInput(aType: TInputType; aName: string = ''): THTMLWriter; overload;
     function OpenButton(aName: string): THTMLWriter;
 
     { TODO -oNick : Add all supporting tags to <form> }
@@ -929,10 +928,14 @@ begin
   Result := AddTag(cImage, ctEmpty).AddAttribute(cSource, aImageSource);
 end;
 
-function THTMLWriter.OpenInput(aType: TInputType): THTMLWriter;
+function THTMLWriter.OpenInput(aType: TInputType; aName: string = ''): THTMLWriter;
 begin
   CheckInFormTag;
   Result := OpenInput.AddAttribute(cType, TInputTypeStrings[aType]);
+  if StringIsNotEmpty(aName) then
+  begin
+    Result := Result[cName, aName];
+  end;
 end;
 
 function THTMLWriter.OpenInsert: THTMLWriter;
@@ -1529,7 +1532,7 @@ function THTMLWriter.AddCaption(aCaption: string): THTMLWriter;
 begin
   if not TableIsOpen then
   begin
-    raise ETableTagNotOpenHTMLWriterException.Create('Error Message');
+    raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenCaptionOutsideTable);
   end;
   Result := AddTag(cCaption).AddText(aCaption).CloseTag;
 end;
