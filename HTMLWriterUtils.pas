@@ -66,7 +66,7 @@ resourcestring
   strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
   strNotInFormTag = 'A <form> tag must be open in order to call this.';
   strMustBeInObject = 'An <object> tag must be open in order to call this.';
-  strOtherTagsOpen = 'The document cannot yet be closed -- there are non-<html> tags still open.';
+  strOtherTagsOpen = 'The document cannot be closed -- there are non-<html> tags still open.';
 
 type
   IGetHTML = interface
@@ -75,9 +75,9 @@ type
 
   TStackOfStrings = TStack<string>;
 
+   ///	<summary>A data structure that holds a width, and then publishes that width in various ways useful in
+   ///	HTML.</summary>
   THTMLWidth = record
-    ///	<summary>A data structure that holds a width, and then publishes that width in various ways useful in
-    ///	HTML.</summary>
     Width: integer;
     IsPercentage: Boolean;
     constructor Create(aWidth: integer; aIsPercentage: Boolean);
@@ -223,11 +223,11 @@ type
 {$REGION 'Documentation'}
 ///	<summary>Function to determine if a string is empty.</summary>
 ///	<param name="aString">The string to be examined for emptiness.</param>
-///	<param name="aCountSpacesAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
+///	<param name="aCountSpacesOnlyAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
 ///	If passed in as True, a string with nothing but spaces in it will be counted as empty.&#160; Defaults to
 ///	True.</param>
 {$ENDREGION}
-function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = False): Boolean;
+function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
 
 type
 
@@ -241,10 +241,10 @@ type
 
 implementation
 
-function StringIsEmpty(aString: string; aCountSpacesAsEmpty: Boolean = False): Boolean;
+function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
 begin
   Result := aString = EmptyStr;
-  if (not Result) and aCountSpacesAsEmpty then
+  if (not Result) and aCountSpacesOnlyAsEmpty then
   begin
     Result := Trim(aString) = EmptyStr;
   end;

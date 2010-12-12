@@ -65,7 +65,7 @@ type
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave)
   private
     FHTML: TStringBuilder;
-    FClosingTags: TStack<string>;
+    FClosingTags: TStackofStrings;
     FCurrentTagName: string;
     FTagState: TTagStates;
     FParent: THTMLWriter;
