@@ -30,7 +30,10 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestThatExceptionsAreRaised;
 
+
+    procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
     procedure TestInput;
@@ -105,7 +108,6 @@ type
     procedure TestOpenScript;
     procedure TestAddScript;
     procedure TestConstructorException;
-    procedure TestThatExceptionsAreRaised;
 
     procedure TestAddTableData;
     procedure TestAddLineBreak;
@@ -1767,6 +1769,17 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestCaption;
+var
+  TestResult: string;
+  TempString: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory(cHTML).OpenTable.AddCaption(TempString).CloseTable.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<table><caption>%s</caption></table>', [TempString]));
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestCloseComment;
 var
   TestResult: string;
@@ -2220,12 +2233,12 @@ begin
   end;
 
   try
-    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInObjectTagException when trying to add a <param> tag outside of a <object> tag.');
+    TestResult := HTMLWriterFactory(cHTML).OpenBold.AddCaption('horgtay').CloseTag.AsHTML;
+    Check(False, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
   except
-    on E: ENotInObjectTagException do
+    on E: ETableTagNotOpenHTMLWriterException do
     begin
-      Check(True, 'Properly called ENotInObjectTagException when trying to add a <param> tag outside of a <object> tag.');
+      Check(True, 'Properly called ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
     end;
   end;
 
@@ -3172,8 +3185,6 @@ begin
   // Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
   // end;
   // end;
-
-
 
 end;
 

@@ -67,6 +67,7 @@ resourcestring
   strNotInFormTag = 'A <form> tag must be open in order to call this.';
   strMustBeInObject = 'An <object> tag must be open in order to call this.';
   strOtherTagsOpen = 'The document cannot be closed -- there are non-<html> tags still open.';
+  strCantOpenCaptionOutsideTable = 'A <caption> tag can only be added immediately after a <table> tag';
 
 type
   IGetHTML = interface
@@ -103,10 +104,13 @@ type
     ENotInFormTagHTMLException = class(EHTMLWriterException); // Tested
     ENotInObjectTagException = class(EHTMLWriterException);
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);   // Tested.
+    ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException);  // Tested
 
   type
 
-    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag, tsInObjectTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag, tsInMapTag);
+    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag,
+                 tsInObjectTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag,
+                 tsInMapTag, tsTableIsOpen);
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
@@ -228,6 +232,8 @@ type
 ///	True.</param>
 {$ENDREGION}
 function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+
 
 type
 
@@ -248,6 +254,11 @@ begin
   begin
     Result := Trim(aString) = EmptyStr;
   end;
+end;
+
+function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+begin
+  Result := not StringIsEmpty(aString, aCountSpacesOnlyAsEmpty);
 end;
 
 class function TTagMaker.MakeCommentCloseTag: string;
