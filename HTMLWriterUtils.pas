@@ -68,6 +68,7 @@ resourcestring
   strMustBeInObject = 'An <object> tag must be open in order to call this.';
   strOtherTagsOpen = 'The document cannot be closed -- there are non-<html> tags still open.';
   strCantOpenCaptionOutsideTable = 'A <caption> tag can only be added immediately after a <table> tag';
+  strParamNameRequired = 'The name of a <param> tag cannot be empty';
 
 type
   IGetHTML = interface
@@ -105,6 +106,7 @@ type
     ENotInObjectTagException = class(EHTMLWriterException);
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);   // Tested.
     ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException);  // Tested
+    EParamNameRequiredHTMLWriterException = class(EHTMLWriterException);
 
   type
 
