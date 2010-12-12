@@ -174,6 +174,7 @@ type
     cParam = 'param';
     cAction = 'action';
     cMethod = 'method';
+    cValue = 'value';
 
     cCRLF = #13#10;
 

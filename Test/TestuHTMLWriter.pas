@@ -367,6 +367,7 @@ var
   ExpectedResult: string;
   TempTag1, TempTag2: string;
   TempName: string;
+  TempValue: string;
 begin
   TempTag1 := cObject;
   TempTag2 := cParam;
@@ -387,6 +388,14 @@ begin
   TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
   ExpectedResult := Format('<html><%s><%s name="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TempValue := 'mortopper';
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName, TempValue).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s" value="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempValue, TempTag2, TempTag1]);
+  CheckEquals(ExpectedResult, TestResult);
+
+
+
 end;
 
 procedure TestTHTMLWriter.TestAddParagraphTextWithStyle;
