@@ -394,8 +394,6 @@ begin
   ExpectedResult := Format('<html><%s><%s name="%s" value="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempValue, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
 
-
-
 end;
 
 procedure TestTHTMLWriter.TestAddParagraphTextWithStyle;

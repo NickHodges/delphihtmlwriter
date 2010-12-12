@@ -116,7 +116,9 @@ type
     TTagStates = set of TTagState;
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
-    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym, ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation, ftSample, ftSmall, ftStrike, ftTeletype, ftVariable, ftInsert);
+    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym,
+                   ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation,
+                   ftSample, ftSmall, ftStrike, ftTeletype, ftVariable, ftInsert);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
@@ -130,7 +132,6 @@ type
     TFormMethod = (fmNone, fmGet, fmPost);
 
     TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
-
 
     TPercentage = 1 .. 100;
 
