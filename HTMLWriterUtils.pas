@@ -208,6 +208,7 @@ type
     cLabel = 'label';
     cTextArea = 'textarea';
     cSelect = 'select';
+    cFor = 'for';
 
     cOpenBracket = '<';
     cCloseBracket = '>';
