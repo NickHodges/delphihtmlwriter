@@ -599,7 +599,8 @@ type
     /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
     /// tag</exception>
 {$ENDREGION}
-    function OpenParam: THTMLWriter;
+    function OpenParam(aName: string): THTMLWriter; // name parameter is required
+
 
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
 
@@ -1861,10 +1862,14 @@ begin
   Result := OpenParagraph.AddStyle(aStyle);
 end;
 
-function THTMLWriter.OpenParam: THTMLWriter;
+function THTMLWriter.OpenParam(aName: string): THTMLWriter;
 begin
   CheckInObjectTag;
-  Result := AddTag(cParam);
+  if StringisEmpty(aName) then
+  begin
+    raise EParamNameRequiredHTMLWriterException.Create(strParamNameRequired);
+  end;
+  Result := AddTag(cParam)[cName, aName];
 end;
 
 function THTMLWriter.OpenPre: THTMLWriter;

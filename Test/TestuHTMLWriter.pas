@@ -366,24 +366,26 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag1, TempTag2: string;
+  TempName: string;
 begin
   TempTag1 := cObject;
   TempTag2 := cParam;
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AsHTML;
-  ExpectedResult := Format('<html><%s><%s', [TempTag1, TempTag2]);
+  TempName := 'joople';
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"', [TempTag1, TempTag2, TempName]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s>', [TempTag1, TempTag2, TempTag2]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"></%s>', [TempTag1, TempTag2, TempName, TempTag2]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"></%s></%s></html>', [TempTag1, TempTag2, TempName, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
 end;
 
@@ -2159,12 +2161,12 @@ var
 begin
 
   try
-    TestResult := HTMLWriterFactory(cHTML).OpenLabel.CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+    TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML;
+    Check(False, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
   except
-    on E: ENotInFormTagHTMLException do
+    on E: EParamNameRequiredHTMLWriterException do
     begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
+      Check(True, 'Properly called EParamNameRequiredHTMLWriterException when adding a <param> with an empty name.');
     end;
   end;
 
@@ -2249,7 +2251,7 @@ begin
   end;
 
   try
-    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
+    TestResult := HTMLWriterFactory(cHTML).OpenParam('herdle').CloseTag.AsHTML;
     Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
   except
     on E: ENotInObjectTagException do
