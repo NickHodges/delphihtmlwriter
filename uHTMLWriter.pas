@@ -92,6 +92,7 @@ type
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
+    procedure CloseTheTag;
 {$ENDREGION}
 {$REGION 'Check Methods'}
     procedure CheckInHeadTag;
@@ -108,7 +109,6 @@ type
     procedure CheckCurrentTagIsHTMLTag;
 {$ENDREGION}
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
-    procedure CloseTheTag;
     function GetAttribute(const Name, Value: string): THTMLWriter;
 
   public
@@ -149,13 +149,11 @@ type
     /// a &lt;head&gt; tag.</remarks>
 {$ENDREGION}
     function OpenBase: THTMLWriter;
-    function AddBase(aHREF: string): THTMLWriter; overload;
     function OpenBaseFont: THTMLWriter;
-
     /// <summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
     /// <remarks>Note:   this method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter; overload;
-
+    function AddBase(aHREF: string): THTMLWriter; overload;
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: THTMLWriter;
 {$REGION 'Documentation'}
@@ -176,13 +174,10 @@ type
     /// <param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
     function OpenParagraphWithStyle(aStyle: string): THTMLWriter;
     function OpenParagraphWithID(aID: string): THTMLWriter;
-
     /// <summary>Opens a &lt;span&gt; tag.</summary>
     function OpenSpan: THTMLWriter;
-
     /// <summary>Opens a &lt;div&gt; tag.</summary>
     function OpenDiv: THTMLWriter;
-
     /// <summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: THTMLWriter;
 {$REGION 'Documentation'}
@@ -517,7 +512,6 @@ type
       }
 {$ENDREGION}
 {$REGION 'Form Methods'}
-    // function OpenForm: THTMLWriter;
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): THTMLWriter;
     function OpenInput: THTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): THTMLWriter; overload;
@@ -576,7 +570,6 @@ type
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
 
-
     /// <summary>Opens a &lt;frameset&gt; tag.</summary>
     function OpenFrameset: THTMLWriter;
 {$REGION 'Documentation'}
@@ -600,7 +593,6 @@ type
     /// tag</exception>
 {$ENDREGION}
     function OpenParam(aName: string; aValue: string = ''): THTMLWriter; // name parameter is required
-
 
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
 
