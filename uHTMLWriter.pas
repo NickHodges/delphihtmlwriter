@@ -113,15 +113,14 @@ type
 
   public
 {$REGION 'Constructors'}
-
-    {$REGION 'Documentation'}
-    ///	<summary>Creates an instance of THTMLWriter by passing in any arbitrary tag. Use this constructur if you want to create a chunk of HTML code not associated with a document.</summary>
-    ///	<param name="aTagName">The text for the tag you are creating. For instance, if you want to create a &lt;span&gt; tag, you should pass 'span' as the value</param>
-    ///	<param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
-    ///	<param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance, normally the &lt;b&gt; doesn't have attributes. Set this to False if you want to ensure that the tag will not have any attributes.</param>
-    ///	<exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName parameter</exception>
-    ///	<seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Creates an instance of THTMLWriter by passing in any arbitrary tag. Use this constructur if you want to create a chunk of HTML code not associated with a document.</summary>
+    /// <param name="aTagName">The text for the tag you are creating. For instance, if you want to create a &lt;span&gt; tag, you should pass 'span' as the value</param>
+    /// <param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
+    /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance, normally the &lt;b&gt; doesn't have attributes. Set this to False if you want to ensure that the tag will not have any attributes.</param>
+    /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName parameter</exception>
+    /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
+{$ENDREGION}
     constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
@@ -394,15 +393,14 @@ type
     /// The default is to do so.</param>
 {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
-
-    {$REGION 'Documentation'}
-    ///	<summary>Adds an &lt;hr&gt; tag to the HTML</summary>
-    ///	<param name="aAttributes">Attributes that should be added to the &lt;hr&gt; tag.</param>
-    ///	<param name="aUseEmptyTag">Determines if the &lt;hr&gt; tag should be rendered as &lt;hr /&gt;</param>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Adds an &lt;hr&gt; tag to the HTML</summary>
+    /// <param name="aAttributes">Attributes that should be added to the &lt;hr&gt; tag.</param>
+    /// <param name="aUseEmptyTag">Determines if the &lt;hr&gt; tag should be rendered as &lt;hr /&gt;</param>
+{$ENDREGION}
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): THTMLWriter;
 
-    ///	<summary>Adds a Carriage Return and a Line Feed to the HTML.</summary>
+    /// <summary>Adds a Carriage Return and a Line Feed to the HTML.</summary>
     function CRLF: THTMLWriter;
 
     /// <summary>Adds spaces to the HTML stream</summary>
@@ -440,7 +438,7 @@ type
     /// <param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
 
-    ///	<summary>Opens a &lt;noscript&gt; tag</summary>
+    /// <summary>Opens a &lt;noscript&gt; tag</summary>
     function OpenNoScript: THTMLWriter;
 
     /// <summary>Opens a &lt;link /&gt; tag.</summary>
@@ -457,11 +455,11 @@ type
     function CloseComment: THTMLWriter;
     /// <summary>Closes an open &lt;list&gt; tag</summary>
     function CloseList: THTMLWriter;
-    ///	<summary>Closes an open &lt;table&gt; tag.</summary>
+    /// <summary>Closes an open &lt;table&gt; tag.</summary>
     function CloseTable: THTMLWriter;
-    ///	<summary>Closes and open &lt;form&gt; tag.</summary>
+    /// <summary>Closes and open &lt;form&gt; tag.</summary>
     function CloseForm: THTMLWriter;
-    ///	<summary>Closes and open &lt;html&gt; tag.</summary>
+    /// <summary>Closes and open &lt;html&gt; tag.</summary>
     function CloseDocument: THTMLWriter;
 
     { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
@@ -568,7 +566,6 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-
     /// <summary>Opens a &lt;frameset&gt; tag.</summary>
     function OpenFrameset: THTMLWriter;
 {$REGION 'Documentation'}
@@ -579,20 +576,18 @@ type
     function OpenFrame: THTMLWriter;
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
     function OpenNoFrames: THTMLWriter;
-
     /// <summary>Opens a &lt;map /&gt; tag</summary>
     function OpenMap: THTMLWriter;
     /// <summary>Opens an &lt;area /&gt; tag</summary>
     function OpenArea: THTMLWriter;
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
+    function OpenParam(aName: string; aValue: string = ''): THTMLWriter; // name parameter is required
 {$REGION 'Documentation'}
     /// <summary>Opens a &lt;param&gt; tag</summary>
     /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
     /// tag</exception>
 {$ENDREGION}
-    function OpenParam(aName: string; aValue: string = ''): THTMLWriter; // name parameter is required
-
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
 
   end;
@@ -677,7 +672,7 @@ begin
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
-  FClosingTags := TStackOfStrings.Create;
+  FClosingTags := TStackofStrings.Create;
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
 
@@ -1230,12 +1225,11 @@ begin
   Result.FTagState := Result.FTagState + [tsInListTag];
 end;
 
-
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
 
-  if TableIsOpen  then
+  if TableIsOpen then
   begin
     Exclude(FTagState, tsTableIsOpen);
   end;
@@ -1856,7 +1850,7 @@ end;
 function THTMLWriter.OpenParam(aName: string; aValue: string = ''): THTMLWriter;
 begin
   CheckInObjectTag;
-  if StringisEmpty(aName) then
+  if StringIsEmpty(aName) then
   begin
     raise EParamNameRequiredHTMLWriterException.Create(strParamNameRequired);
   end;
