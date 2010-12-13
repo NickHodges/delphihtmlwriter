@@ -521,7 +521,6 @@ type
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
-      <label>
       <select>
       <optgroup>
       <option>
