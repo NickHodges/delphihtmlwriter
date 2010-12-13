@@ -103,10 +103,10 @@ type
     ENotInFrameSetHTMLException = class(EHTMLWriterException); // Tested
     ENotInMapTagHTMLException = class(EHTMLWriterException);  // Tested
     ENotInFormTagHTMLException = class(EHTMLWriterException); // Tested
-    ENotInObjectTagException = class(EHTMLWriterException);
+    ENotInObjectTagException = class(EHTMLWriterException);  // Tested
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException);   // Tested.
     ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException);  // Tested
-    EParamNameRequiredHTMLWriterException = class(EHTMLWriterException);
+    EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
 
   type
 
@@ -238,7 +238,6 @@ type
 {$ENDREGION}
 function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
 function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
-
 
 type
 
