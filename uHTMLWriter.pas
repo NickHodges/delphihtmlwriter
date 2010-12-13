@@ -525,7 +525,7 @@ type
       <optgroup>
       <option>
       <textarea>
-
+      Need to check the HTML book to ensure that this is a complete list
 
       }
 {$ENDREGION}
