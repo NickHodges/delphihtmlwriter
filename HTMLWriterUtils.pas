@@ -110,10 +110,53 @@ type
 
   type
 
-    TTagState = (tsBracketOpen, tsTagOpen, tsCommentOpen, tsTagClosed, tsInHeadTag, tsInBodyTag, tsInListTag,
-                 tsInObjectTag, tsInTableTag, tsInTableRowTag, tsInFormTag, tsInFieldSetTag, tsInFrameSetTag,
-                 tsInMapTag, tsTableIsOpen);
+    ///	<summary>Enumeration that defines the various states that a tag can be in.</summary>
+    TTagState = (
+      ///	<summary>Indicates that the current state of the tag is that the left bracket has been added but the right has not been. (e.g. "&lt;span " The tag is able to accept attributes at this point.</summary>
+      tsBracketOpen,
+
+      ///	<summary>Indicates that the tag is open and the bracket has been added. (e.g. "&lt;span&gt;"</summary>
+      tsTagOpen,
+
+      ///	<summary>Indicates that the current HTML is part of a comment.</summary>
+      tsCommentOpen,
+
+      tsTagClosed,
+
+      tsInHeadTag,
+
+      tsInBodyTag,
+
+      tsInListTag,
+
+      tsInObjectTag,
+
+      tsInTableTag,
+
+      tsInTableRowTag,
+
+      tsInFormTag,
+
+      tsInFieldSetTag,
+
+      tsInFrameSetTag,
+
+      tsInMapTag,
+
+      tsTableIsOpen
+    );
     TTagStates = set of TTagState;
+
+    ///	<summary>Enumeration to define possible states of an open &lt;table&gt; tag.</summary>
+    TTableState = (
+      ///	<summary>Indicates that the current HTML is part of a table. (&lt;table&gt;)</summary>
+      tbsInTable,
+
+      ///	<summary>Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)</summary>
+      tbsInTableRowTag
+    );
+    TTableStates = set of TTableState;
+
 
     TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
     TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym,
