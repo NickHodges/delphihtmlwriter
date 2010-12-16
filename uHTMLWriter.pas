@@ -68,6 +68,7 @@ type
     FClosingTags: TStackofStrings;
     FCurrentTagName: string;
     FTagState: TTagStates;
+    FTableState: TTableStates;
     FParent: THTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
@@ -1066,6 +1067,7 @@ begin
   end;
 
   Result.FTagState := Result.FTagState + [tsInTableTag, tsTableIsOpen];
+  Result.FTableState := Result.FTableState + [tbsInTable];
 end;
 
 function THTMLWriter.OpenTableData: THTMLWriter;
@@ -1232,6 +1234,7 @@ begin
   if TableIsOpen then
   begin
     Exclude(FTagState, tsTableIsOpen);
+    FTableState := [];
   end;
 
   if (FCurrentTagName = cObject) and InObjectTag then
