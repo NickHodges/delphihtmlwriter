@@ -110,7 +110,11 @@ type
 
   type
 
+    {$REGION 'Documentation'}
     ///	<summary>Enumeration that defines the various states that a tag can be in.</summary>
+    ///	<remarks>This enumeration is not normally used by itself, but only as part of the TTagStates set type.</remarks>
+    ///	<seealso cref="TTagStates">TTagStates</seealso>
+    {$ENDREGION}
     TTagState = (
       ///	<summary>Indicates that the current state of the tag is that the left bracket has been added but the right has not been. (e.g. "&lt;span " The tag is able to accept attributes at this point.</summary>
       tsBracketOpen,
@@ -124,26 +128,37 @@ type
       ///	<summary>Indicates that the tag is currently closed (e.g. "&lt;span&gt;&lt;/span&gt;"</summary>
       tsTagClosed,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;head&gt; tag.</summary>
       tsInHeadTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;body&gt; tag.</summary>
       tsInBodyTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;list&gt; tag.</summary>
       tsInListTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;object&gt; tag.</summary>
       tsInObjectTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;table&gt; tag.</summary>
       tsInTableTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
       tsInTableRowTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;form&gt; tag.</summary>
       tsInFormTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;fieldset&gt; tag.</summary>
       tsInFieldSetTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
       tsInFrameSetTag,
 
+      ///	<summary>Indicates that the current HTML is being written inside of a &lt;map&gt; tag.</summary>
       tsInMapTag,
 
+      ///	<summary>Indicates that a &lt;table&gt; tag is currently open.</summary>
       tsTableIsOpen
     );
     TTagStates = set of TTagState;
