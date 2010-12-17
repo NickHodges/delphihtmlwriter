@@ -121,6 +121,7 @@ type
       ///	<summary>Indicates that the current HTML is part of a comment.</summary>
       tsCommentOpen,
 
+      ///	<summary>Indicates that the tag is currently closed (e.g. "&lt;span&gt;&lt;/span&gt;"</summary>
       tsTagClosed,
 
       tsInHeadTag,
