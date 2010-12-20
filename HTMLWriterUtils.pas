@@ -242,7 +242,19 @@ type
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
-    TFormMethod = (fmNone, fmGet, fmPost);
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  <para>Indicates the action type to be taken by a &lt;form&gt; tag</para>
+    ///	</summary>
+    {$ENDREGION}
+    TFormMethod = (
+      ///	<summary>Indicates no action</summary>
+      fmNone,
+      ///	<summary>Indicates a GET action</summary>
+      fmGet,
+      ///	<summary>Indicates a POST action</summary>
+      fmPost
+    );
 
     TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
 
