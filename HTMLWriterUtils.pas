@@ -234,6 +234,7 @@ type
       ///	<summary>Indicates that a black disc should be used as the bullet</summary>
       bsDisc,
 
+      ///	<summary>Indicates that a small circle should be used as the bullet</summary>
       bsCircle,
 
       bsSquare
