@@ -231,6 +231,7 @@ type
       ///	<summary>Indicates that no bullet should be used</summary>
       bsNone,
 
+      ///	<summary>Indicates that a black disc should be used as the bullet</summary>
       bsDisc,
 
       bsCircle,
