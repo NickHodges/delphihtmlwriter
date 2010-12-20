@@ -237,7 +237,20 @@ type
 
       bsSquare
     );
-    TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
+    ///	<summary>Enumeration to define the type of numbering system to use in an ordered list (&lt;ol&gt;)</summary>
+    TNumberType = (
+      ntNone,
+
+      ntNumber,
+
+      ntUpperCase,
+
+      ntLowerCase,
+
+      ntUpperRoman,
+
+      ntLowerRoman
+    );
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
