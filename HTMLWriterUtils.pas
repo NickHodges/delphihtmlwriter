@@ -252,7 +252,14 @@ type
       ntLowerRoman
     );
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
-    TCloseTagType = (ctNormal, ctEmpty, ctComment);
+    ///	<summary>Enumeration to define the kind of closing a given tag requires.</summary>
+    TCloseTagType = (
+      ctNormal,
+
+      ctEmpty,
+
+      ctComment
+    );
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
     {$REGION 'Documentation'}
