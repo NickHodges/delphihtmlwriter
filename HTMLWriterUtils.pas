@@ -226,7 +226,17 @@ type
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
     TIsEmptyTag = (ietIsEmptyTag, ietIsNotEmptyTag);
-    TBulletShape = (bsNone, bsDisc, bsCircle, bsSquare);
+    ///	<summary>Enumeration to define the different types of bullets that can be used with the &lt;ol&gt; and &lt;ul&gt; tags.</summary>
+    TBulletShape = (
+      ///	<summary>Indicates that no bullet should be used</summary>
+      bsNone,
+
+      bsDisc,
+
+      bsCircle,
+
+      bsSquare
+    );
     TNumberType = (ntNone, ntNumber, ntUpperCase, ntLowerCase, ntUpperRoman, ntLowerRoman);
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
     TCloseTagType = (ctNormal, ctEmpty, ctComment);
