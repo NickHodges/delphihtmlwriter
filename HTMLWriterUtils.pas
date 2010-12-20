@@ -118,46 +118,32 @@ type
     TTagState = (
       ///	<summary>Indicates that the current state of the tag is that the left bracket has been added but the right has not been. (e.g. "&lt;span " The tag is able to accept attributes at this point.</summary>
       tsBracketOpen,
-
       ///	<summary>Indicates that the tag is open and the bracket has been added. (e.g. "&lt;span&gt;"</summary>
       tsTagOpen,
-
       ///	<summary>Indicates that the current HTML is part of a comment.</summary>
       tsCommentOpen,
-
       ///	<summary>Indicates that the tag is currently closed (e.g. "&lt;span&gt;&lt;/span&gt;"</summary>
       tsTagClosed,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;head&gt; tag.</summary>
       tsInHeadTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;body&gt; tag.</summary>
       tsInBodyTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;list&gt; tag.</summary>
       tsInListTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;object&gt; tag.</summary>
       tsInObjectTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;table&gt; tag.</summary>
       tsInTableTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
       tsInTableRowTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;form&gt; tag.</summary>
       tsInFormTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;fieldset&gt; tag.</summary>
       tsInFieldSetTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
       tsInFrameSetTag,
-
       ///	<summary>Indicates that the current HTML is being written inside of a &lt;map&gt; tag.</summary>
       tsInMapTag,
-
       ///	<summary>Indicates that a &lt;table&gt; tag is currently open.</summary>
       tsTableIsOpen
     );
@@ -167,17 +153,75 @@ type
     TTableState = (
       ///	<summary>Indicates that the current HTML is part of a table. (&lt;table&gt;)</summary>
       tbsInTable,
-
       ///	<summary>Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)</summary>
       tbsInTableRowTag
     );
     TTableStates = set of TTableState;
 
+    TCanHaveAttributes = (
+      ///	<summary>Indicates that the given tag can accept attributes.</summary>
+      chaCanHaveAttributes,
+      ///	<summary>Indicates that the given tag cannot accept attributes.</summary>
+      chaCannotHaveAttributes
+    );
 
-    TCanHaveAttributes = (chaCanHaveAttributes, chaCannotHaveAttributes);
-    TFormatType = (ftBold, ftItalic, ftUnderline, ftEmphasis, ftStrong, ftSubscript, ftSuperscript, ftPreformatted, ftCitation, ftAcronym,
-                   ftAbbreviation, ftAddress, ftBDO, ftBig, ftCenter, ftCode, ftDelete, ftDefinition, ftFont, ftKeyboard, ftQuotation,
-                   ftSample, ftSmall, ftStrike, ftTeletype, ftVariable, ftInsert);
+    ///	<summary>An enumeration listing the different ways that text can be formatted</summary>
+    TFormatType = (
+      ///	<summary>Formats with a &lt;b&gt; tag</summary>
+      ftBold,
+      ///	<summary>Formats with a &lt;i&gt; tag</summary>
+      ftItalic,
+      ///	<summary>Formats with a &lt;u&gt; tag</summary>
+      ftUnderline,
+      ///	<summary>Formats with a &lt;em&gt; tag</summary>
+      ftEmphasis,
+      ///	<summary>Formats with a &lt;strong&gt; tag</summary>
+      ftStrong,
+      ///	<summary>Formats with a &lt;sub&gt; tag</summary>
+      ftSubscript,
+      ///	<summary>Formats with a &lt;sup&gt; tag</summary>
+      ftSuperscript,
+      ///	<summary>Formats with a &lt;pre&gt; tag</summary>
+      ftPreformatted,
+      ///	<summary>Formats with a &lt;cite&gt; tag</summary>
+      ftCitation,
+      ///	<summary>Formats with a &lt;acronym&gt; tag</summary>
+      ftAcronym,
+      ///	<summary>Formats with a &lt;abbr&gt; tag</summary>
+      ftAbbreviation,
+      ///	<summary>Formats with a &lt;address&gt; tag</summary>
+      ftAddress,
+      ///	<summary>Formats with a &lt;bdo&gt; tag</summary>
+      ftBDO,
+      ///	<summary>Formats with a &lt;big&gt; tag</summary>
+      ftBig,
+      ///	<summary>Formats with a &lt;center&gt; tag</summary>
+      ftCenter,
+      ///	<summary>Formats with a &lt;code&gt; tag</summary>
+      ftCode,
+      ///	<summary>Formats with a &lt;delete&gt; tag</summary>
+      ftDelete,
+      ///	<summary>Formats with a &lt;dfn&gt; tag</summary>
+      ftDefinition,
+      ///	<summary>Formats with a &lt;font&gt; tag</summary>
+      ftFont,
+      ///	<summary>Formats with a &lt;kbd&gt; tag</summary>
+      ftKeyboard,
+      ///	<summary>Formats with a &lt;q&gt; tag</summary>
+      ftQuotation,
+      ///	<summary>Formats with a &lt;samp&gt; tag</summary>
+      ftSample,
+      ///	<summary>Formats with a &lt;small&gt; tag</summary>
+      ftSmall,
+      ///	<summary>Formats with a &lt;strike&gt; tag</summary>
+      ftStrike,
+      ///	<summary>Formats with a &lt;tt&gt; tag</summary>
+      ftTeletype,
+      ///	<summary>Formats with a &lt;var&gt; tag</summary>
+      ftVariable,
+      ///	<summary>Formats with a &lt;ins&gt; tag</summary>
+      ftInsert
+    );
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
