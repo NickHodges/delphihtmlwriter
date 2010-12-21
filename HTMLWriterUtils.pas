@@ -272,11 +272,11 @@ type
 
     TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
 
-    TPercentage = 1 .. 100;
-
     TBlockType = (btDiv, btSpan, btParagraph);
 
   const
+    ///	<summary>String array for use with the TFormatType</summary>
+    ///	<seealso cref="TFormatType">TFormatType</seealso>
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins');
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
