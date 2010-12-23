@@ -469,6 +469,8 @@ type
     /// <summary>Opens in &lt;img&gt; tag.</summary>
     /// <remarks>This tag will always be closed by " /&gt;"</remarks>
     function OpenImage: THTMLWriter; overload;
+    ///	<summary>Opens an &lt;img&gt; tag and adds the 'src' parameter.</summary>
+    ///	<param name="aImageSource">The URL of the image to be displayed</param>
     function OpenImage(aImageSource: string): THTMLWriter; overload;
     function AddImage(aImageSource: string): THTMLWriter;
 {$ENDREGION}
@@ -552,9 +554,21 @@ type
     function AddIFrame(aURL: string; aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
 {$ENDREGION}
 {$REGION 'List Methods'}
+
+    ///	<summary>Opens an unordered list tag (&lt;ul&gt;)</summary>
+    ///	<param name="aBulletShape">An optional parameter indicating the bullet type that the list should use.</param>
+    ///	<seealso cref="TBulletShape">TBulletShape</seealso>
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Opens an ordered list tag (&lt;ol&gt;)</summary>
+    ///	<param name="aNumberType">An optional parameter indicating the numbering type that the list should use.</param>
+    ///	<seealso cref="TNumberType">TNumberType</seealso>
+    {$ENDREGION}
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
+    ///	<summary>Opens a list item (&lt;li&gt;) inside of a list.</summary>
     function OpenListItem: THTMLWriter;
+    ///	<summary>Adds a List item (&lt;li&gt;) with the given text</summary>
+    ///	<param name="aText">The text to be added to the list item.</param>
     function AddListItem(aText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'Storage Methods'}
@@ -583,6 +597,12 @@ type
     function OpenArea: THTMLWriter;
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Opens a &lt;param&gt; tag</summary>
+    ///	<param name="aName">The name for the parameter</param>
+    ///	<param name="aValue">The value to be assigned to the paramter</param>
+    ///	<remarks>This tag can only be used inside of an &lt;object&gt; tag.</remarks>
+    {$ENDREGION}
     function OpenParam(aName: string; aValue: string = ''): THTMLWriter; // name parameter is required
 {$REGION 'Documentation'}
     /// <summary>Opens a &lt;param&gt; tag</summary>
