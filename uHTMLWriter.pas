@@ -487,6 +487,7 @@ type
     /// open.</remarks>
 {$ENDREGION}
     function OpenTable: THTMLWriter; overload;
+    ///	<summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
@@ -497,6 +498,11 @@ type
     /// <summary>Opens a &lt;td&gt; tag.</summary>
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
+    ///	<exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
+    ///	<remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
+    {$ENDREGION}
     function AddTableData(aText: string): THTMLWriter;
     function AddCaption(aCaption: string): THTMLWriter;
 
