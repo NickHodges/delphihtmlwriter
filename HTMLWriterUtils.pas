@@ -111,6 +111,7 @@ type
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException); // Tested.
     ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException); // Tested
     EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
+    ETagIsDeprecated4HTMLWriterException = class(EHTMLWriterException);
 
   type
 {$REGION 'Documentation'}

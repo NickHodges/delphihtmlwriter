@@ -90,6 +90,9 @@ type
     function InMapTag: Boolean;
     function InObjectTag: Boolean;
 {$ENDREGION}
+    procedure IsDeprecatedTag(aName: string; aVersion: integer);
+
+
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
@@ -111,7 +114,7 @@ type
 {$ENDREGION}
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
     function GetAttribute(const Name, Value: string): THTMLWriter;
-
+   
   public
 {$REGION 'Constructors'}
 {$REGION 'Documentation'}
@@ -817,6 +820,11 @@ end;
 function THTMLWriter.InTableTag: Boolean;
 begin
   Result := tsInTableTag in FTagState;
+end;
+
+procedure THTMLWriter.IsDeprecatedTag(aName: string; aVersion: integer);
+begin
+  raise ETagIsDeprecated4HTMLWriterException.Create(Format('The %s tag is deprecated  in HTML %d.x.', [aName, aVersion]));
 end;
 
 function THTMLWriter.OpenBold: THTMLWriter;
