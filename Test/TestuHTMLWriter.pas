@@ -26,8 +26,10 @@ type
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
+
   protected
     procedure CheckException(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
+    procedure CheckExceptionNotRaised(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
 
   public
     procedure SetUp; override;
@@ -2166,111 +2168,73 @@ var
   TestResult: string;
 begin
 
-  CheckException(EParamNameRequiredHTMLWriterException,
-    procedure()
-      begin
-        TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML;
-     end,
-     'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
+  CheckException(EParamNameRequiredHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML; end, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
 
-  CheckException(ENotInFormTagHTMLException,
-    procedure()
-      begin
-        TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML;
-     end,
-     'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+  CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML; end, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
 
-  CheckException(EHeadTagRequiredHTMLException,
-    procedure()
-      begin
-        TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
-     end,
-     'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
+  CheckException(EHeadTagRequiredHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML; end, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
 
-  CheckException(ENotInListTagException,
-    procedure()
-      begin
-        TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
-     end,
-     'Properly called ENotInListTagException when outside of a list.  All is well.');
+  CheckException(ENotInListTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML; end, 'Properly called ENotInListTagException when outside of a list.  All is well.');
+
+  CheckException(ENotInTableTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML; end, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
 
   CheckException(ENotInTableTagException,
     procedure()
-      begin
-        TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
-     end,
-     'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
-
-
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
-    Check(False, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
-  except
-    on E: EClosingDocumentWithOpenTagsHTMLException do
     begin
-      Check(True, 'Properly called EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
+    end,
+    'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table'
+    );
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
-  except
-    on E: ENotInFrameSetHTMLException do
+  CheckException(EClosingDocumentWithOpenTagsHTMLException,
+    procedure()
     begin
-      Check(True, 'Properly called ENotInFrameSetHTMLException when adding a frame outside of a frameset.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
+    end,
+    'Failed to raise EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.'
+    );
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
-  except
-    on E: ENotInMapTagHTMLException do
+  CheckException(ENotInFrameSetHTMLException,
+    procedure()
     begin
-      Check(True, 'Properly called ENotInMapTagHTMLException when adding an area outside of a map tag.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML;
+    end,
+    'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
-  except
-    on E: ENotInFormTagHTMLException do
+  CheckException(ENotInMapTagHTMLException,
+    procedure()
     begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when adding an <input> outside of a <form>.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML;
+    end,
+   'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenParam('herdle').CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
-  except
-    on E: ENotInObjectTagException do
+  CheckException(ENotInFormTagHTMLException,
+    procedure()
     begin
-      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML;
+    end,
+   'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML;
-    Check(False, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
-  except
-    on E: EHTMLWriterOpenTagRequiredException do
+  CheckException(ENotInObjectTagException,
+    procedure()
     begin
-      Check(True, 'Properly called EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag..');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenParam('herdle').CloseTag.AsHTML;
+    end,
+    'Failed to raise ENotInObjectTagException when trying to add an <param> outside of a <object>');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBold.AddCaption('horgtay').CloseTag.AsHTML;
-    Check(False, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
-  except
-    on E: ETableTagNotOpenHTMLWriterException do
+  CheckException(EHTMLWriterOpenTagRequiredException,
+    procedure()
     begin
-      Check(True, 'Properly called ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
-    end;
-  end;
+      TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML;
+    end,
+    'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
+
+  CheckException(ETableTagNotOpenHTMLWriterException,
+    procedure()
+    begin
+      TestResult := HTMLWriterFactory(cHTML).OpenBold.AddCaption('horgtay').CloseTag.AsHTML;
+    end,
+    'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
 end;
 
@@ -2360,7 +2324,6 @@ var
   WasException: Boolean;
 begin
   WasException := False;
-
   try
     aCode;
   except
@@ -2372,9 +2335,28 @@ begin
       end;
     end;
   end;
-
   Check(WasException, aMessage);
 end;
+
+procedure TestTHTMLWriter.CheckExceptionNotRaised(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
+var
+  WasException: Boolean;
+begin
+  WasException := False;
+  try
+    aCode;
+  except
+    on E: Exception do
+    begin
+      if E is aExceptionType then
+      begin
+        WasException := True;
+      end;
+    end;
+  end;
+  Check(WasException, aMessage);
+end;
+
 
 function TestTHTMLWriter.HTML(aString: string): string;
 begin
@@ -3293,9 +3275,9 @@ var
   Temp: THTMLWriter;
 begin
   // <font>
-
   CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: THTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
+  // Negative test case for <font>
   try
     Temp := HTMLWriterFactory(cHTML);
     Temp.ErrorLevels := [];
