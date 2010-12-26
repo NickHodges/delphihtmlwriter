@@ -15,6 +15,10 @@ uses
   TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils;
 
 type
+  TSimpleClosure = reference to procedure;
+  TClassOfException = class of Exception;
+
+type
   // Test methods for class THTMLWriter
 
   TestTHTMLWriter = class(TTestCase)
@@ -22,7 +26,8 @@ type
     FHTMLWriter: THTMLWriter;
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
-  private
+  protected
+    procedure CheckException(aExceptionType: TClassOfException; aProc: TSimpleClosure; const aMessage: String);
 
   public
 
@@ -1155,7 +1160,7 @@ begin
   TempName := 'Verdana';
   TempType := itHidden;
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType, 'farble').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form method="get"><%s type="%s" name="farble" /></form></html>', [TempTag,  TInputTypeStrings[TempType]]);
+  ExpectedResult := Format('<html><form method="get"><%s type="%s" name="farble" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
   CheckEquals(ExpectedResult, TestResult);
 
   for TempType := Low(TInputType) to High(TInputType) do
@@ -1252,7 +1257,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-
 end;
 
 procedure TestTHTMLWriter.TestLabel;
@@ -1266,12 +1270,7 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenLabel.CloseTag.CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-
-
-
 end;
-
-
 
 procedure TestTHTMLWriter.TestMap;
 var
@@ -2169,25 +2168,20 @@ var
   TestResult: string;
 begin
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
-  except
-    on E: EParamNameRequiredHTMLWriterException do
-    begin
-      Check(True, 'Properly called EParamNameRequiredHTMLWriterException when adding a <param> with an empty name.');
-    end;
-  end;
+  CheckException(EParamNameRequiredHTMLWriterException,
+    procedure()
+      begin
+        TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML;
+     end,
+     'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
-  except
-    on E: ENotInFormTagHTMLException do
-    begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
-    end;
-  end;
+  CheckException(ENotInFormTagHTMLException,
+    procedure()
+      begin
+        TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML;
+     end,
+     'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
+
 
   try
     TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
@@ -2371,6 +2365,28 @@ begin
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).AddListItem(Temp).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
+end;
+
+procedure TestTHTMLWriter.CheckException(aExceptionType: TClassOfException; aProc: TSimpleClosure; const aMessage: String);
+var
+  WasException: Boolean;
+begin
+  WasException := False;
+
+  try
+    { Cannot self-link }
+    aProc;
+  except
+    on E: Exception do
+    begin
+      if E is aExceptionType then
+      begin
+        WasException := True;
+      end;
+    end;
+  end;
+
+  Check(WasException, aMessage);
 end;
 
 function TestTHTMLWriter.HTML(aString: string): string;
@@ -3285,23 +3301,13 @@ begin
 
 end;
 
-
 procedure TestTHTMLWriter.TestDeprecated;
 var
   Temp: THTMLWriter;
 begin
   // <font>
-  try
-    Temp := HTMLWriterFactory(cHTML);
-    Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4];
-    Temp.OpenFont;
-    Check(False, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-  except
-    on E: ETagIsDeprecatedHTMLWriterException do
-    begin
-      Check(True, 'Properly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-    end;
-  end;
+
+  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: THTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
   try
     Temp := HTMLWriterFactory(cHTML);
@@ -3314,9 +3320,6 @@ begin
       Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
     end;
   end;
-
-
-
 
 end;
 
