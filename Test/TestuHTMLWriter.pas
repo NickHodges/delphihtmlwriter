@@ -30,6 +30,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestDeprecated;
+
     procedure TestThatExceptionsAreRaised;
 
     procedure TestLabel;
@@ -3283,6 +3285,40 @@ begin
 
 end;
 
+
+procedure TestTHTMLWriter.TestDeprecated;
+var
+  Temp: THTMLWriter;
+begin
+  // <font>
+  try
+    Temp := HTMLWriterFactory(cHTML);
+    Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4];
+    Temp.OpenFont;
+    Check(False, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+  except
+    on E: ETagIsDeprecatedHTMLWriterException do
+    begin
+      Check(True, 'Properly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+    end;
+  end;
+
+  try
+    Temp := HTMLWriterFactory(cHTML);
+    Temp.ErrorLevels := [];
+    Temp.OpenFont;
+    Check(True, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+  except
+    on E: ETagIsDeprecatedHTMLWriterException do
+    begin
+      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+    end;
+  end;
+
+
+
+
+end;
 
 procedure TestTHTMLWriter.TestLoadSave;
 var

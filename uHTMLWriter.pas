@@ -69,6 +69,7 @@ type
     FCurrentTagName: string;
     FTagState: TTagStates;
     FTableState: TTableStates;
+    FErrorLevels: THTMLErrorLevels;
     FParent: THTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
@@ -90,7 +91,7 @@ type
     function InMapTag: Boolean;
     function InObjectTag: Boolean;
 {$ENDREGION}
-    procedure IsDeprecatedTag(aName: string; aVersion: integer);
+    procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 
 
 {$REGION 'Close and Clean Methods'}
@@ -99,6 +100,7 @@ type
     procedure CloseTheTag;
 {$ENDREGION}
 {$REGION 'Check Methods'}
+    function CheckForErrors: Boolean;
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
@@ -619,6 +621,7 @@ type
     /// tag</exception>
 {$ENDREGION}
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
+    property ErrorLevels: THTMLErrorLevels read FErrorLevels write FErrorLevels;
 
   end;
 
@@ -703,12 +706,12 @@ begin
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
   FClosingTags := TStackofStrings.Create;
+  FErrorLevels := [elErrors];
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
 begin
-
   inherited Create;
   CreateDocument;
   FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
@@ -822,9 +825,12 @@ begin
   Result := tsInTableTag in FTagState;
 end;
 
-procedure THTMLWriter.IsDeprecatedTag(aName: string; aVersion: integer);
+procedure THTMLWriter.IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 begin
-  raise ETagIsDeprecated4HTMLWriterException.Create(Format('The %s tag is deprecated  in HTML %d.x.', [aName, aVersion]));
+  if aDeprecationLevel in ErrorLevels then
+  begin
+    raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
+  end;
 end;
 
 function THTMLWriter.OpenBold: THTMLWriter;
@@ -862,6 +868,7 @@ end;
 
 function THTMLWriter.OpenFont: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML4);
   Result := OpenFormatTag(ftFont);
 end;
 
@@ -1737,7 +1744,7 @@ end;
 
 procedure THTMLWriter.CheckBracketOpen(aString: string);
 begin
-  if not(tsBracketOpen in FTagState) then
+  if (not(tsBracketOpen in FTagState)) and CheckForErrors then
   begin
     raise EHTMLWriterOpenTagRequiredException.CreateFmt(StrATagsBracketMust, [Self.FCurrentTagName, aString]);
   end;
@@ -1745,7 +1752,7 @@ end;
 
 procedure THTMLWriter.CheckInTableTag;
 begin
-  if not InTableTag then
+  if (not InTableTag) and CheckForErrors then
   begin
     raise ENotInTableTagException.Create(strMustBeInTable);
   end;
@@ -1753,7 +1760,7 @@ end;
 
 procedure THTMLWriter.CheckInTableRowTag;
 begin
-  if not InTableRowTag then
+  if (not InTableRowTag) and CheckForErrors then
   begin
     raise ENotInTableTagException.Create(strMustBeInTableRow);
   end;
@@ -1761,7 +1768,7 @@ end;
 
 procedure THTMLWriter.CheckInListTag;
 begin
-  if not InListTag then
+  if (not InListTag) and CheckForErrors then
   begin
     raise ENotInListTagException.Create(strMustBeInList);
   end;
@@ -1769,7 +1776,7 @@ end;
 
 procedure THTMLWriter.CheckInMapTag;
 begin
-  if not InMapTag then
+  if (not InMapTag) and CheckForErrors then
   begin
     raise ENotInMapTagHTMLException.Create(strNotInMapTag);
   end;
@@ -1777,7 +1784,7 @@ end;
 
 procedure THTMLWriter.CheckInObjectTag;
 begin
-  if not InObjectTag then
+  if (not InObjectTag) and CheckForErrors then
   begin
     raise ENotInObjectTagException.Create(strMustBeInObject);
   end;
@@ -1786,7 +1793,7 @@ end;
 
 procedure THTMLWriter.CheckInCommentTag;
 begin
-  if not InCommentTag then
+  if (not InCommentTag) and CheckForErrors then
   begin
     raise ENotInCommentTagException.Create(strMustBeInComment);
   end;
@@ -1794,7 +1801,7 @@ end;
 
 procedure THTMLWriter.CheckInFieldSetTag;
 begin
-  if not InFieldSetTag then
+  if (not InFieldSetTag) and CheckForErrors then
   begin
     raise ENotInFieldsetTagException.Create(strNotInFieldTag);
   end;
@@ -1802,15 +1809,20 @@ end;
 
 procedure THTMLWriter.CheckCurrentTagIsHTMLTag;
 begin
-  if FCurrentTagName <> cHTML then
+  if (FCurrentTagName <> cHTML) and CheckForErrors then
   begin
     raise EClosingDocumentWithOpenTagsHTMLException.Create(strOtherTagsOpen);
   end;
 end;
 
+function THTMLWriter.CheckForErrors: Boolean;
+begin
+  Result := elErrors in ErrorLevels;
+end;
+
 procedure THTMLWriter.CheckInFormTag;
 begin
-  if not InFormTag then
+  if (not InFormTag) and CheckForErrors then
   begin
     raise ENotInFormTagHTMLException.Create(strNotInFormTag);
   end;
@@ -1818,7 +1830,7 @@ end;
 
 procedure THTMLWriter.CheckInFramesetTag;
 begin
-  if not InFrameSetTag then
+  if (not InFrameSetTag) and CheckForErrors then
   begin
     raise ENotInFrameSetHTMLException.Create(strNotInFrameSet);
   end;
@@ -1826,7 +1838,7 @@ end;
 
 procedure THTMLWriter.CheckInHeadTag;
 begin
-  if not InHeadTag then
+  if (not InHeadTag) and CheckForErrors then
   begin
     raise EHeadTagRequiredHTMLException.Create(strAMetaTagCanOnly);
   end;
