@@ -15,7 +15,7 @@ uses
   TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils;
 
 type
-  TSimpleClosure = reference to procedure;
+  TTestCode = reference to procedure;
   TClassOfException = class of Exception;
 
 type
@@ -27,10 +27,9 @@ type
     function HTMLWriterFactory(aTagName: string): THTMLWriter;
     function HTML(aString: string): string;
   protected
-    procedure CheckException(aExceptionType: TClassOfException; aProc: TSimpleClosure; const aMessage: String);
+    procedure CheckException(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
 
   public
-
     procedure SetUp; override;
     procedure TearDown; override;
 
@@ -40,7 +39,6 @@ type
     procedure TestThatExceptionsAreRaised;
 
     procedure TestLabel;
-
     procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
@@ -2182,36 +2180,27 @@ begin
      end,
      'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
 
+  CheckException(EHeadTagRequiredHTMLException,
+    procedure()
+      begin
+        TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
+     end,
+     'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
-    Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
-  except
-    on E: EHeadTagRequiredHTMLException do
-    begin
-      Check(True, 'Successfully raised EHeadTagRequiredHTMLException when it was supposed to be raised.');
-    end;
-  end;
+  CheckException(ENotInListTagException,
+    procedure()
+      begin
+        TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
+     end,
+     'Properly called ENotInListTagException when outside of a list.  All is well.');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a list');
-  except
-    on E: ENotInListTagException do
-    begin
-      Check(True, 'Properly called ENotInListTagException when outside of a list.  All is well.');
-    end;
-  end;
+  CheckException(ENotInTableTagException,
+    procedure()
+      begin
+        TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
+     end,
+     'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
-  except
-    on E: ENotInTableTagException do
-    begin
-      Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
-    end;
-  end;
 
   try
     TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
@@ -2364,18 +2353,16 @@ begin
   ExpectedResult := Format('<html><ul type="square"><li>%s</li></ul></html>', [Temp]);
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).AddListItem(Temp).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-
 end;
 
-procedure TestTHTMLWriter.CheckException(aExceptionType: TClassOfException; aProc: TSimpleClosure; const aMessage: String);
+procedure TestTHTMLWriter.CheckException(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
 var
   WasException: Boolean;
 begin
   WasException := False;
 
   try
-    { Cannot self-link }
-    aProc;
+    aCode;
   except
     on E: Exception do
     begin
