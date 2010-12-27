@@ -66,6 +66,7 @@ resourcestring
   strOtherTagsOpen = 'The document cannot be closed -- there are non-<html> tags still open.';
   strCantOpenCaptionOutsideTable = 'A <caption> tag can only be added immediately after a <table> tag';
   strParamNameRequired = 'The name of a <param> tag cannot be empty';
+  strDeprecatedTag = 'The %s tag is deprecated  in HTML %s.x.';
 
 type
   IGetHTML = interface
@@ -111,6 +112,8 @@ type
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException); // Tested.
     ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException); // Tested
     EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
+    ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException);
+    EHTMLErrorHTMLWriterException = class(EHTMLWriterException);
 
   type
 {$REGION 'Documentation'}
@@ -262,8 +265,11 @@ type
       ctEmpty,
 
       ctComment);
+
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
+
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
+
 {$REGION 'Documentation'}
     /// <summary>
     /// <para>Indicates the action type to be taken by a &lt;form&gt; tag</para>
@@ -281,6 +287,10 @@ type
 
     TBlockType = (btDiv, btSpan, btParagraph);
 
+    THTMLErrorLevel = (elErrors, elStrictHTML4, elStrictHTML5, elStrictxhtml);
+
+    THTMLErrorLevels = set of THTMLErrorLevel;
+
   const
     ///	<summary>String array for use with the TFormatType</summary>
     ///	<seealso cref="TFormatType">TFormatType</seealso>
@@ -293,6 +303,8 @@ type
     TTargetTypeStrings: array [TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
     TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
     TFormMethodStrings: array [TFormMethod] of string = ('', 'get', 'post');
+    THTMLErrorLevelStrings: array [THTMLErrorLevel] of string = ('', '4.x', '5.x', 'xhmtl');
+
 
     cHTML = 'html';
     cHead = 'head';
