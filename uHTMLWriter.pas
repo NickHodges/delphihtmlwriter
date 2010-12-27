@@ -69,6 +69,7 @@ type
     FCurrentTagName: string;
     FTagState: TTagStates;
     FTableState: TTableStates;
+    FErrorLevels: THTMLErrorLevels;
     FParent: THTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
     function AddFormattedText(aString: string; aFormatType: TFormatType): THTMLWriter;
@@ -90,12 +91,14 @@ type
     function InMapTag: Boolean;
     function InObjectTag: Boolean;
 {$ENDREGION}
+    procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: THTMLWriter;
     procedure CleanUpTagState;
     procedure CloseTheTag;
 {$ENDREGION}
 {$REGION 'Check Methods'}
+    function CheckForErrors: Boolean;
     procedure CheckInHeadTag;
     procedure CheckInCommentTag;
     procedure CheckInListTag;
@@ -469,8 +472,8 @@ type
     /// <summary>Opens in &lt;img&gt; tag.</summary>
     /// <remarks>This tag will always be closed by " /&gt;"</remarks>
     function OpenImage: THTMLWriter; overload;
-    ///	<summary>Opens an &lt;img&gt; tag and adds the 'src' parameter.</summary>
-    ///	<param name="aImageSource">The URL of the image to be displayed</param>
+    /// <summary>Opens an &lt;img&gt; tag and adds the 'src' parameter.</summary>
+    /// <param name="aImageSource">The URL of the image to be displayed</param>
     function OpenImage(aImageSource: string): THTMLWriter; overload;
     function AddImage(aImageSource: string): THTMLWriter;
 {$ENDREGION}
@@ -487,7 +490,7 @@ type
     /// open.</remarks>
 {$ENDREGION}
     function OpenTable: THTMLWriter; overload;
-    ///	<summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
+    /// <summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
     function OpenTable(aBorder: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): THTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): THTMLWriter; overload;
@@ -498,11 +501,11 @@ type
     /// <summary>Opens a &lt;td&gt; tag.</summary>
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: THTMLWriter;
-    {$REGION 'Documentation'}
-    ///	<summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
-    ///	<exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
-    ///	<remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
+    /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
+    /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
+{$ENDREGION}
     function AddTableData(aText: string): THTMLWriter;
     function AddCaption(aCaption: string): THTMLWriter;
 
@@ -560,21 +563,20 @@ type
     function AddIFrame(aURL: string; aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): THTMLWriter; overload;
 {$ENDREGION}
 {$REGION 'List Methods'}
-
-    ///	<summary>Opens an unordered list tag (&lt;ul&gt;)</summary>
-    ///	<param name="aBulletShape">An optional parameter indicating the bullet type that the list should use.</param>
-    ///	<seealso cref="TBulletShape">TBulletShape</seealso>
+    /// <summary>Opens an unordered list tag (&lt;ul&gt;)</summary>
+    /// <param name="aBulletShape">An optional parameter indicating the bullet type that the list should use.</param>
+    /// <seealso cref="TBulletShape">TBulletShape</seealso>
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): THTMLWriter;
-    {$REGION 'Documentation'}
-    ///	<summary>Opens an ordered list tag (&lt;ol&gt;)</summary>
-    ///	<param name="aNumberType">An optional parameter indicating the numbering type that the list should use.</param>
-    ///	<seealso cref="TNumberType">TNumberType</seealso>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Opens an ordered list tag (&lt;ol&gt;)</summary>
+    /// <param name="aNumberType">An optional parameter indicating the numbering type that the list should use.</param>
+    /// <seealso cref="TNumberType">TNumberType</seealso>
+{$ENDREGION}
     function OpenOrderedList(aNumberType: TNumberType = ntNone): THTMLWriter;
-    ///	<summary>Opens a list item (&lt;li&gt;) inside of a list.</summary>
+    /// <summary>Opens a list item (&lt;li&gt;) inside of a list.</summary>
     function OpenListItem: THTMLWriter;
-    ///	<summary>Adds a List item (&lt;li&gt;) with the given text</summary>
-    ///	<param name="aText">The text to be added to the list item.</param>
+    /// <summary>Adds a List item (&lt;li&gt;) with the given text</summary>
+    /// <param name="aText">The text to be added to the list item.</param>
     function AddListItem(aText: string): THTMLWriter;
 {$ENDREGION}
 {$REGION 'Storage Methods'}
@@ -603,12 +605,12 @@ type
     function OpenArea: THTMLWriter;
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: THTMLWriter;
-    {$REGION 'Documentation'}
-    ///	<summary>Opens a &lt;param&gt; tag</summary>
-    ///	<param name="aName">The name for the parameter</param>
-    ///	<param name="aValue">The value to be assigned to the paramter</param>
-    ///	<remarks>This tag can only be used inside of an &lt;object&gt; tag.</remarks>
-    {$ENDREGION}
+{$REGION 'Documentation'}
+    /// <summary>Opens a &lt;param&gt; tag</summary>
+    /// <param name="aName">The name for the parameter</param>
+    /// <param name="aValue">The value to be assigned to the paramter</param>
+    /// <remarks>This tag can only be used inside of an &lt;object&gt; tag.</remarks>
+{$ENDREGION}
     function OpenParam(aName: string; aValue: string = ''): THTMLWriter; // name parameter is required
 {$REGION 'Documentation'}
     /// <summary>Opens a &lt;param&gt; tag</summary>
@@ -616,6 +618,7 @@ type
     /// tag</exception>
 {$ENDREGION}
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
+    property ErrorLevels: THTMLErrorLevels read FErrorLevels write FErrorLevels;
 
   end;
 
@@ -700,12 +703,12 @@ begin
   FTagState := FTagState + [tsBracketOpen];
   FParent := Self;
   FClosingTags := TStackofStrings.Create;
+  FErrorLevels := [elErrors];
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
 begin
-
   inherited Create;
   CreateDocument;
   FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
@@ -819,6 +822,14 @@ begin
   Result := tsInTableTag in FTagState;
 end;
 
+procedure THTMLWriter.IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
+begin
+  if aDeprecationLevel in ErrorLevels then
+  begin
+    raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
+  end;
+end;
+
 function THTMLWriter.OpenBold: THTMLWriter;
 begin
   Result := OpenFormatTag(ftBold);
@@ -832,6 +843,7 @@ end;
 
 function THTMLWriter.OpenCenter: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftCenter], elStrictHTML4);
   Result := OpenFormatTag(ftCenter);
 end;
 
@@ -854,6 +866,7 @@ end;
 
 function THTMLWriter.OpenFont: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML4);
   Result := OpenFormatTag(ftFont);
 end;
 
@@ -879,13 +892,15 @@ end;
 
 function THTMLWriter.OpenFrame: THTMLWriter;
 begin
+  IsDeprecatedTag(cFrameset, elStrictHTML5);
   CheckInFramesetTag;
   Result := AddTag(cFrame);
 end;
 
 function THTMLWriter.OpenFrameset: THTMLWriter;
 begin
-  Result := AddTag(cFrameSet);
+  IsDeprecatedTag(cFrameset, elStrictHTML5);
+  Result := AddTag(cFrameset);
   Include(Result.FTagState, tsInFramesetTag);
 end;
 
@@ -1027,6 +1042,7 @@ end;
 
 function THTMLWriter.OpenNoFrames: THTMLWriter;
 begin
+  IsDeprecatedTag(cFrameset, elStrictHTML5);
   Result := AddTag(cNoFrames);
 end;
 
@@ -1037,6 +1053,7 @@ end;
 
 function THTMLWriter.OpenStrike: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftStrike], elStrictHTML4);
   Result := OpenFormatTag(ftStrike);
 end;
 
@@ -1111,6 +1128,7 @@ end;
 
 function THTMLWriter.OpenTeletype: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftTeletype], elStrictHTML5);
   Result := OpenFormatTag(ftTeletype);
 end;
 
@@ -1122,6 +1140,7 @@ end;
 
 function THTMLWriter.OpenUnderline: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftUnderline], elStrictHTML4);
   Result := OpenFormatTag(ftUnderline);
 end;
 
@@ -1273,7 +1292,7 @@ begin
     Exclude(FTagState, tsInMapTag);
   end;
 
-  if (FCurrentTagName = cFrameSet) and InFrameSetTag then
+  if (FCurrentTagName = cFrameset) and InFrameSetTag then
   begin
     Exclude(FTagState, tsInFramesetTag);
   end;
@@ -1447,6 +1466,7 @@ end;
 
 function THTMLWriter.OpenAcronym: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftAcronym], elStrictHTML5);
   Result := OpenFormatTag(ftAcronym);
 end;
 
@@ -1494,6 +1514,7 @@ end;
 
 function THTMLWriter.OpenBaseFont: THTMLWriter;
 begin
+  IsDeprecatedTag(cBaseFont, elStrictHTML4);
   CheckInHeadTag;
   Result := AddTag(cBaseFont, ctEmpty);
 end;
@@ -1505,6 +1526,7 @@ end;
 
 function THTMLWriter.OpenBig: THTMLWriter;
 begin
+  IsDeprecatedTag(TFormatTypeStrings[ftBig], elStrictHTML5);
   Result := OpenFormatTag(ftBig);
 end;
 
@@ -1729,7 +1751,7 @@ end;
 
 procedure THTMLWriter.CheckBracketOpen(aString: string);
 begin
-  if not(tsBracketOpen in FTagState) then
+  if (not(tsBracketOpen in FTagState)) and CheckForErrors then
   begin
     raise EHTMLWriterOpenTagRequiredException.CreateFmt(StrATagsBracketMust, [Self.FCurrentTagName, aString]);
   end;
@@ -1737,7 +1759,7 @@ end;
 
 procedure THTMLWriter.CheckInTableTag;
 begin
-  if not InTableTag then
+  if (not InTableTag) and CheckForErrors then
   begin
     raise ENotInTableTagException.Create(strMustBeInTable);
   end;
@@ -1745,7 +1767,7 @@ end;
 
 procedure THTMLWriter.CheckInTableRowTag;
 begin
-  if not InTableRowTag then
+  if (not InTableRowTag) and CheckForErrors then
   begin
     raise ENotInTableTagException.Create(strMustBeInTableRow);
   end;
@@ -1753,7 +1775,7 @@ end;
 
 procedure THTMLWriter.CheckInListTag;
 begin
-  if not InListTag then
+  if (not InListTag) and CheckForErrors then
   begin
     raise ENotInListTagException.Create(strMustBeInList);
   end;
@@ -1761,7 +1783,7 @@ end;
 
 procedure THTMLWriter.CheckInMapTag;
 begin
-  if not InMapTag then
+  if (not InMapTag) and CheckForErrors then
   begin
     raise ENotInMapTagHTMLException.Create(strNotInMapTag);
   end;
@@ -1769,7 +1791,7 @@ end;
 
 procedure THTMLWriter.CheckInObjectTag;
 begin
-  if not InObjectTag then
+  if (not InObjectTag) and CheckForErrors then
   begin
     raise ENotInObjectTagException.Create(strMustBeInObject);
   end;
@@ -1778,7 +1800,7 @@ end;
 
 procedure THTMLWriter.CheckInCommentTag;
 begin
-  if not InCommentTag then
+  if (not InCommentTag) and CheckForErrors then
   begin
     raise ENotInCommentTagException.Create(strMustBeInComment);
   end;
@@ -1786,7 +1808,7 @@ end;
 
 procedure THTMLWriter.CheckInFieldSetTag;
 begin
-  if not InFieldSetTag then
+  if (not InFieldSetTag) and CheckForErrors then
   begin
     raise ENotInFieldsetTagException.Create(strNotInFieldTag);
   end;
@@ -1794,15 +1816,20 @@ end;
 
 procedure THTMLWriter.CheckCurrentTagIsHTMLTag;
 begin
-  if FCurrentTagName <> cHTML then
+  if (FCurrentTagName <> cHTML) and CheckForErrors then
   begin
     raise EClosingDocumentWithOpenTagsHTMLException.Create(strOtherTagsOpen);
   end;
 end;
 
+function THTMLWriter.CheckForErrors: Boolean;
+begin
+  Result := elErrors in ErrorLevels;
+end;
+
 procedure THTMLWriter.CheckInFormTag;
 begin
-  if not InFormTag then
+  if (not InFormTag) and CheckForErrors then
   begin
     raise ENotInFormTagHTMLException.Create(strNotInFormTag);
   end;
@@ -1810,7 +1837,7 @@ end;
 
 procedure THTMLWriter.CheckInFramesetTag;
 begin
-  if not InFrameSetTag then
+  if (not InFrameSetTag) and CheckForErrors then
   begin
     raise ENotInFrameSetHTMLException.Create(strNotInFrameSet);
   end;
@@ -1818,7 +1845,7 @@ end;
 
 procedure THTMLWriter.CheckInHeadTag;
 begin
-  if not InHeadTag then
+  if (not InHeadTag) and CheckForErrors then
   begin
     raise EHeadTagRequiredHTMLException.Create(strAMetaTagCanOnly);
   end;
