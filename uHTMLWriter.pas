@@ -618,6 +618,7 @@ type
     /// tag</exception>
 {$ENDREGION}
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
+    ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read FErrorLevels write FErrorLevels;
 
   end;
