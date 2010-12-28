@@ -10,10 +10,13 @@ uses
 
 type
 
-IHTMLWriter = interface
+  IHTMLWriter = interface
     function GetAttribute(const Name, Value: string): IHTMLWriter;
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
+    function GetHTML: TStringBuilder;
+
+
     function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
     function OpenHead: IHTMLWriter;
     function OpenMeta: IHTMLWriter;
@@ -177,6 +180,7 @@ IHTMLWriter = interface
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
+    property HTML: TStringBuilder read GetHTML;
 
 end;
 
