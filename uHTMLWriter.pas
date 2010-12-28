@@ -114,6 +114,8 @@ type
 {$ENDREGION}
     procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
     function GetAttribute(const Name, Value: string): THTMLWriter;
+    function GetErrorLevels: THTMLErrorLevels;
+    procedure SetErrorLevels(const Value: THTMLErrorLevels);
 
   public
 {$REGION 'Constructors'}
@@ -153,8 +155,8 @@ type
 {$ENDREGION}
     function OpenBase: THTMLWriter;
     function OpenBaseFont: THTMLWriter;
-    /// <summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
-    /// <remarks>Note:   this method can only be called inside an open &lt;head&gt; tag.</remarks>
+    ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
+    ///	<remarks>Note: This method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): THTMLWriter; overload;
     function AddBase(aHREF: string): THTMLWriter; overload;
     /// <summary>Opens a &lt;title&gt; tag.</summary>
@@ -442,7 +444,7 @@ type
     /// <param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): THTMLWriter;
 
-    /// <summary>Opens a &lt;noscript&gt; tag</summary>
+    ///	<summary>Opens a &lt;noscript&gt; tag</summary>
     function OpenNoScript: THTMLWriter;
 
     /// <summary>Opens a &lt;link /&gt; tag.</summary>
@@ -589,15 +591,18 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-    /// <summary>Opens a &lt;frameset&gt; tag.</summary>
+    ///	<summary>Opens a &lt;frameset&gt; tag.</summary>
+    ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
     function OpenFrameset: THTMLWriter;
 {$REGION 'Documentation'}
     /// <summary>Opens a &lt;frame&gt; tag.</summary>
     /// <exception cref="ENotInFrameSetHTMLException">Raised if this is called outside of a &lt;frameset&gt;
     /// tag.</exception>
+    ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
 {$ENDREGION}
     function OpenFrame: THTMLWriter;
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
+    ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
     function OpenNoFrames: THTMLWriter;
     /// <summary>Opens a &lt;map /&gt; tag</summary>
     function OpenMap: THTMLWriter;
@@ -619,7 +624,7 @@ type
 {$ENDREGION}
     property Attribute[const Name: string; const Value: string]: THTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
-    property ErrorLevels: THTMLErrorLevels read FErrorLevels write FErrorLevels;
+    property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
 
   end;
 
@@ -737,6 +742,11 @@ end;
 function THTMLWriter.GetAttribute(const Name, Value: string): THTMLWriter;
 begin
   Result := Self.AddAttribute(Name, Value);
+end;
+
+function THTMLWriter.GetErrorLevels: THTMLErrorLevels;
+begin
+ Result := FErrorLevels;
 end;
 
 function THTMLWriter.InBodyTag: Boolean;
@@ -1238,6 +1248,11 @@ begin
   finally
     SS.Free;
   end;
+end;
+
+procedure THTMLWriter.SetErrorLevels(const Value: THTMLErrorLevels);
+begin
+  FErrorLevels := Value;
 end;
 
 procedure THTMLWriter.PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
