@@ -167,6 +167,7 @@ type
     /// <remarks>There is no need to close this tag manually.   All "AddXXXX" methods close themselves.</remarks>
 {$ENDREGION}
     function AddTitle(aTitleText: string): THTMLWriter;
+
     function AddMetaNamedContent(aName: string; aContent: string): THTMLWriter;
 
     /// <summary>Opens a &lt;body&gt; tag.</summary>
