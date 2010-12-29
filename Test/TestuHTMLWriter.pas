@@ -12,7 +12,7 @@ unit TestuHTMLWriter;
 interface
 
 uses
-  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils;
+  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils, HTMLWriterIntf;
 
 type
   TTestCode = reference to procedure;
@@ -23,8 +23,8 @@ type
 
   TestTHTMLWriter = class(TTestCase)
   strict private
-    FHTMLWriter: THTMLWriter;
-    function HTMLWriterFactory(aTagName: string): THTMLWriter;
+//    FHTMLWriter: IHTMLWriter;
+    function HTMLWriterFactory(aTagName: string): IHTMLWriter;
     function HTML(aString: string): string;
 
   protected
@@ -36,11 +36,12 @@ type
     procedure TearDown; override;
 
   published
-    procedure TestDeprecated;
-
-    procedure TestThatExceptionsAreRaised;
 
     procedure TestLabel;
+    procedure TestThatExceptionsAreRaised;
+    procedure TestDeprecated;
+
+
     procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
@@ -207,7 +208,7 @@ uses Windows;
 
 procedure TestTHTMLWriter.SetUp;
 begin
-  FHTMLWriter := nil;
+
 end;
 
 procedure TestTHTMLWriter.TearDown;
@@ -246,28 +247,29 @@ var
   aString: string;
   ExpectedValue: string;
   Result: string;
+  Temp: IHTMLWriter;
 begin
   aString := 'this';
   ExpectedValue := HTML(aString); // '<html>this</html>';
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // arbitrary tags
   aString := 'this';
   ExpectedValue := Format('<%s>%s</%s>', [aString, aString, aString]);
-  FHTMLWriter := HTMLWriterFactory('this');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('this');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // try adding text with brackets in it
   aString := '<groob>';
   ExpectedValue := HTML(aString);
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
 end;
@@ -295,11 +297,12 @@ procedure TestTHTMLWriter.TestAddHead;
 var
   ExpectedValue: string;
   TestResult: string;
+  Temp: IHTMLWriter;
 begin
-  FHTMLWriter := HTMLWriterFactory('html');
+  Temp := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.OpenHead.CloseTag.CloseTag.AsHTML;
+  TestResult := Temp.OpenHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -1259,10 +1262,18 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempName: string;
+  Temp: IHTMLWriter;
 begin
   TempName := 'kreetom';
   ExpectedResult := Format(HTML('<form method="get"><%s></%s></form>'), [cLabel, cLabel]);
-  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenLabel.CloseTag.CloseForm.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory(cHTML);
+
+  Temp := Temp.OpenForm;
+  Temp := Temp.OpenLabel;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseForm;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2297,13 +2308,8 @@ begin
   Result := Format('<html>%s</html>', [aString]);
 end;
 
-function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): THTMLWriter;
+function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): IHTMLWriter;
 begin
-  if FHTMLWriter <> nil then
-  begin
-    FHTMLWriter.Free;
-    FHTMLWriter := nil;
-  end;
   Result := THTMLWriter.Create(aTagName);
 end;
 
@@ -2469,7 +2475,7 @@ var
   TestResult, ExpectedResult: string;
   TempName: string;
   TempContent: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 begin
   TempName := 'Snerdo';
   TempContent := 'derfle';
@@ -2635,7 +2641,7 @@ var
   TestResult, ExpectedResult: string;
   Temp: string;
   TempTarget: TTargetType;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 const
   TempURL = 'http://www.nickhodges.com';
 begin
@@ -3175,7 +3181,7 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempStr: string;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 begin
   TempStr := 'prittle';
   ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
@@ -3191,30 +3197,30 @@ end;
 
 procedure TestTHTMLWriter.TestDeprecated;
 var
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 begin
   // <font>
-  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: THTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
   // Negative test case for <font>
-  try
-    Temp := HTMLWriterFactory(cHTML);
-    Temp.ErrorLevels := [];
-    Temp.OpenFont;
-    Check(True, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
-  except
-    on E: ETagIsDeprecatedHTMLWriterException do
-    begin
-      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-    end;
-  end;
+//  try
+//    Temp := HTMLWriterFactory(cHTML);
+//    Temp.ErrorLevels := [];
+//    Temp := Temp.OpenFont;
+//    Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+//  except
+//    on E: ETagIsDeprecatedHTMLWriterException do
+//    begin
+//      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+//    end;
+//  end;
 
 end;
 
 procedure TestTHTMLWriter.TestLoadSave;
 var
   InString, OutString: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 const
   cFilename = 'test.html';
 begin

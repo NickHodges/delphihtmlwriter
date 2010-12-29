@@ -1,4 +1,4 @@
-	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 		<PropertyGroup>
 			<ProjectGuid>{316A00AF-70EE-45FA-9649-786B73454808}</ProjectGuid>
 			<MainSource>HTMLWriterTestPackage.dpk</MainSource>
@@ -47,6 +47,7 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="rtl.dcp"/>
+			<DCCReference Include="vcl.dcp"/>
 			<DCCReference Include="uHTMLWriter.pas"/>
 			<DCCReference Include="HTMLWriterUtils.pas"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\default.txvpck"/>
