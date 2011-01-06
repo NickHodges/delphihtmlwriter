@@ -12,7 +12,7 @@ unit TestuHTMLWriter;
 interface
 
 uses
-  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils, HTMLWriterIntf;
+  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils, HTMLWriterIntf, Dialogs;
 
 type
   TTestCode = reference to procedure;
@@ -36,6 +36,14 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestCloseComment;
+    procedure TestOpenComment;
+    procedure TestAddComment;
+
+
+
+
+    procedure TestOpenBold;
 
     procedure TestLabel;
     procedure TestThatExceptionsAreRaised;
@@ -63,7 +71,6 @@ type
 
     procedure TestFrameset;
     procedure TestFrame;
-    procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
@@ -127,9 +134,8 @@ type
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
     procedure TestAddDivTextWithID;
-    procedure TestOpenComment;
     procedure TestAddMetaNamedContent;
-    procedure TestAddComment;
+
     procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
@@ -158,7 +164,7 @@ type
     procedure TestAddSpanText;
     procedure TestAddDivText;
     procedure TestAddBlockQuoteText;
-    procedure TestOpenBold;
+
     procedure TestOpenItalic;
     procedure TestOpenUnderline;
     procedure TestOpenEmphasis;
@@ -955,16 +961,23 @@ procedure TestTHTMLWriter.TestOpenBold;
 var
   TestResult: string;
   ExpectedResult: string;
+  Temp: IHTMLWriter;
 begin
-  TestResult := HTMLWriterFactory('html').OpenBold.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -1812,15 +1825,23 @@ var
   TestResult: string;
   TempString: string;
   ExpectedResult: string;
+  Temp: IHTMLWriter;
 begin
   TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenSpan;
+  Temp := Temp.OpenComment;
+  Temp := Temp.AddText(TempString);
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  CheckException(ENotInCommentTagException,
-                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
-                 'Failed to raise an exception when closing a comment outside of a comment tag. ');
+//  CheckException(ENotInCommentTagException,
+//                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
+//                 'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
 
 end;
@@ -3196,8 +3217,8 @@ begin
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
-var
-  Temp: IHTMLWriter;
+//var
+//  Temp: IHTMLWriter;
 begin
   // <font>
   CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');

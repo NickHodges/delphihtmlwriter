@@ -50,6 +50,7 @@
 			<DCCReference Include="vcl.dcp"/>
 			<DCCReference Include="uHTMLWriter.pas"/>
 			<DCCReference Include="HTMLWriterUtils.pas"/>
+			<DCCReference Include="HTMLWriterIntf.pas"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\default.txvpck"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\TestStuff\default.txvpck"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\TestStuff\default.txaPackage"/>

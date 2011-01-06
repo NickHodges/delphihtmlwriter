@@ -637,39 +637,38 @@ implementation
 
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
 var
-  TempString: string;
-  TempStack: TStackOfStrings;
+  TempList: TList<string>;
+  i: Integer;
+  TempStr: string;
 begin
-  inherited Create;
+  inherited Create;                    ;
   FHTML := TStringBuilder.Create;
-  HTML.Append(aHTMLWriter);
+  TempStr := aHTMLWriter.HTML.ToString;
+  HTML.Append(TempStr);
   FCurrentTagName := aHTMLWriter.FCurrentTagName;
   FTagState := aHTMLWriter.FTagState;
   FTableState := aHTMLWriter.FTableState;
   FErrorLevels := aHTMLWriter.FErrorLevels;
-  FParent := aHTMLWriter.FParent;
+//  FParent := Self;
   FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
+
   FClosingTags := TStackOfStrings.Create;
-  TempStack := TStackofStrings.Create;
+
+  TempList := TList<string>.Create;
   try
-    for TempString in aHTMLWriter.FClosingTags do
+    for i := 0 to aHTMLWriter.FClosingTags.Count - 1 do
     begin
-      TempStack.Push(TempString);
+      TempList.Add(aHTMLWriter.FClosingTags.Pop);
     end;
 
-    for TempString in TempStack do
+    for i := TempList.Count - 1 downto 0 do
     begin
-      FClosingTags.Push(TempString);
+      FClosingTags.Push(TempList[i]);
     end;
-
 
   finally
-    TEmpStack.Free;
+    TempList.Free;
   end;
-
-
-//    FClosingTags: TStackofStrings;
-
 
 end;
 
@@ -715,6 +714,8 @@ begin
 end;
 
 function THTMLWriter.CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): IHTMLWriter;
+var
+  TempText: string;
 begin
   if tsTagClosed in FTagState then
   begin
@@ -730,7 +731,18 @@ begin
 
   CleanUpTagState;
 
-  Result := FParent;
+  if Self.FParent <> nil then
+  begin
+    TempText := Self.HTML.ToString;
+    Result := Self.FParent as IHTMLWriter;
+    Result.HTML.Clear;
+    Result.HTML.Append(TempText);
+  end else
+  begin
+    Result := Self;
+    Exclude(FTagState, tsTagClosed);
+  end;
+
   if aUseCRLF = ucoUseCRLF then
   begin
     Result.HTML.Append(cCRLF);
@@ -748,9 +760,9 @@ begin
   FHTML := TStringBuilder.Create;
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
-  FParent := Self;
   FClosingTags := TStackofStrings.Create;
   FErrorLevels := [elErrors];
+//  FParent := Self;
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
 
@@ -867,8 +879,12 @@ function THTMLWriter.InSlashOnlyTag: Boolean;
 var
   PeekValue: string;
 begin
-  PeekValue := FClosingTags.Peek;
-  Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
+  Result := False;
+  if FClosingTags.Count > 0 then
+  begin
+    PeekValue := FClosingTags.Peek;
+    Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
+  end;
 end;
 
 function THTMLWriter.InTableRowTag: Boolean;
@@ -923,6 +939,7 @@ begin
   CheckInFormTag;
   Temp := THTMLWriter.Create(Self);
   Temp.FTagState := Temp.FTagState + [tsInFieldSetTag];
+  Temp.FParent := Self.FParent;
   Result := Temp.AddTag(cFieldSet);
 end;
 
@@ -938,6 +955,7 @@ var
 begin
   FTagState := FTagState + [tsInFormTag];
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Result := Temp.AddTag(cForm);
   if not StringIsEmpty(aActionURL) then
   begin
@@ -966,6 +984,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsInFramesetTag);
   IsDeprecatedTag(cFrameset, elStrictHTML5);
   Result := Temp.AddTag(cFrameset);
@@ -1100,6 +1119,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsInMapTag);
   Result := Temp.AddTag(cMap);
 
@@ -1158,6 +1178,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInTableTag, tsTableIsOpen];
   Temp.FTableState := Temp.FTableState + [tbsInTable];
 
@@ -1203,6 +1224,7 @@ var
 begin
   CheckInTableTag;
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInTableRowTag];
   Result := Temp.AddTag(cTableRow);
 end;
@@ -1230,6 +1252,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInListTag];
   Result := Temp.AddTag(cUnorderedList);
   if aBulletShape <> bsNone then
@@ -1350,6 +1373,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsInObjectTag);
   Result := Temp.AddTag(cObject);
 end;
@@ -1359,6 +1383,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInListTag];
   Result := Temp.AddTag(cOrderedList);
   if aNumberType <> ntNone then
@@ -1369,7 +1394,7 @@ end;
 
 procedure THTMLWriter.CleanUpTagState;
 begin
-  FTagState := FTagState + [tsTagClosed] - [tsTagOpen];
+  FTagState := FTagState + [tsTagClosed] - [tsTagOpen, tsBracketOpen];
 
   if TableIsOpen then
   begin
@@ -1449,21 +1474,19 @@ end;
 function THTMLWriter.AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
 var
   Temp: THTMLWriter;
-  SB: TStringBuilder;
   TempStr: string;
-  NewHTML: string;
 begin
   CloseBracket;
   Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
-  Temp.FTagState := Temp.FTagState + [tsBracketOpen];
+  Temp.FParent := Self.FParent;
+
+  Temp.FTagState := Self.FTagState + [tsBracketOpen];
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
   TempStr := AsHTML;
   Temp.HTML.Append(TempStr);
-
-  //  Temp.FHTML.Append(Self.HTML.Append(Temp.HTML.ToString));
-  Temp.FParent := Self;
+  Temp.FParent := Self as IHTMLWriter;
   Result := Temp;
 end;
 
@@ -1478,6 +1501,7 @@ var
 begin
   CloseBracket;
   Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
+  Temp.FParent := Self.FParent;
   Temp.FHTML := Self.FHTML.Append(Temp.FHTML.ToString).Append(cSpace);
   Temp.FTagState := Temp.FTagState + [tsCommentOpen];
   Temp.FParent := Self;
@@ -1533,6 +1557,7 @@ var
   Temp: THTMLWriter;
 begin
   Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInHeadTag];
   Result := Temp.AddTag(cHead, ctNormal, chaCanHaveAttributes);
 end;
