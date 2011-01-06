@@ -65,7 +65,7 @@ type
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
   private
     FHTML: TStringBuilder;
-    FClosingTags: TStackofStrings;
+    FClosingTag: string;
     FCurrentTagName: string;
     FTagState: TTagStates;
     FTableState: TTableStates;
@@ -617,13 +617,13 @@ type
     /// <param name="aName">The name for the parameter</param>
     /// <param name="aValue">The value to be assigned to the paramter</param>
     /// <remarks>This tag can only be used inside of an &lt;object&gt; tag.</remarks>
-{$ENDREGION}
-    function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
-{$REGION 'Documentation'}
-    /// <summary>Opens a &lt;param&gt; tag</summary>
     /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
     /// tag</exception>
 {$ENDREGION}
+    function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
+
+    class function Write: IHTMLWriter;
+
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
@@ -650,25 +650,7 @@ begin
   FTableState := aHTMLWriter.FTableState;
   FErrorLevels := aHTMLWriter.FErrorLevels;
   FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
-
-  FClosingTags := TStackOfStrings.Create;
-
-  TempList := TList<string>.Create;
-  try
-    for i := 0 to aHTMLWriter.FClosingTags.Count - 1 do
-    begin
-      TempList.Add(aHTMLWriter.FClosingTags.Pop);
-    end;
-
-    for i := TempList.Count - 1 downto 0 do
-    begin
-      FClosingTags.Push(TempList[i]);
-    end;
-
-  finally
-    TempList.Free;
-  end;
-
+  FClosingTag := aHTMLWriter.FClosingTag;
 end;
 
 function THTMLWriter.CloseBracket: IHTMLWriter;
@@ -759,13 +741,9 @@ begin
   FHTML := TStringBuilder.Create;
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
-  FClosingTags := TStackofStrings.Create;
   FErrorLevels := [elErrors];
-//  FParent := Self;
   PushClosingTagOnStack(aCloseTagType, aTagName);
 end;
-
-
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
 begin
@@ -789,7 +767,6 @@ end;
 destructor THTMLWriter.Destroy;
 begin
   FHTML.Free;
-  FClosingTags.Free;
   inherited;
 end;
 
@@ -854,6 +831,11 @@ begin
   Result := tsTagOpen in FTagState;
 end;
 
+class function THTMLWriter.Write: IHTMLWriter;
+begin
+  Result := THTMLWriter.CreateDocument;
+end;
+
 function THTMLWriter.InHeadTag: Boolean;
 begin
   Result := tsInHeadTag in FTagState;
@@ -875,15 +857,8 @@ begin
 end;
 
 function THTMLWriter.InSlashOnlyTag: Boolean;
-var
-  PeekValue: string;
 begin
-  Result := False;
-  if FClosingTags.Count > 0 then
-  begin
-    PeekValue := FClosingTags.Peek;
-    Result := (PeekValue = TTagMaker.MakeSlashCloseTag);
-  end;
+  Result := FClosingTag = TTagMaker.MakeSlashCloseTag;
 end;
 
 function THTMLWriter.InTableRowTag: Boolean;
@@ -1121,7 +1096,6 @@ begin
   Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsInMapTag);
   Result := Temp.AddTag(cMap);
-
 end;
 
 function THTMLWriter.OpenMeta: IHTMLWriter;
@@ -1181,8 +1155,6 @@ begin
   Temp.FTagState := Temp.FTagState + [tsInTableTag, tsTableIsOpen];
   Temp.FTableState := Temp.FTableState + [tbsInTable];
 
-
-
   Result := Temp.AddTag(cTable);
   if aBorder >= 0 then
   begin
@@ -1207,8 +1179,6 @@ begin
       Result := Result.AddAttribute(aWidth.WidthString);
     end;
   end;
-
-
 end;
 
 function THTMLWriter.OpenTableData: IHTMLWriter;
@@ -1353,12 +1323,9 @@ end;
 procedure THTMLWriter.PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
 begin
   case aCloseTagType of
-    ctNormal:
-      FClosingTags.Push(TTagMaker.MakeCloseTag(aString));
-    ctEmpty:
-      FClosingTags.Push(TTagMaker.MakeSlashCloseTag);
-    ctComment:
-      FClosingTags.Push(TTagMaker.MakeCommentCloseTag);
+    ctNormal:   FClosingTag := TTagMaker.MakeCloseTag(aString);
+    ctEmpty:    FClosingTag := TTagMaker.MakeSlashCloseTag;
+    ctComment:  FClosingTag := TTagMaker.MakeCommentCloseTag;
   end;
 end;
 
@@ -1473,7 +1440,6 @@ end;
 function THTMLWriter.AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
 var
   Temp: THTMLWriter;
-//  TempStr: string;
 begin
   CloseBracket;
   Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
@@ -1504,8 +1470,6 @@ begin
   Temp.FParent := Self;
   Result := Temp;
 end;
-
-
 
 function THTMLWriter.OpenCode: IHTMLWriter;
 begin
@@ -1544,14 +1508,8 @@ begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
   case aUseEmptyTag of
-    ietIsEmptyTag:
-      begin
-        FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-      end;
-    ietIsNotEmptyTag:
-      begin
-        FHTML := FHTML.Append(cCloseBracket);
-      end;
+    ietIsEmptyTag:    FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
+    ietIsNotEmptyTag: FHTML := FHTML.Append(cCloseBracket);
   end;
   Result := Self;
 end;
@@ -1634,17 +1592,14 @@ begin
 end;
 
 procedure THTMLWriter.CloseTheTag;
-var
-  TagToAppend: string;
 begin
   if TagIsOpen or InCommentTag then
   begin
-    if FClosingTags.Count = 0 then
+    if StringisEmpty(FClosingTag) then
     begin
       raise EEmptyStackHTMLWriterExeption.Create(strStackIsEmpty);
     end;
-    TagToAppend := FClosingTags.Pop;
-    FHTML.Append(TagToAppend);
+    FHTML.Append(FClosingTag);
   end;
 end;
 

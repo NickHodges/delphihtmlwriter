@@ -40,9 +40,6 @@ type
     procedure TestOpenComment;
     procedure TestAddComment;
 
-
-
-
     procedure TestOpenBold;
 
     procedure TestLabel;
@@ -2338,7 +2335,13 @@ end;
 
 function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): IHTMLWriter;
 begin
-  Result := THTMLWriter.Create(aTagName);
+  if aTagName = cHTML then
+  begin
+    Result := THTMLWriter.Write;
+  end else
+  begin
+    Result := THTMLWriter.Create(aTagName);
+  end;
 end;
 
 procedure TestTHTMLWriter.TestAddBlockQuoteText;
