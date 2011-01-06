@@ -58,7 +58,7 @@ resourcestring
   strMustBeInTableRow = 'A <tr> tag must be open to call this.';
   strMustBeInComment = 'A comment must be open in order to call CloseComment';
   strNotInFieldTag = 'A fieldset must be open to add this tag.';
-  strStackIsEmpty = 'The stack has nothing in it, but it should.';
+  strNoClosingTag = 'The FClosingTag field is empty, and that should never be the case.';
   strNotInFrameSet = 'A <frame> tag can only be added inside of a <frameset> tag.';
   strNotInMapTag = 'An <area> tag can only be added inside of a <map> tag.';
   strNotInFormTag = 'A <form> tag must be open in order to call this.';
@@ -73,7 +73,6 @@ type
     function AsHTML: string;
   end;
 
-  TStackOfStrings = TStack<string>;
 
   /// <summary>A data structure that holds a width, and then publishes that width in various ways useful in
   /// HTML.</summary>
@@ -104,7 +103,7 @@ type
     ENotInTableTagException = class(EHTMLWriterException); // Tested
     ENotInCommentTagException = class(EHTMLWriterException); // Tested
     ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
-    EEmptyStackHTMLWriterExeption = class(EHTMLWriterException);
+    ENoClosingTagHTMLWriterException = class(EHTMLWriterException);
     ENotInFrameSetHTMLException = class(EHTMLWriterException); // Tested
     ENotInMapTagHTMLException = class(EHTMLWriterException); // Tested
     ENotInFormTagHTMLException = class(EHTMLWriterException); // Tested
