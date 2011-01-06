@@ -1825,18 +1825,10 @@ procedure TestTHTMLWriter.TestCloseComment;
 var
   TempString: string;
   ExpectedResult: string;
-  Temp: IHTMLWriter;
   TestResult: string;
 begin
   TempString := 'gloppet';
-  Temp := HTMLWriterFactory(cHTML);
-  Temp := Temp.OpenSpan;
-  Temp := Temp.OpenComment;
-  Temp := Temp.AddText(TempString);
-  Temp := Temp.CloseComment;
-  Temp := Temp.CloseTag;
-  Temp := Temp.CloseTag;
-  TestResult := Temp.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
 
@@ -1850,29 +1842,16 @@ procedure TestTHTMLWriter.TestCloseComment1;
 var
   TempString: string;
   ExpectedResult: string;
-  Temp: IHTMLWriter;
   TestResult: string;
 begin
   TempString := 'gloppet';
-  Temp := HTMLWriterFactory(cHTML);
-  Temp := Temp.OpenSpan;
-  Temp := Temp.OpenComment;
-  Temp := Temp.AddText(TempString);
-  Temp := Temp.CloseComment;
-  Temp := Temp.CloseTag;
-  Temp := Temp.CloseTag;
-  TestResult := Temp.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
 
   CheckEquals(ExpectedResult, TestResult);
 
   TempString := 'gloppet';
-  Temp := HTMLWriterFactory(cHTML);
-  Temp := Temp.OpenComment;
-  Temp := Temp.CloseComment;
-  Temp := Temp.CloseTag;
-  TestResult := Temp.AsHTML;
-  Temp := nil;
+  TestResult := HTMLWriterFactory(cHTML).OpenComment.CloseComment.CloseTag.AsHTML;
   ExpectedResult := '<html><!--  --></html>';
   CheckEquals(ExpectedResult, TestResult);
 end;
