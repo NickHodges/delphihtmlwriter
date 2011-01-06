@@ -23,7 +23,6 @@ type
 
   TestTHTMLWriter = class(TTestCase)
   strict private
-//    FHTMLWriter: IHTMLWriter;
     function HTMLWriterFactory(aTagName: string): IHTMLWriter;
     function HTML(aString: string): string;
 
@@ -1847,10 +1846,8 @@ begin
   TempString := 'gloppet';
   TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-
   CheckEquals(ExpectedResult, TestResult);
 
-  TempString := 'gloppet';
   TestResult := HTMLWriterFactory(cHTML).OpenComment.CloseComment.CloseTag.AsHTML;
   ExpectedResult := '<html><!--  --></html>';
   CheckEquals(ExpectedResult, TestResult);

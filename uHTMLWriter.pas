@@ -649,7 +649,6 @@ begin
   FTagState := aHTMLWriter.FTagState;
   FTableState := aHTMLWriter.FTableState;
   FErrorLevels := aHTMLWriter.FErrorLevels;
-//  FParent := Self;
   FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
 
   FClosingTags := TStackOfStrings.Create;
@@ -1474,7 +1473,7 @@ end;
 function THTMLWriter.AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
 var
   Temp: THTMLWriter;
-  TempStr: string;
+//  TempStr: string;
 begin
   CloseBracket;
   Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
@@ -1483,8 +1482,7 @@ begin
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
-  TempStr := AsHTML;
-  Temp.HTML.Append(TempStr);
+  Temp.HTML.Append(Self.AsHTML);
   Temp.FParent := Self;
   Result := Temp;
 end;
