@@ -11,6 +11,7 @@ uses
 type
 
   IHTMLWriter = interface
+  ['{7D6CC975-3FAB-453C-8BAB-45D6E55DE376}']
     function GetAttribute(const Name, Value: string): IHTMLWriter;
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
