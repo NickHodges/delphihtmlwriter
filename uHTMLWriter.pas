@@ -734,7 +734,7 @@ begin
   if Self.FParent <> nil then
   begin
     TempText := Self.HTML.ToString;
-    Result := Self.FParent as IHTMLWriter;
+    Result := Self.FParent;
     Result.HTML.Clear;
     Result.HTML.Append(TempText);
   end else
