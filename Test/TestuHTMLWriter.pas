@@ -37,6 +37,7 @@ type
 
   published
     procedure TestCloseComment;
+    procedure TestCloseComment1;
     procedure TestOpenComment;
     procedure TestAddComment;
 
@@ -1822,31 +1823,58 @@ end;
 
 procedure TestTHTMLWriter.TestCloseComment;
 var
-  TestResult: string;
   TempString: string;
   ExpectedResult: string;
   Temp: IHTMLWriter;
+  TestResult: string;
 begin
   TempString := 'gloppet';
-//  Temp := HTMLWriterFactory(cHTML);
-//  Temp := Temp.OpenSpan;
-//  Temp := Temp.OpenComment;
-//  Temp := Temp.AddText(TempString);
-//  Temp := Temp.CloseComment;
-//  Temp := Temp.CloseTag;
-//  Temp := Temp.CloseTag;
-//  TestResult := Temp.AsHTML;
-  //ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  //ExpectedResult := HTML(Format('<!-- %s -->', [TempString]));
-  //ExpectedResult := HTML(Format('%s', [TempString]));
-//  ExpectedResult := '<html></html>';
-//  CheckEquals(ExpectedResult, TestResult);
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenSpan;
+  Temp := Temp.OpenComment;
+  Temp := Temp.AddText(TempString);
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
+  CheckEquals(ExpectedResult, TestResult);
 
   CheckException(ENotInCommentTagException,
                  procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
                  'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
+end;
 
+procedure TestTHTMLWriter.TestCloseComment1;
+var
+  TempString: string;
+  ExpectedResult: string;
+  Temp: IHTMLWriter;
+  TestResult: string;
+begin
+  TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenSpan;
+  Temp := Temp.OpenComment;
+  Temp := Temp.AddText(TempString);
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
+
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenComment;
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  Temp := nil;
+  ExpectedResult := '<html><!--  --></html>';
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddCodeText;

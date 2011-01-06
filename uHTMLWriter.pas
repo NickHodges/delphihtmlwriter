@@ -1479,7 +1479,6 @@ begin
   CloseBracket;
   Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
   Temp.FParent := Self.FParent;
-
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
@@ -1490,23 +1489,44 @@ begin
   Result := Temp;
 end;
 
+function THTMLWriter.OpenComment: IHTMLWriter;
+var
+  Temp: THTMLWriter;
+  TempStr: string;
+begin
+  CloseBracket;
+  Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
+  Temp.FParent := Self.FParent;
+  Temp.FTagState := Self.FTagState + [tsBracketOpen];
+  Self.HTML.Append(Temp.AsHTML);
+  Temp.HTML.Clear;
+  TempStr := AsHTML;
+  Temp.HTML.Append(TempStr).Append(cSpace);
+  //Temp.FHTML := Self.FHTML.Append(Temp.FHTML.ToString).Append(cSpace);
+  Temp.FTagState := Temp.FTagState + [tsCommentOpen];
+  Temp.FParent := Self;
+  Result := Temp;
+end;
+
+
+
 function THTMLWriter.OpenCode: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftCode);
 end;
 
-function THTMLWriter.OpenComment: IHTMLWriter;
-var
-  Temp: THTMLWriter;
-begin
-  CloseBracket;
-  Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
-  Temp.FParent := Self.FParent;
-  Temp.FHTML := Self.FHTML.Append(Temp.FHTML.ToString).Append(cSpace);
-  Temp.FTagState := Temp.FTagState + [tsCommentOpen];
-  Temp.FParent := Self;
-  Result := Temp;
-end;
+//function THTMLWriter.OpenComment: IHTMLWriter;
+//var
+//  Temp: THTMLWriter;
+//begin
+//  CloseBracket;
+//  Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
+//  Temp.FParent := Self.FParent;
+//  Temp.FHTML := Self.FHTML.Append(Temp.FHTML.ToString).Append(cSpace);
+//  Temp.FTagState := Temp.FTagState + [tsCommentOpen];
+//  Temp.FParent := Self as IHTMLWriter;
+//  Result := Temp;
+//end;
 
 function THTMLWriter.AsHTML: string;
 begin
