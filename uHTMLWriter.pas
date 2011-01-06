@@ -1828,16 +1828,9 @@ begin
     FHTML := FHTML.Append(cSpace).AppendFormat('%s="%s"', [cClear, TClearValueStrings[aClearValue]]);
   end;
   case aUseEmptyTag of
-    ietIsEmptyTag:
-      begin
-        FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-      end;
-    ietIsNotEmptyTag:
-      begin
-        FHTML := FHTML.Append(cCloseBracket);
-      end;
+    ietIsEmptyTag:     FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
+    ietIsNotEmptyTag:  FHTML := FHTML.Append(cCloseBracket);
   end;
-
   Result := Self;
 end;
 
