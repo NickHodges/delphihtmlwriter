@@ -12,7 +12,7 @@ unit TestuHTMLWriter;
 interface
 
 uses
-  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils;
+  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils, HTMLWriterIntf, Dialogs;
 
 type
   TTestCode = reference to procedure;
@@ -23,8 +23,8 @@ type
 
   TestTHTMLWriter = class(TTestCase)
   strict private
-    FHTMLWriter: THTMLWriter;
-    function HTMLWriterFactory(aTagName: string): THTMLWriter;
+//    FHTMLWriter: IHTMLWriter;
+    function HTMLWriterFactory(aTagName: string): IHTMLWriter;
     function HTML(aString: string): string;
 
   protected
@@ -36,11 +36,21 @@ type
     procedure TearDown; override;
 
   published
-    procedure TestDeprecated;
+    procedure TestCloseComment;
+    procedure TestCloseComment1;
+    procedure TestOpenComment;
+    procedure TestAddComment;
 
-    procedure TestThatExceptionsAreRaised;
+
+
+
+    procedure TestOpenBold;
 
     procedure TestLabel;
+    procedure TestThatExceptionsAreRaised;
+    procedure TestDeprecated;
+
+
     procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
@@ -62,7 +72,6 @@ type
 
     procedure TestFrameset;
     procedure TestFrame;
-    procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
@@ -126,9 +135,8 @@ type
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
     procedure TestAddDivTextWithID;
-    procedure TestOpenComment;
     procedure TestAddMetaNamedContent;
-    procedure TestAddComment;
+
     procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
@@ -157,7 +165,7 @@ type
     procedure TestAddSpanText;
     procedure TestAddDivText;
     procedure TestAddBlockQuoteText;
-    procedure TestOpenBold;
+
     procedure TestOpenItalic;
     procedure TestOpenUnderline;
     procedure TestOpenEmphasis;
@@ -207,7 +215,7 @@ uses Windows;
 
 procedure TestTHTMLWriter.SetUp;
 begin
-  FHTMLWriter := nil;
+
 end;
 
 procedure TestTHTMLWriter.TearDown;
@@ -246,28 +254,29 @@ var
   aString: string;
   ExpectedValue: string;
   Result: string;
+  Temp: IHTMLWriter;
 begin
   aString := 'this';
   ExpectedValue := HTML(aString); // '<html>this</html>';
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // arbitrary tags
   aString := 'this';
   ExpectedValue := Format('<%s>%s</%s>', [aString, aString, aString]);
-  FHTMLWriter := HTMLWriterFactory('this');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('this');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // try adding text with brackets in it
   aString := '<groob>';
   ExpectedValue := HTML(aString);
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
 end;
@@ -295,11 +304,12 @@ procedure TestTHTMLWriter.TestAddHead;
 var
   ExpectedValue: string;
   TestResult: string;
+  Temp: IHTMLWriter;
 begin
-  FHTMLWriter := HTMLWriterFactory('html');
+  Temp := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.OpenHead.CloseTag.CloseTag.AsHTML;
+  TestResult := Temp.OpenHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -952,16 +962,23 @@ procedure TestTHTMLWriter.TestOpenBold;
 var
   TestResult: string;
   ExpectedResult: string;
+  Temp: IHTMLWriter;
 begin
-  TestResult := HTMLWriterFactory('html').OpenBold.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -1259,10 +1276,18 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempName: string;
+  Temp: IHTMLWriter;
 begin
   TempName := 'kreetom';
   ExpectedResult := Format(HTML('<form method="get"><%s></%s></form>'), [cLabel, cLabel]);
-  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenLabel.CloseTag.CloseForm.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory(cHTML);
+
+  Temp := Temp.OpenForm;
+  Temp := Temp.OpenLabel;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseForm;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1798,20 +1823,58 @@ end;
 
 procedure TestTHTMLWriter.TestCloseComment;
 var
-  TestResult: string;
   TempString: string;
   ExpectedResult: string;
+  Temp: IHTMLWriter;
+  TestResult: string;
 begin
   TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenSpan;
+  Temp := Temp.OpenComment;
+  Temp := Temp.AddText(TempString);
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
-  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   CheckException(ENotInCommentTagException,
                  procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
                  'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
+end;
 
+procedure TestTHTMLWriter.TestCloseComment1;
+var
+  TempString: string;
+  ExpectedResult: string;
+  Temp: IHTMLWriter;
+  TestResult: string;
+begin
+  TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenSpan;
+  Temp := Temp.OpenComment;
+  Temp := Temp.AddText(TempString);
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
+
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempString := 'gloppet';
+  Temp := HTMLWriterFactory(cHTML);
+  Temp := Temp.OpenComment;
+  Temp := Temp.CloseComment;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  Temp := nil;
+  ExpectedResult := '<html><!--  --></html>';
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddCodeText;
@@ -2297,13 +2360,8 @@ begin
   Result := Format('<html>%s</html>', [aString]);
 end;
 
-function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): THTMLWriter;
+function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): IHTMLWriter;
 begin
-  if FHTMLWriter <> nil then
-  begin
-    FHTMLWriter.Free;
-    FHTMLWriter := nil;
-  end;
   Result := THTMLWriter.Create(aTagName);
 end;
 
@@ -2469,7 +2527,7 @@ var
   TestResult, ExpectedResult: string;
   TempName: string;
   TempContent: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 begin
   TempName := 'Snerdo';
   TempContent := 'derfle';
@@ -2635,7 +2693,7 @@ var
   TestResult, ExpectedResult: string;
   Temp: string;
   TempTarget: TTargetType;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 const
   TempURL = 'http://www.nickhodges.com';
 begin
@@ -3175,7 +3233,7 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempStr: string;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 begin
   TempStr := 'prittle';
   ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
@@ -3190,31 +3248,31 @@ begin
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
-var
-  Temp: THTMLWriter;
+//var
+//  Temp: IHTMLWriter;
 begin
   // <font>
-  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: THTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
   // Negative test case for <font>
-  try
-    Temp := HTMLWriterFactory(cHTML);
-    Temp.ErrorLevels := [];
-    Temp.OpenFont;
-    Check(True, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
-  except
-    on E: ETagIsDeprecatedHTMLWriterException do
-    begin
-      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-    end;
-  end;
+//  try
+//    Temp := HTMLWriterFactory(cHTML);
+//    Temp.ErrorLevels := [];
+//    Temp := Temp.OpenFont;
+//    Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+//  except
+//    on E: ETagIsDeprecatedHTMLWriterException do
+//    begin
+//      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+//    end;
+//  end;
 
 end;
 
 procedure TestTHTMLWriter.TestLoadSave;
 var
   InString, OutString: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 const
   cFilename = 'test.html';
 begin
