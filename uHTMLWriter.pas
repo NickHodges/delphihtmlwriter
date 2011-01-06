@@ -40,7 +40,7 @@ type
   /// to create a complete document.</summary>
   /// <remarks>
   /// <para>IHTMLWriter is very method heavy, but relatively code light. Most of the code simply ends up calling
-  /// the  AddTag  method. The closing tags are tracked in a  TStack&lt;string&gt;  class.</para>
+  /// the  AddTag  method. </para>
   /// <para>Most methods begin with either "Open" or "Add". Methods that start with "Open" will
   /// add  &lt;tag  to the HTML stream, leaving it ready for the addition of attributes or other content. The
   /// system will automatically close the tag when necessary.</para>
@@ -112,7 +112,7 @@ type
     procedure CheckBracketOpen(aString: string);
     procedure CheckCurrentTagIsHTMLTag;
 {$ENDREGION}
-    procedure PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
+    procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
     function GetAttribute(const Name, Value: string): IHTMLWriter;
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
@@ -742,7 +742,7 @@ begin
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
   FErrorLevels := [elErrors];
-  PushClosingTagOnStack(aCloseTagType, aTagName);
+  SetClosingTagValue(aCloseTagType, aTagName);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
@@ -1320,7 +1320,7 @@ begin
   FErrorLevels := Value;
 end;
 
-procedure THTMLWriter.PushClosingTagOnStack(aCloseTagType: TCloseTagType; aString: string = '');
+procedure THTMLWriter.SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
 begin
   case aCloseTagType of
     ctNormal:   FClosingTag := TTagMaker.MakeCloseTag(aString);
@@ -1597,7 +1597,7 @@ begin
   begin
     if StringisEmpty(FClosingTag) then
     begin
-      raise EEmptyStackHTMLWriterExeption.Create(strStackIsEmpty);
+      raise ENoClosingTagHTMLWriterException.Create(strNoClosingTag);
     end;
     FHTML.Append(FClosingTag);
   end;
