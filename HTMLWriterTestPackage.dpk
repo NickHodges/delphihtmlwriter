@@ -25,10 +25,13 @@ package HTMLWriterTestPackage;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  rtl,
+  vcl;
 
 contains
   uHTMLWriter in 'uHTMLWriter.pas',
-  HTMLWriterUtils in 'HTMLWriterUtils.pas';
+  HTMLWriterUtils in 'HTMLWriterUtils.pas',
+  HTMLWriterIntf in 'HTMLWriterIntf.pas';
 
 end.
+

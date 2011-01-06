@@ -22,7 +22,8 @@ uses
   TextTestRunner,
   TestuHTMLWriter in 'TestuHTMLWriter.pas',
   uHTMLWriter in '..\uHTMLWriter.pas',
-  HTMLWriterUtils in '..\HTMLWriterUtils.pas';
+  HTMLWriterUtils in '..\HTMLWriterUtils.pas',
+  HTMLWriterIntf in '..\HTMLWriterIntf.pas';
 
 {$R *.RES}
 
