@@ -636,15 +636,10 @@ implementation
 { THTMLWriter }
 
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
-var
-  TempList: TList<string>;
-  i: Integer;
-  TempStr: string;
 begin
   inherited Create;                    ;
   FHTML := TStringBuilder.Create;
-  TempStr := aHTMLWriter.HTML.ToString;
-  HTML.Append(TempStr);
+  HTML.Append(aHTMLWriter.HTML.ToString);
   FCurrentTagName := aHTMLWriter.FCurrentTagName;
   FTagState := aHTMLWriter.FTagState;
   FTableState := aHTMLWriter.FTableState;
