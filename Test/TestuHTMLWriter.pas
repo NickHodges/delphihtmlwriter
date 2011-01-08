@@ -1189,11 +1189,11 @@ begin
   TempTag := 'fritle';
 
   ExpectedResult := Format('<%s></%s>', [TempTag, TempTag]);
-  TestResult := THTMLWriter.Create(TempTag).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TempTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s></%s>', [TempTag, TempTag]));
-  TestResult := THTMLWriter.CreateDocument.AddTag(TempTag).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument.AddTag(TempTag).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2337,10 +2337,10 @@ function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): IHTMLWriter;
 begin
   if aTagName = cHTML then
   begin
-    Result := THTMLWriter.Write;
+    Result := HTMLWriterCreateDocument;
   end else
   begin
-    Result := THTMLWriter.Create(aTagName);
+    Result := HTMLWriterCreate(aTagName);
   end;
 end;
 
@@ -3198,11 +3198,11 @@ var
   ExpectedResult: string;
 begin
   ExpectedResult := '<html></html>';
-  TestResult := THTMLWriter.CreateDocument.CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := THTMLDocTypeStrings[dtHTML401Strict] + '<html></html>';
-  TestResult := THTMLWriter.CreateDocument(dtHTML401Strict).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument(dtHTML401Strict).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -3274,12 +3274,12 @@ var
   TempStr: string;
 begin
   ExpectedResult := '<b></b>';
-  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TFormatTypeStrings[ftBold]).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   TempStr := 'mashtes';
   ExpectedResult := Format('<b>%s</b>', [TempStr]);
-  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
