@@ -26,6 +26,11 @@ type
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
     function AddBase(aHREF: string): IHTMLWriter; overload;
     function OpenTitle: IHTMLWriter;
+    {$REGION 'Documentation'}
+    /// <summary>Adds a &lt;title&gt; tag including the passed in text.</summary>
+    /// <param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
+    /// <remarks>There is no need to close this tag manually.   All "AddXXXX" methods close themselves.</remarks>
+    {$ENDREGION}
     function AddTitle(aTitleText: string): IHTMLWriter;
     function AddMetaNamedContent(aName: string; aContent: string): IHTMLWriter;
     function OpenBody: IHTMLWriter;
