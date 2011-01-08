@@ -3,7 +3,7 @@ unit uHTMLWriter;
 interface
 
 uses
-  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf, Dialogs;
+  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -32,6 +32,13 @@ uses
   * ***** END LICENSE BLOCK *****
   }
 {$ENDREGION}
+
+function HTMLWriterCreateDocument: IHTMLWriter; overload;
+function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
+function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
+
+
+implementation
 
 type
 {$REGION 'Documentation'}
@@ -631,7 +638,7 @@ type
 
   end;
 
-implementation
+
 
 { THTMLWriter }
 
@@ -2096,6 +2103,24 @@ begin
     FHTML := FHTML.Append(Format('="%s"', [aValue]));
   end;
   Result := Self;
+end;
+
+
+// Access functions
+
+function HTMLWriterCreateDocument: IHTMLWriter;
+begin
+  Result := THTMLWriter.CreateDocument;
+end;
+
+function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+begin
+  Result := THTMLWriter.Create(aTagName, aCloseTagType, aCanAddAttributes);
+end;
+
+function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter ;overload;
+begin
+  Result := THTMLWriter.CreateDocument(aDocType);
 end;
 
 end.
