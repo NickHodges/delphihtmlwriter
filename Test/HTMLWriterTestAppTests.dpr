@@ -23,7 +23,8 @@ uses
   TestuHTMLWriter in 'TestuHTMLWriter.pas',
   uHTMLWriter in '..\uHTMLWriter.pas',
   HTMLWriterUtils in '..\HTMLWriterUtils.pas',
-  HTMLWriterIntf in '..\HTMLWriterIntf.pas';
+  HTMLWriterIntf in '..\HTMLWriterIntf.pas',
+  LoadSaveIntf in '..\LoadSaveIntf.pas';
 
 {$R *.RES}
 

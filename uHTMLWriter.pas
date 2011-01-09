@@ -1,9 +1,5 @@
+
 unit uHTMLWriter;
-
-interface
-
-uses
-  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -33,6 +29,11 @@ uses
   }
 {$ENDREGION}
 
+interface
+
+uses
+  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf, LoadSaveIntf;
+
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
@@ -42,32 +43,6 @@ implementation
 
 type
 {$REGION 'Documentation'}
-  /// <summary>A class for creating HTML.   IHTMLWriter uses the fluent interface. It can be used to create either
-  /// complete HTML documents or chunks of HTML. By using the fluent interface, you can link together number of methods
-  /// to create a complete document.</summary>
-  /// <remarks>
-  /// <para>IHTMLWriter is very method heavy, but relatively code light. Most of the code simply ends up calling
-  /// the  AddTag  method. </para>
-  /// <para>Most methods begin with either "Open" or "Add". Methods that start with "Open" will
-  /// add  &lt;tag  to the HTML stream, leaving it ready for the addition of attributes or other content. The
-  /// system will automatically close the tag when necessary.</para>
-  /// <para>Methods that start with "Add" will normally take paramenters and then add content within a complete tag
-  /// pair. For example, a call toAddBoldText('blah') will result in  &lt;b&gt;blah&lt;/b&gt;  being added to
-  /// the HTML stream.</para>
-  /// <para>Some things to note:</para>
-  /// <list type="bullet">
-  /// <item>Any tag that is opened will need to be closed via  CloseTag</item>
-  /// <item>Any tag that is added via a  AddXXXX  call will close itself.</item>
-  /// <item>The rule to follow: Close what you open. Additions take care of themselves.</item>
-  /// <item>As a general rule, IHTMLWriter will raise an exception if a tag is placed somewhere that doesn't make
-  /// sense.</item>
-  /// <item>Certain tags like  &lt;meta&gt;  and  &lt;base&gt;  can only be added inside
-  /// at  &lt;head&gt;  tag.</item>
-  /// <item>Tags such as  &lt;td&gt;,  &lt;tr&gt;  can only be added inside of
-  /// a  &lt;table&gt;  tag.</item>
-  /// <item>The same is true for list items inside lists.</item>
-  /// </list>
-  /// </remarks>
 {$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
   private
@@ -158,39 +133,18 @@ type
     function OpenBody: IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Text Block Methods'}
-    /// <summary>Opens a &lt;p&gt; tag.  </summary>
     function OpenParagraph: IHTMLWriter;
-    /// <summary>Opens a &lt;p&gt; tag and gives it the passed in style="" attribute</summary>
-    /// <param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
     function OpenParagraphWithStyle(aStyle: string): IHTMLWriter;
     function OpenParagraphWithID(aID: string): IHTMLWriter;
-    /// <summary>Opens a &lt;span&gt; tag.</summary>
     function OpenSpan: IHTMLWriter;
-    /// <summary>Opens a &lt;div&gt; tag.</summary>
     function OpenDiv: IHTMLWriter;
-    /// <summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
-    /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
-{$ENDREGION}
     function AddParagraphText(aString: string): IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds the passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
-    /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
-    /// <param name="aStyle">The value for the Style attribute  to be added to the &lt;p&gt; tag.</param>
-{$ENDREGION}
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
-
-    /// <summary>Adds text inside of a &lt;span&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
     function AddSpanText(aString: string): IHTMLWriter;
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
-
-    /// <summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside teh &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
     function AddDivTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
@@ -311,28 +265,14 @@ type
     function AddAnchor(const aHREF: string; aText: string): IHTMLWriter; overload;
 {$ENDREGION}
 {$REGION 'Table Support Methods'}
-{$REGION 'Documentation'}
-    /// <summary>Opens a &lt;table&gt; tag</summary>
-    /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
-    /// open.</remarks>
-{$ENDREGION}
     function OpenTable: IHTMLWriter; overload;
-    /// <summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
     function OpenTable(aBorder: integer): IHTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer): IHTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): IHTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter; overload;
 
-    /// <summary>Opens a &lt;tr&gt; tag.</summary>
     function OpenTableRow: IHTMLWriter;
-    /// <summary>Opens a &lt;td&gt; tag.</summary>
-    /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
-    /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
-    /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
-{$ENDREGION}
     function AddTableData(aText: string): IHTMLWriter;
     function AddCaption(aCaption: string): IHTMLWriter;
 
