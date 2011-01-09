@@ -196,167 +196,72 @@ type
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'General Formatting Methods'}
-    /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: IHTMLWriter;
-    /// <summary>Opens up a &lt;i&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenItalic: IHTMLWriter;
-    /// <summary>Opens up a &lt;u&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenUnderline: IHTMLWriter;
-    /// <summary>Opens a &lt;em&gt; tag.</summary>
     function OpenEmphasis: IHTMLWriter;
-    /// <summary>Opens a &lt;strong&gt; tag.</summary>
     function OpenStrong: IHTMLWriter;
-    /// <summary>Opens a &lt;pre&gt; tag.</summary>
     function OpenPre: IHTMLWriter;
-    /// <summary>Opens a &lt;cite&gt; tag.</summary>
     function OpenCite: IHTMLWriter;
-    /// <summary>Opens a &lt;acronym&gt; tag.</summary>
     function OpenAcronym: IHTMLWriter;
-    /// <summary>Opens an &lt;abbr&gt; tag.</summary>
     function OpenAbbreviation: IHTMLWriter;
-    /// <summary>Opens an &lt;addr&gt; tag</summary>
     function OpenAddress: IHTMLWriter;
-    /// <summary>Opens a &lt;bdo&gt; tag.</summary>
     function OpenBDO: IHTMLWriter;
-    /// <summary>Opens a &lt;big&gt; tag.</summary>
     function OpenBig: IHTMLWriter;
-    /// <summary>Opens a &lt;center&gt; tag.</summary>
     function OpenCenter: IHTMLWriter;
-    /// <summary>Opens a &lt;code&gt; tag.</summary>
     function OpenCode: IHTMLWriter;
-    /// <summary>Opens a &lt;delete&gt; tag.</summary>
     function OpenDelete: IHTMLWriter;
-    /// <summary>Opens a &lt;dfn&gt; tag.</summary>
     function OpenDefinition: IHTMLWriter;
-    /// <summary>Opens a &lt;font&gt; tag.</summary>
     function OpenFont: IHTMLWriter;
-    /// <summary>Opens a &lt;kbd&gt; tag</summary>
     function OpenKeyboard: IHTMLWriter;
-    /// <summary>Opens a &lt;q&gt; tag.  </summary>
     function OpenQuotation: IHTMLWriter;
-    /// <summary>Opens a &lt;sample&gt; tag.</summary>
     function OpenSample: IHTMLWriter;
-    /// <summary>Opens a &lt;small&gt; tag.</summary>
     function OpenSmall: IHTMLWriter;
-    /// <summary>Opens a &lt;strike&gt; tag.</summary>
     function OpenStrike: IHTMLWriter;
-    /// <summary>Opens a &lt;tt&gt; tag.</summary>
     function OpenTeletype: IHTMLWriter;
-    /// <summary>Opens a &lt;var&gt; tag.</summary>
     function OpenVariable: IHTMLWriter;
-    /// <summary>Opens a &lt;ins&gt; tag.</summary>
     function OpenInsert: IHTMLWriter;
 
-    /// <summary>Adds a &lt;b&gt;&lt;/b&gt; containing the passed text</summary>
-    /// <param name="aString">The text to be placed within the bold tag.</param>
     function AddBoldText(aString: string): IHTMLWriter;
-    /// <summary>Adds a &lt;i&gt;&lt;/i&gt; containing the passed text</summary>
-    /// <param name="aString">The text to be placed within the italic tag.</param>
     function AddItalicText(aString: string): IHTMLWriter;
-    /// <summary>Adds a &lt;u&gt;&lt;/u&gt; containing the passed text</summary>
-    /// <param name="aString">The text to be placed within the underline tag.</param>
     function AddUnderlinedText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed text inside of a &lt;em&gt;&lt;/em&gt; tag</summary>
-    /// <param name="aString">The text to be added inside the Emphasis tag.</param>
     function AddEmphasisText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;strong&gt;&lt;/strong&gt; tag.</summary>
-    /// <param name="aString">The text to be added to the strong tag.</param>
     function AddStrongText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;pre&gt;&lt;/pre&gt; tag</summary>
-    /// <param name="aString">The text to be added inside a preformatted tag</param>
     function AddPreformattedText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;cite&lt;&lt;/cite&gt; tag</summary>
-    /// <param name="aString">The text to be added inside the Citation tag.</param>
     function AddCitationText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text inside of a &lt;blockquote&gt;&lt;/blockquote&gt; tag.</summary>
-    /// <param name="aString">The text to be included inside the block quote tag.</param>
     function AddBlockQuoteText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to an &lt;acronym&gt;&lt;/acronym&gt; tag.</summary>
-    /// <param name="aString">The string that will be included in the Acronym tag.</param>
     function AddAcronymText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text inside a &lt;abbr&gt;&lt;/abbr&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside the Abbreviation tag.</param>
     function AddAbbreviationText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;addr&gt;&lt;/addr&gt; tag.</summary>
-    /// <param name="aString">The text to be included in the Address tag.</param>
     function AddAddressText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;bdo&gt;&lt;/bdo&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside the Bi-Directional tag.</param>
     function AddBDOText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;big&gt;&lt;/big&gt; tag.</summary>
-    /// <param name="aString">The text to eb added to the Big tag.</param>
     function AddBigText(aString: string): IHTMLWriter;
-    /// <summary>Addes the passed in text to a &lt;center&gt;&lt;/center&gt; tag.</summary>
-    /// <param name="aString">The text to be added to the Center tag.</param>
     function AddCenterText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;code&gt;&lt;/code&gt; tag.</summary>
-    /// <param name="aString">The text to be added to the Code tag.</param>
     function AddCodeText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;delete&gt;&lt;/delete&gt; tag.</summary>
-    /// <param name="aString">The text to be added to the Delete tag.</param>
     function AddDeleteText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;dfn&gt;&lt;/dfn&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside of the Definition tag.</param>
     function AddDefinitionText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;font&gt;&lt;/font&gt; tag.</summary>
-    /// <param name="aString">The text to be included in the Font tag.</param>
     function AddFontText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;kbd&gt;&lt;/kbd&gt; tag.</summary>
-    /// <param name="aString">The text to be added to the Keyboard tag.</param>
     function AddKeyboardText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;q&gt;&lt;/q&gt; tag</summary>
-    /// <param name="aString">The string that will be included inside the quotation tag.</param>
     function AddQuotationText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;samp&gt;&lt;/samp&gt; tag.</summary>
-    /// <param name="aString">The text to be inserted into the sample tag.</param>
     function AddSampleText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;small&gt;&lt;/small&gt; tag</summary>
-    /// <param name="aString">The text to be included in a small tag.</param>
     function AddSmallText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text inside a &lt;strike&gt;&lt;/strike&gt; tag</summary>
-    /// <param name="aString">The text to be included in the strike tag.</param>
     function AddStrikeText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;tt&gt;&lt;/tt&gt; tag.</summary>
-    /// <param name="aString">The text to be added into the teletype tag.</param>
     function AddTeletypeText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;var&gt;&lt;/var&gt; tag</summary>
-    /// <param name="aString">The text to be passed to the variable tag.</param>
     function AddVariableText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;ins&gt;&lt;/ins&gt; tag</summary>
-    /// <param name="aString">The text to be passed to the insert tag.</param>
     function AddInsertText(aString: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Heading Methods'}
-    /// <summary>Opens a &lt;h1&gt; tag.</summary>
     function OpenHeading1: IHTMLWriter;
-    /// <summary>Opens a &lt;h2&gt; tag.</summary>
     function OpenHeading2: IHTMLWriter;
-    /// <summary>Opens a &lt;h3&gt; tag.</summary>
     function OpenHeading3: IHTMLWriter;
-    /// <summary>Opens a &lt;h4&gt; tag.</summary>
     function OpenHeading4: IHTMLWriter;
-    /// <summary>Opens a &lt;h5&gt; tag.</summary>
     function OpenHeading5: IHTMLWriter;
-    /// <summary>Opens a &lt;h6&gt; tag.</summary>
     function OpenHeading6: IHTMLWriter;
 
-    /// <summary>Inserts a &lt;h1&gt;&lt;/h1&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading1Text(aString: string): IHTMLWriter;
-    /// <summary>Inserts a &lt;h2&gt;&lt;/h2&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading2Text(aString: string): IHTMLWriter;
-    /// <summary>Inserts a &lt;h3&gt;&lt;/h3&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading3Text(aString: string): IHTMLWriter;
-    /// <summary>Inserts a &lt;h4&gt;&lt;/h4&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading4Text(aString: string): IHTMLWriter;
-    /// <summary>Inserts a &lt;h5&gt;&lt;/h5&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading5Text(aString: string): IHTMLWriter;
-    /// <summary>Inserts a &lt;h6&gt;&lt;/h6&gt; tag and places the given text in it.</summary>
-    /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading6Text(aString: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'CSS Formatting Methods'}
@@ -366,64 +271,21 @@ type
     function AddID(aID: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Miscellaneous Methods'}
-{$REGION 'Documentation'}
-    /// <summary>Adds an attribute to the current tag.   The tag must have its bracket open.  </summary>
-    /// <param name="aString">The name of the attribute to be added.   If this is the only parameter passed in,
-    /// then this string should contain the entire attribute string.</param>
-    /// <param name="aValue">Optional parameter.   If this value is passed, then the first parameter become the
-    /// <i>name</i>, and this one the <i>value</i>, in a <i>name=value</i> pair.</param>
-    /// <exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
-    /// have it's bracket open.</exception>
-{$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds a &lt;br /&gt; tag</summary>
-    /// <param name="aClearValue">An optional parameter that determines if a clear attribute will be added.   The
-    /// default value is not to include the clear attribute.</param>
-    /// <param name="aUseCloseSlash">An optional parameter that determines if the tag will close with a /&gt;.
-    /// The default is to do so.</param>
-{$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds an &lt;hr&gt; tag to the HTML</summary>
-    /// <param name="aAttributes">Attributes that should be added to the &lt;hr&gt; tag.</param>
-    /// <param name="aUseEmptyTag">Determines if the &lt;hr&gt; tag should be rendered as &lt;hr /&gt;</param>
-{$ENDREGION}
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
     function CRLF: IHTMLWriter;
     function Indent(aNumberofSpaces: integer): IHTMLWriter;
     function OpenComment: IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Adds any text to the HTML.  </summary>
-    /// <param name="aString">The string to be added</param>
-    /// <remarks>AddText will close the current tag and then add the text passed in the string parameter</remarks>
-{$ENDREGION}
     function AddText(aString: string): IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>AddRawText will inject the passed in string directly into the HTML.  </summary>
-    /// <param name="aString">The text to be added to the HTML</param>
-    /// <remarks>AddRawText  will not make any other changes to open tags or open brackets.   It just injects
-    /// the passed text directly onto the HTML.</remarks>
-{$ENDREGION}
     function AddRawText(aString: string): IHTMLWriter;
-{$REGION 'Documentation'}
-    /// <summary>Returns a string containing the current HTML for the
-    /// HTMLWriter</summary>
-    /// <remarks>This property will return the HTML in whatever state it is
-    /// in when called.   This may mean that brackets or even tags are
-    /// open, attributes hanging undone, etc.  </remarks>
-{$ENDREGION}
     function AsHTML: string;
-    /// <summary>Adds a comment to the HTML stream</summary>
-    /// <param name="aCommentText">The text to be added inside the comment</param>
     function AddComment(aCommentText: string): IHTMLWriter;
-    /// <summary>Opens a &lt;script&gt; tag</summary>
     function OpenScript: IHTMLWriter;
-    /// <summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
-    /// <param name="aScriptText">The script text to be added inside the Script tag.</param>
+
     function AddScript(aScriptText: string): IHTMLWriter;
 
-    ///	<summary>Opens a &lt;noscript&gt; tag</summary>
+
     function OpenNoScript: IHTMLWriter;
     function OpenLink: IHTMLWriter;
 {$ENDREGION}
