@@ -32,18 +32,21 @@ unit uHTMLWriter;
 interface
 
 uses
-  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf, LoadSaveIntf;
+          SysUtils
+        , HTMLWriterUtils
+        , Classes
+        , Generics.Collections
+        , HTMLWriterIntf
+        , LoadSaveIntf
+        ;
 
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
-
 implementation
 
 type
-{$REGION 'Documentation'}
-{$ENDREGION}
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
   private
     FHTML: TStringBuilder;
