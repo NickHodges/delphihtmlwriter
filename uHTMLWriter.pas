@@ -129,7 +129,6 @@ type
     function OpenBaseFont: IHTMLWriter;
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
     function AddBase(aHREF: string): IHTMLWriter; overload;
-
     function OpenTitle: IHTMLWriter;
     function AddTitle(aTitleText: string): IHTMLWriter;
     function AddMetaNamedContent(aName: string; aContent: string): IHTMLWriter;
@@ -242,19 +241,17 @@ type
 
     function AddScript(aScriptText: string): IHTMLWriter;
 
-
     function OpenNoScript: IHTMLWriter;
     function OpenLink: IHTMLWriter;
 {$ENDREGION}
 {$REGION 'CloseTag methods'}
+    { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
     function CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): IHTMLWriter;
     function CloseComment: IHTMLWriter;
     function CloseList: IHTMLWriter;
     function CloseTable: IHTMLWriter;
     function CloseForm: IHTMLWriter;
     function CloseDocument: IHTMLWriter;
-
-    { TODO -oNick : Add more specialized close tags CloseTable, CloseList, etc. }
 {$ENDREGION}
 {$REGION 'Image Methods'}
     function OpenImage: IHTMLWriter; overload;
@@ -318,7 +315,6 @@ type
 
     function OpenIFrame: IHTMLWriter; overload;
 
-
     function OpenIFrame(aURL: string): IHTMLWriter; overload;
     function OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter; overload;
     function AddIFrame(aURL: string; aAlternateText: string): IHTMLWriter; overload;
@@ -355,8 +351,6 @@ type
     property HTML: TStringBuilder read GetHTML;
 
   end;
-
-
 
 { THTMLWriter }
 
@@ -1823,8 +1817,7 @@ begin
   Result := Self;
 end;
 
-
-// Access functions
+// Interface Access functions
 
 function HTMLWriterCreateDocument: IHTMLWriter;
 begin
