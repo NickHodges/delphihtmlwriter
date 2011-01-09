@@ -1,4 +1,4 @@
-unit HTMLWriterIntf;
+ unit HTMLWriterIntf;
 
 interface
 
@@ -21,7 +21,21 @@ type
     function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
     /// <summary>Opens a&lt;head&gt; tag to the document.  </summary>
     function OpenHead: IHTMLWriter;
+    {$REGION 'Documentation'}
+    /// <summary>Opens a &lt;meta&gt; tag.</summary>
+    /// <exception cref="EHeadTagRequiredHTMLException">Raised if an attempt is made  to call this method
+    /// when not inside a &lt;head&gt; tag.</exception>
+    /// <remarks>Note that this method can only be called from within &lt;head&gt; tag.   If it is called from
+    /// anywhere else, it will raise an exception.</remarks>
+    {$ENDREGION}
     function OpenMeta: IHTMLWriter;
+    {$REGION 'Documentation'}
+    /// <summary>Opens a &lt;base /&gt; tag.</summary>
+    /// <exception cref="EHeadTagRequiredHTMLException">Raised if this tag is added outside of the &lt;head&gt;
+    /// tag.</exception>
+    /// <remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
+    /// a &lt;head&gt; tag.</remarks>
+    {$ENDREGION}
     function OpenBase: IHTMLWriter;
     function OpenBaseFont: IHTMLWriter;
     ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
@@ -123,24 +137,49 @@ type
     function AddAttribute(aString: string; aValue: string = ''): IHTMLWriter;
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
+    /// <summary>Adds a Carriage Return and a Line Feed to the HTML.</summary>
     function CRLF: IHTMLWriter;
+    /// <summary>Adds spaces to the HTML stream</summary>
+    /// <param name="aNumberofSpaces">An integer indicating how many spaces should be added to the HTML.</param>
     function Indent(aNumberofSpaces: integer): IHTMLWriter;
+    /// <summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: IHTMLWriter;
     function AddText(aString: string): IHTMLWriter;
     function AddRawText(aString: string): IHTMLWriter;
     function AsHTML: string;
+    /// <summary>Adds a comment to the HTML stream</summary>
+    /// <param name="aCommentText">The text to be added inside the comment</param>
     function AddComment(aCommentText: string): IHTMLWriter;
+    /// <summary>Opens a &lt;script&gt; tag</summary>
     function OpenScript: IHTMLWriter;
+    /// <summary>Adds the passed in script text to a &lt;script&gt;&lt;/script&gt; tag.</summary>
+    /// <param name="aScriptText">The script text to be added inside the Script tag.</param>
     function AddScript(aScriptText: string): IHTMLWriter;
+    ///	<summary>Opens a &lt;noscript&gt; tag</summary>
     function OpenNoScript: IHTMLWriter;
+    /// <summary>Opens a &lt;link /&gt; tag.</summary>
     function OpenLink: IHTMLWriter;
+    {$REGION 'Documentation'}
+    /// <summary>Closes an open tag.</summary>
+    /// <param name="aUseCRLF">Determines if CRLF should be added after the closing of the tag.</param>
+    /// <exception cref="ETryingToCloseClosedTag">Raised if you try to close a tag when no tag is open.</exception>
+    {$ENDREGION}
     function CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): IHTMLWriter;
+    /// <summary>Closes an open comment tag.</summary>
     function CloseComment: IHTMLWriter;
+    /// <summary>Closes an open &lt;list&gt; tag</summary>
     function CloseList: IHTMLWriter;
+    /// <summary>Closes an open &lt;table&gt; tag.</summary>
     function CloseTable: IHTMLWriter;
+    /// <summary>Closes and open &lt;form&gt; tag.</summary>
     function CloseForm: IHTMLWriter;
+    /// <summary>Closes and open &lt;html&gt; tag.</summary>
     function CloseDocument: IHTMLWriter;
+    /// <summary>Opens in &lt;img&gt; tag.</summary>
+    /// <remarks>This tag will always be closed by " /&gt;"</remarks>
     function OpenImage: IHTMLWriter; overload;
+    /// <summary>Opens an &lt;img&gt; tag and adds the 'src' parameter.</summary>
+    /// <param name="aImageSource">The URL of the image to be displayed</param>
     function OpenImage(aImageSource: string): IHTMLWriter; overload;
     function AddImage(aImageSource: string): IHTMLWriter;
     function OpenAnchor: IHTMLWriter; overload;
@@ -162,8 +201,13 @@ type
     function OpenButton(aName: string): IHTMLWriter;
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;
+    /// <summary>Opens a &lt;legend&gt; tag.</summary>
+    /// <remarks>This method will raise an exception if called outside of an open &lt;fieldset&gt; tag.</remarks>
     function OpenLegend: IHTMLWriter;
+    /// <summary>Adds the passed in text to a &lt;legend&gt;&lt;/legend&gt; tag</summary>
+    /// <param name="aText">The text to be included in the Legend tag.</param>
     function AddLegend(aText: string): IHTMLWriter;
     /// <summary>Opens an &lt;iframe&gt; tag.</summary>
     function OpenIFrame: IHTMLWriter; overload;
@@ -235,3 +279,7 @@ end;
 implementation
 
 end.
+
+
+
+
