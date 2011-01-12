@@ -27,9 +27,6 @@ unit uHTMLWriter;
   *
   * ***** END LICENSE BLOCK *****
   }
-
-
-
 {$ENDREGION}
 
 interface
