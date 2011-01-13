@@ -21,6 +21,7 @@
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
 			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_UnitSearchPath>$(bds)\lib;C:\Code\OmniXML;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
 			<GenPackage>true</GenPackage>
 			<DCC_DependencyCheckOutputName>C:\Users\Public\Documents\RAD Studio\7.0\Bpl\HTMLWriterTestPackage.bpl</DCC_DependencyCheckOutputName>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
@@ -46,8 +47,10 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="rtl.dcp"/>
+			<DCCReference Include="vcl.dcp"/>
 			<DCCReference Include="uHTMLWriter.pas"/>
 			<DCCReference Include="HTMLWriterUtils.pas"/>
+			<DCCReference Include="HTMLWriterIntf.pas"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\default.txvpck"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\TestStuff\default.txvpck"/>
 			<None Include="ModelSupport_HTMLWriterTestPackage\TestStuff\default.txaPackage"/>
