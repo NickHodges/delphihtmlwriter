@@ -59,6 +59,7 @@
 			<DCCReference Include="..\uHTMLWriter.pas"/>
 			<DCCReference Include="..\HTMLWriterUtils.pas"/>
 			<DCCReference Include="..\HTMLWriterIntf.pas"/>
+			<DCCReference Include="..\LoadSaveIntf.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
