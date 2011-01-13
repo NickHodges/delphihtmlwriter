@@ -4,14 +4,15 @@ program HTMLWriterTestApp;
 
 uses
   SysUtils,
+  HTMLWriterIntf,
   uHTMLWriter in 'uHTMLWriter.pas';
 
 var
   TempHTML: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 begin
   try
-     Temp := THTMLWriter.CreateDocument;
+     Temp := HTMLWriterCreateDocument;
      TempHTML := Temp
                   .OpenHead
                     .AddAttribute('dweezle')
