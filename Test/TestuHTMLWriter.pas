@@ -12,24 +12,42 @@ unit TestuHTMLWriter;
 interface
 
 uses
-  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils;
+  TestFramework, SysUtils, uHTMLWriter, HTMLWriterUtils, HTMLWriterIntf, Dialogs;
+
+type
+  TTestCode = reference to procedure;
+  TClassOfException = class of Exception;
 
 type
   // Test methods for class THTMLWriter
 
   TestTHTMLWriter = class(TTestCase)
   strict private
-    FHTMLWriter: THTMLWriter;
-    function HTMLWriterFactory(aTagName: string): THTMLWriter;
+    function HTMLWriterFactory(aTagName: string): IHTMLWriter;
     function HTML(aString: string): string;
-  private
+
+  protected
+    procedure CheckException(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
+    procedure CheckExceptionNotRaised(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
 
   public
-
     procedure SetUp; override;
     procedure TearDown; override;
 
   published
+    procedure TestCloseComment;
+    procedure TestCloseComment1;
+    procedure TestOpenComment;
+    procedure TestAddComment;
+
+    procedure TestOpenBold;
+
+    procedure TestLabel;
+    procedure TestThatExceptionsAreRaised;
+    procedure TestDeprecated;
+
+
+    procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
     procedure TestInput;
@@ -50,7 +68,6 @@ type
 
     procedure TestFrameset;
     procedure TestFrame;
-    procedure TestCloseComment;
     procedure TestAddTitle;
     procedure TestTHTMLWidth1;
     procedure TestTHTMLWidth2;
@@ -104,7 +121,6 @@ type
     procedure TestOpenScript;
     procedure TestAddScript;
     procedure TestConstructorException;
-    procedure TestThatExceptionsAreRaised;
 
     procedure TestAddTableData;
     procedure TestAddLineBreak;
@@ -115,9 +131,8 @@ type
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
     procedure TestAddDivTextWithID;
-    procedure TestOpenComment;
     procedure TestAddMetaNamedContent;
-    procedure TestAddComment;
+
     procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
@@ -146,7 +161,7 @@ type
     procedure TestAddSpanText;
     procedure TestAddDivText;
     procedure TestAddBlockQuoteText;
-    procedure TestOpenBold;
+
     procedure TestOpenItalic;
     procedure TestOpenUnderline;
     procedure TestOpenEmphasis;
@@ -196,7 +211,7 @@ uses Windows;
 
 procedure TestTHTMLWriter.SetUp;
 begin
-  FHTMLWriter := nil;
+
 end;
 
 procedure TestTHTMLWriter.TearDown;
@@ -235,28 +250,29 @@ var
   aString: string;
   ExpectedValue: string;
   Result: string;
+  Temp: IHTMLWriter;
 begin
   aString := 'this';
   ExpectedValue := HTML(aString); // '<html>this</html>';
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // arbitrary tags
   aString := 'this';
   ExpectedValue := Format('<%s>%s</%s>', [aString, aString, aString]);
-  FHTMLWriter := HTMLWriterFactory('this');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('this');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
   // try adding text with brackets in it
   aString := '<groob>';
   ExpectedValue := HTML(aString);
-  FHTMLWriter := HTMLWriterFactory('html');
-  FHTMLWriter.AddText(aString);
-  Result := FHTMLWriter.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html');
+  Temp.AddText(aString);
+  Result := Temp.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, Result);
 
 end;
@@ -284,11 +300,12 @@ procedure TestTHTMLWriter.TestAddHead;
 var
   ExpectedValue: string;
   TestResult: string;
+  Temp: IHTMLWriter;
 begin
-  FHTMLWriter := HTMLWriterFactory('html');
+  Temp := HTMLWriterFactory('html');
   ExpectedValue := HTML('<head></head>');
   // Multiple close tags should be fine
-  TestResult := FHTMLWriter.OpenHead.CloseTag.CloseTag.AsHTML;
+  TestResult := Temp.OpenHead.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedValue, TestResult);
 end;
 
@@ -362,25 +379,34 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag1, TempTag2: string;
+  TempName: string;
+  TempValue: string;
 begin
   TempTag1 := cObject;
   TempTag2 := cParam;
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AsHTML;
-  ExpectedResult := Format('<html><%s><%s', [TempTag1, TempTag2]);
+  TempName := 'joople';
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"', [TempTag1, TempTag2, TempName]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s>', [TempTag1, TempTag2, TempTag2]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"></%s>', [TempTag1, TempTag2, TempName, TempTag2]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s></%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s"></%s></%s></html>', [TempTag1, TempTag2, TempName, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s><%s>blah</%s></%s></html>', [TempTag1, TempTag2, TempTag2, TempTag1]);
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempTag2, TempTag1]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TempValue := 'mortopper';
+  TestResult := HTMLWriterFactory('html').OpenObject.OpenParam(TempName, TempValue).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s><%s name="%s" value="%s">blah</%s></%s></html>', [TempTag1, TempTag2, TempName, TempValue, TempTag2, TempTag1]);
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestAddParagraphTextWithStyle;
@@ -669,8 +695,13 @@ begin
   ExpectedResult := '<html><a></a>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenAnchor.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := '<html><a></a></html>';
+  TempText := 'farbler';
+  TestResult := HTMLWriterFactory('html').OpenAnchor(TempText).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><a name="%s"></a>', [TempText]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAnchor(TempText).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><a name="%s"></a></html>', [TempText]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenAnchor.AddText('blah').CloseTag.CloseTag.AsHTML;
@@ -927,16 +958,23 @@ procedure TestTHTMLWriter.TestOpenBold;
 var
   TestResult: string;
   ExpectedResult: string;
+  Temp: IHTMLWriter;
 begin
-  TestResult := HTMLWriterFactory('html').OpenBold.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenBold.CloseTag.CloseTag.AsHTML;
+  Temp := HTMLWriterFactory('html').OpenBold;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
   ExpectedResult := '<html><b></b></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -999,46 +1037,41 @@ begin
   TempTag := cFieldSet;
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AsHTML;
-  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s', [TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#1');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s></%s>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s></%s>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#2');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s></%s></form></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s></%s></form></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#3');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s>blah</%s></form></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s>blah</%s></form></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult, '#4');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s', [cFieldSet, cLegend]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s', [cFieldSet, cLegend]);
   CheckEquals(ExpectedResult, TestResult, '#4');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s></%s>', [cFieldSet, cLegend, cLegend]);
   CheckEquals(ExpectedResult, TestResult, '#5');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.OpenLegend.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s></%s></%s>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult, '#6');
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenFieldSet.AddLegend('blah').CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
+  ExpectedResult := Format('<html><form method="get"><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult, '#7');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise an exception adding a <legend> tag outside the <fieldset> tag. ');
-  except
-    on E: ENotInFieldsetTagException do
-    begin
-      Check(True, 'Successfully raised the ENotInFieldsetTagException.  All is well.');
-    end;
-  end;
+
+  CheckException(ENotInFieldsetTagException,
+                 procedure()begin TestResult :=HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML; end,
+                 'Failed to raise an exception adding a <legend> tag outside the <fieldset> tag. ');
 
 end;
 
@@ -1117,26 +1150,31 @@ begin
   TempTag := cInput;
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AsHTML;
-  ExpectedResult := Format('<html><form><%s', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s />', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s />', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.CloseForm.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s /></form></html>', [TempTag]);
+  ExpectedResult := Format('<html><form method="get"><%s /></form></html>', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.CloseTag.CloseForm.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s /></form></html>', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TempName := 'Verdana';
-  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput.AddAttribute('face', TempName).CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><form><%s face="%s" /></form></html>', [TempTag, TempName, TempTag]);
+  TempType := itHidden;
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType, 'farble').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s type="%s" name="farble" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
   CheckEquals(ExpectedResult, TestResult);
 
   for TempType := Low(TInputType) to High(TInputType) do
   begin
     TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseDocument.AsHTML;
-    ExpectedResult := Format('<html><form><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
+    ExpectedResult := Format('<html><form method="get"><%s type="%s" /></form></html>', [TempTag, TInputTypeStrings[TempType]]);
     CheckEquals(ExpectedResult, TestResult);
   end;
 
@@ -1151,11 +1189,11 @@ begin
   TempTag := 'fritle';
 
   ExpectedResult := Format('<%s></%s>', [TempTag, TempTag]);
-  TestResult := THTMLWriter.Create(TempTag).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TempTag).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := HTML(Format('<%s></%s>', [TempTag, TempTag]));
-  TestResult := THTMLWriter.CreateDocument.AddTag(TempTag).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument.AddTag(TempTag).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1223,19 +1261,30 @@ var
   TempName: string;
 begin
   TempName := 'loople';
-  ExpectedResult := Format(HTML('<form><button name="%s"></button></form>'), [TempName]);
+  ExpectedResult := Format(HTML('<form method="get"><button name="%s"></button></form>'), [TempName]);
   TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenButton(TempName).CloseTag().CloseForm.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenButton(TempName).CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
-  except
-    on E: ENotInFormTagHTMLException do
-    begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when trying to add a <button> without a <form>.');
-    end;
-  end;
+end;
+
+procedure TestTHTMLWriter.TestLabel;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempName: string;
+  Temp: IHTMLWriter;
+begin
+  TempName := 'kreetom';
+  ExpectedResult := Format(HTML('<form method="get"><%s></%s></form>'), [cLabel, cLabel]);
+  Temp := HTMLWriterFactory(cHTML);
+
+  Temp := Temp.OpenForm;
+  Temp := Temp.OpenLabel;
+  Temp := Temp.CloseTag;
+  Temp := Temp.CloseForm;
+  Temp := Temp.CloseTag;
+  TestResult := Temp.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
 
 end;
 
@@ -1282,6 +1331,14 @@ begin
 
   TestResult := HTMLWriterFactory(cHTML)['this', 'that'].AddBoldText('grested').CloseTag.AsHTML;
   ExpectedResult := '<html this="that"><b>grested</b></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory(cHTML)['this', 'that']['brethal', 'trooter'].AddBoldText('grested').CloseTag.AsHTML;
+  ExpectedResult := '<html this="that" brethal="trooter"><b>grested</b></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory(cHTML).OpenDiv['this', 'that']['brethal', 'trooter'].AddBoldText('grested').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><div this="that" brethal="trooter"><b>grested</b></div></html>';
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -1608,15 +1665,11 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.AddTitle('hethland').CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML;
-    Check(False, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
-  except
-    on E: EHeadTagRequiredHTMLException do
-    begin
-      Check(True, 'All is well -- the EHeadTagRequiredHTMLException was properly raised. ');
-    end;
-  end;
+
+  CheckException(EHeadTagRequiredHTMLException,
+                 procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML; end,
+                 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
+
 
 end;
 
@@ -1753,27 +1806,48 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-procedure TestTHTMLWriter.TestCloseComment;
+procedure TestTHTMLWriter.TestCaption;
 var
   TestResult: string;
   TempString: string;
   ExpectedResult: string;
 begin
+  TestResult := HTMLWriterFactory(cHTML).OpenTable.AddCaption(TempString).CloseTable.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<table><caption>%s</caption></table>', [TempString]));
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestCloseComment;
+var
+  TempString: string;
+  ExpectedResult: string;
+  TestResult: string;
+begin
   TempString := 'gloppet';
-  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML;
-    Check(False, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
-  except
-    on E: ENotInCommentTagException do
-    begin
-      Check(True, 'Successfully raised the ENotInCommentTagException.  All is well.');
-    end;
-  end;
+  CheckException(ENotInCommentTagException,
+                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
+                 'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
+end;
+
+procedure TestTHTMLWriter.TestCloseComment1;
+var
+  TempString: string;
+  ExpectedResult: string;
+  TestResult: string;
+begin
+  TempString := 'gloppet';
+  TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory(cHTML).OpenComment.CloseComment.CloseTag.AsHTML;
+  ExpectedResult := '<html><!--  --></html>';
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestAddCodeText;
@@ -1920,17 +1994,9 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  { DONE -oNick : Need to test that an exception gets raised if OpenMeta is called outside a <head> tag. }
-
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
-  except
-    on E: EHeadTagRequiredHTMLException do
-    begin
-      Check(True, 'Successfully raised the EMetaOnlyInHeadTagHTMLException.  All is well.');
-    end;
-  end;
+  CheckException(EHeadTagRequiredHTMLException,
+                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML; end,
+                 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
 
 end;
 
@@ -2074,119 +2140,75 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag: string;
+  TempURL: string;
 begin
   TempTag := cForm;
 
   TestResult := HTMLWriterFactory('html').OpenForm.AsHTML;
-  ExpectedResult := Format('<html><%s', [TempTag]);
+  ExpectedResult := Format('<html><%s method="get"', [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get"></%s>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get"></%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
   TestResult := HTMLWriterFactory('html').OpenForm.AddText('blah').CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  ExpectedResult := Format('<html><%s method="get">blah</%s></html>', [TempTag, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
+
+  TempURL := 'http://www.nickhodges.com';
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"', [TempTag, TempURL]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"></%s>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get"></%s></html>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm(TempURL).AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s action="%s" method="get">blah</%s></html>', [TempTag, TempURL, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
 end;
 
 procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
-  try
-    TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML;
-    Check(False, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
-  except
-    on E: EHeadTagRequiredHTMLException do
-    begin
-      Check(True, 'Successfully raised EHeadTagRequiredHTMLException when it was supposed to be raised.');
-    end;
-  end;
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInListTagException when calling OpenList Item outside of a list');
-  except
-    on E: ENotInListTagException do
-    begin
-      Check(True, 'Properly called ENotInListTagException when outside of a list.  All is well.');
-    end;
-  end;
+  CheckException(EParamNameRequiredHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML; end, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
-  except
-    on E: ENotInTableTagException do
-    begin
-      Check(True, 'Properly called ENotInTableTagException when adding a TableRow outside of a table.');
-    end;
-  end;
+  CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenButton('buttonname').CloseTag.CloseTag.AsHTML; end, 'Failed to raise ENotInFormTagHTMLException when trying to add an attribute to a closed tag.');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML;
-    Check(False, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
-  except
-    on E: EClosingDocumentWithOpenTagsHTMLException do
-    begin
-      Check(True, 'Properly called EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
-    end;
-  end;
+  CheckException(EHeadTagRequiredHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddMetaNamedContent('This', 'That').CloseTag.AsHTML; end, 'Failed to raise EHeadTagRequiredHTMLException when adding <meta> tag outside <head> tag');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
-  except
-    on E: ENotInFrameSetHTMLException do
-    begin
-      Check(True, 'Properly called ENotInFrameSetHTMLException when adding a frame outside of a frameset.');
-    end;
-  end;
+  CheckException(ENotInListTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenListItem.CloseTag.AsHTML; end, 'Properly called ENotInListTagException when outside of a list.  All is well.');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
-  except
-    on E: ENotInMapTagHTMLException do
-    begin
-      Check(True, 'Properly called ENotInMapTagHTMLException when adding an area outside of a map tag.');
-    end;
-  end;
+  CheckException(ENotInTableTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML; end, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
-  except
-    on E: ENotInFormTagHTMLException do
-    begin
-      Check(True, 'Properly called ENotInFormTagHTMLException when adding an <input> outside of a <form>.');
-    end;
-  end;
+  CheckException(ENotInTableTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTableData('gremter').CloseTag.AsHTML; end, 'Failed to raise ENotInTableTagException when trying to add a Table Row outside of a table');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenParam.CloseTag.AsHTML;
-    Check(False, 'Failed to raise ENotInObjectTagException when trying to add an <input> outside of a <form>');
-  except
-    on E: ENotInObjectTagException do
-    begin
-      Check(True, 'Properly called ENotInObjectTagException when adding an <input> outside of a <form>.');
-    end;
-  end;
+  CheckException(EClosingDocumentWithOpenTagsHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenBold.AddText('thurd').CloseTag.CloseDocument.CloseTag.AsHTML; end, 'Failed to raise EClosingDocumentWithOpenTagsHTMLException when closing a document with tags open.');
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML;
-    Check(False, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
-  except
-    on E: EHTMLWriterOpenTagRequiredException do
-    begin
-      Check(True, 'Properly called EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag..');
-    end;
-  end;
+  CheckException(ENotInFrameSetHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML; end, 'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
+
+  CheckException(ENotInMapTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML; end, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
+
+  CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML; end, 'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
+
+  CheckException(ENotInObjectTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenParam('herdle').CloseTag.AsHTML; end, 'Failed to raise ENotInObjectTagException when trying to add an <param> outside of a <object>');
+
+  CheckException(EHTMLWriterOpenTagRequiredException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML; end, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
+
+  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.AddCaption('horgtay').CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
 end;
 
@@ -2249,13 +2271,10 @@ begin
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.AddAttribute('type', 'zoob').AddText(Temp).CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  try
-    TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML;
-    Check(False, 'Failed to see that a list item was being added outside a list');
-  except
-    on E: ENotInListTagException do
-      Check(True, 'Successfully raised the ENotInListTagException.  All is well.');
-  end;
+  CheckException(ENotInListTagException,
+                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML; end,
+                 'Failed to see that a list item was being added outside a list');
+
 
 end;
 
@@ -2269,7 +2288,44 @@ begin
   ExpectedResult := Format('<html><ul type="square"><li>%s</li></ul></html>', [Temp]);
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).AddListItem(Temp).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
+end;
 
+procedure TestTHTMLWriter.CheckException(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
+var
+  WasException: Boolean;
+begin
+  WasException := False;
+  try
+    aCode;
+  except
+    on E: Exception do
+    begin
+      if E is aExceptionType then
+      begin
+        WasException := True;
+      end;
+    end;
+  end;
+  Check(WasException, aMessage);
+end;
+
+procedure TestTHTMLWriter.CheckExceptionNotRaised(aExceptionType: TClassOfException; aCode: TTestCode; const aMessage: String);
+var
+  WasException: Boolean;
+begin
+  WasException := False;
+  try
+    aCode;
+  except
+    on E: Exception do
+    begin
+      if E is aExceptionType then
+      begin
+        WasException := True;
+      end;
+    end;
+  end;
+  Check(WasException, aMessage);
 end;
 
 function TestTHTMLWriter.HTML(aString: string): string;
@@ -2277,14 +2333,15 @@ begin
   Result := Format('<html>%s</html>', [aString]);
 end;
 
-function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): THTMLWriter;
+function TestTHTMLWriter.HTMLWriterFactory(aTagName: string): IHTMLWriter;
 begin
-  if FHTMLWriter <> nil then
+  if aTagName = cHTML then
   begin
-    FHTMLWriter.Free;
-    FHTMLWriter := nil;
+    Result := HTMLWriterCreateDocument;
+  end else
+  begin
+    Result := HTMLWriterCreate(aTagName);
   end;
-  Result := THTMLWriter.Create(aTagName);
 end;
 
 procedure TestTHTMLWriter.TestAddBlockQuoteText;
@@ -2428,12 +2485,18 @@ procedure TestTHTMLWriter.TestAddAnchor;
 var
   TestResult: string;
   ExpectedResult: string;
+  TempText: string;
 const
   TempHREF = 'http://www.nickhodges.com';
-  TempText = 'Nick Hodges';
 begin
+  TempText := 'Nick Hodges';
   ExpectedResult := Format(HTML('<a href="%s">%s</a>'), [TempHREF, TempText]);
   TestResult := HTMLWriterFactory(cHTML).AddAnchor(TempHREF, TempText).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempText := 'scaffer';
+  ExpectedResult := Format(HTML('<a name="%s">%s</a>'), [TempText, TempText]);
+  TestResult := HTMLWriterFactory(cHTML).OpenAnchor[cName, TempText].AddText(TempText).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2443,7 +2506,7 @@ var
   TestResult, ExpectedResult: string;
   TempName: string;
   TempContent: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 begin
   TempName := 'Snerdo';
   TempContent := 'derfle';
@@ -2609,7 +2672,7 @@ var
   TestResult, ExpectedResult: string;
   Temp: string;
   TempTarget: TTargetType;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 const
   TempURL = 'http://www.nickhodges.com';
 begin
@@ -3116,34 +3179,17 @@ begin
   TestResult := HTMLWriterFactory(TempTagName).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  // try
-  // TestResult := HTMLWriterFactory(cHTML).OpenHead.CloseTag.CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
-  // Check(False, 'Failed to rais an exception when an extra Closetag was called.');
-  // except
-  // on E: ETryingToCloseClosedTag do
-  // begin
-  // Check(True, 'Successfully raised the ETryingToCloseClosedTag.  All is well.');
-  // end;
-  // end;
-
-  { DONE : Make sure that an extra close tag raises an exception }
-
 end;
 
 procedure TestTHTMLWriter.TestConstructorException;
 var
-  TestValue: string;
+  TestResult: string;
 begin
 
-  try
-    TestValue := HTMLWriterFactory('').CloseTag.AsHTML;
-    Check(False, 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
-  except
-    on E: EEmptyTagHTMLWriterException do
-    begin
-      Check(True, 'All is well -- succsessfully raised the EHTMLWriterEmptyTagException in constructor');
-    end;
-  end;
+  CheckException(EEmptyTagHTMLWriterException,
+                 procedure()begin TestResult := HTMLWriterFactory('').CloseTag.AsHTML; end,
+                 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
+
 end;
 
 procedure TestTHTMLWriter.TestCreateDocument;
@@ -3152,11 +3198,11 @@ var
   ExpectedResult: string;
 begin
   ExpectedResult := '<html></html>';
-  TestResult := THTMLWriter.CreateDocument.CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := THTMLDocTypeStrings[dtHTML401Strict] + '<html></html>';
-  TestResult := THTMLWriter.CreateDocument(dtHTML401Strict).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreateDocument(dtHTML401Strict).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -3166,7 +3212,7 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempStr: string;
-  TempWriter: THTMLWriter;
+  TempWriter: IHTMLWriter;
 begin
   TempStr := 'prittle';
   ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
@@ -3180,10 +3226,32 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestDeprecated;
+//var
+//  Temp: IHTMLWriter;
+begin
+  // <font>
+  CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+
+  // Negative test case for <font>
+//  try
+//    Temp := HTMLWriterFactory(cHTML);
+//    Temp.ErrorLevels := [];
+//    Temp := Temp.OpenFont;
+//    Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+//  except
+//    on E: ETagIsDeprecatedHTMLWriterException do
+//    begin
+//      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+//    end;
+//  end;
+
+end;
+
 procedure TestTHTMLWriter.TestLoadSave;
 var
   InString, OutString: string;
-  Temp: THTMLWriter;
+  Temp: IHTMLWriter;
 const
   cFilename = 'test.html';
 begin
@@ -3206,12 +3274,12 @@ var
   TempStr: string;
 begin
   ExpectedResult := '<b></b>';
-  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TFormatTypeStrings[ftBold]).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
   TempStr := 'mashtes';
   ExpectedResult := Format('<b>%s</b>', [TempStr]);
-  TestResult := THTMLWriter.Create(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
+  TestResult := HTMLWriterCreate(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;

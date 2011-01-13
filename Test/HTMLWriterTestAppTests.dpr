@@ -22,7 +22,9 @@ uses
   TextTestRunner,
   TestuHTMLWriter in 'TestuHTMLWriter.pas',
   uHTMLWriter in '..\uHTMLWriter.pas',
-  HTMLWriterUtils in '..\HTMLWriterUtils.pas';
+  HTMLWriterUtils in '..\HTMLWriterUtils.pas',
+  HTMLWriterIntf in '..\HTMLWriterIntf.pas',
+  LoadSaveIntf in '..\LoadSaveIntf.pas';
 
 {$R *.RES}
 
