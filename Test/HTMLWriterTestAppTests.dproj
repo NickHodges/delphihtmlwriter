@@ -19,8 +19,14 @@
 			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Console' or '$(Cfg_4)'!=''">
+			<Cfg_4>true</Cfg_4>
+			<CfgParent>Cfg_2</CfgParent>
+			<Cfg_2>true</Cfg_2>
+			<Base>true</Base>
+		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
-			<DCC_UnitSearchPath>$(BDS)\Source\DUnit\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_UnitSearchPath>$(BDS)\lib;$(BDS)\Source\DUnit\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
 			<DCC_DependencyCheckOutputName>HTMLWriterTestAppTests.exe</DCC_DependencyCheckOutputName>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
@@ -42,6 +48,9 @@
 		<PropertyGroup Condition="'$(Cfg_2)'!=''">
 			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
 		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_4)'!=''">
+			<DCC_Define>CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
 		<ItemGroup>
 			<DelphiCompile Include="HTMLWriterTestAppTests.dpr">
 				<MainSource>MainSource</MainSource>
@@ -49,8 +58,14 @@
 			<DCCReference Include="TestuHTMLWriter.pas"/>
 			<DCCReference Include="..\uHTMLWriter.pas"/>
 			<DCCReference Include="..\HTMLWriterUtils.pas"/>
+			<DCCReference Include="..\HTMLWriterIntf.pas"/>
+			<DCCReference Include="..\LoadSaveIntf.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Console">
+				<Key>Cfg_4</Key>
+				<CfgParent>Cfg_2</CfgParent>
 			</BuildConfiguration>
 			<BuildConfiguration Include="Debug">
 				<Key>Cfg_2</Key>
@@ -71,6 +86,7 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">&gt; c:\junk\output.txt</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
