@@ -40,8 +40,17 @@ uses
         , LoadSaveIntf
         ;
 
+
+///	<summary>This function creates a reference to an ITHMLWriter interface. It creates a new HTML document by opening an &lt;html&gt; tag.</summary>
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
+///	<summary>This function creates a reference to an ITHMLWriter interface. It adds the given HTML DOCTYPE header and then opens an &lt;html&gt; tag.</summary>
+///	<param name="aDocType">Indicates what type of HTML document type should be created. Determines which HTML header is placed at the beginning of the document.</param>
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
+{$REGION 'Documentation'}
+///	<summary>This function creates a reference to an ITHMLWriter interface. It creates an instance by opening the given tag and leaves the interface ready to add HTML.</summary>
+///	<param name="aTagName">Defines the</param>
+///	<remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
+{$ENDREGION}
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
 implementation
