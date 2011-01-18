@@ -153,6 +153,7 @@ type
     function AddParagraphText(aString: string): IHTMLWriter;
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddParagraphTextWithClass(aString: string; aClass: string): IHTMLWriter;
     function AddSpanText(aString: string): IHTMLWriter;
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
@@ -1685,6 +1686,11 @@ end;
 function THTMLWriter.AddParagraphText(aString: string): IHTMLWriter;
 begin
   Result := AddTag(TBlockTypeStrings[btParagraph], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddParagraphTextWithClass(aString, aClass: string): IHTMLWriter;
+begin
+  Result := OpenParagraph.AddClass(aClass).AddText(aString).CloseTag();
 end;
 
 function THTMLWriter.AddParagraphTextWithID(aString, aID: string): IHTMLWriter;

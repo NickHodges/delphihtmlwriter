@@ -124,6 +124,7 @@ type
 {$ENDREGION}
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddParagraphTextWithClass(aString: string; aClass: string): IHTMLWriter;
 
     /// <summary>Adds text inside of a &lt;span&gt; tag.</summary>
     /// <param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
