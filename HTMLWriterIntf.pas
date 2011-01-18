@@ -134,8 +134,19 @@ type
     /// <summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
     /// <param name="aString">The text to be added inside teh &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Creates a &lt;div&gt; tag with a "style=" attribute.</summary>
+    ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
+    ///	<param name="aStyle">A string representing the CSS style information for the &lt;div&gt; tag.</param>
+    {$ENDREGION}
     function AddDivTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Creates a &lt;div&gt; tag with a "id=" attribute.</summary>
+    ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
+    ///	<param name="aID">As string contaning the id value for teh &lt;div&gt; tag.</param>
+    {$ENDREGION}
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddDivTextWithClass(aString: string; aClass: string): IHTMLWriter;
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: IHTMLWriter;
     /// <summary>Opens up a &lt;i&gt; tag. Once a tag is open, it can be added to as desired.</summary>

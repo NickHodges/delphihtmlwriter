@@ -131,6 +131,7 @@ type
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
     procedure TestAddDivTextWithID;
+    procedure TestAddDivTextWithClass;
     procedure TestAddMetaNamedContent;
 
     procedure TestAsHTML;
@@ -923,6 +924,20 @@ begin
 
   ExpectedResult := HTML('<div>' + TempString + '</div>');
   TestResult := HTMLWriterFactory('html').AddDivText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDivTextWithClass;
+var
+  TempClass: string;
+  TempString: string;
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TempString := 'flooble';
+  TempClass := 'main';
+  ExpectedResult := HTML(Format('<div class="%s">%s</div>', [TempClass, TempString]));
+  TestResult := HTMLWriterFactory(cHTML).AddDivTextWithClass(TempString, TempClass).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
