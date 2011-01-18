@@ -159,6 +159,7 @@ type
     function AddDivText(aString: string): IHTMLWriter;
     function AddDivTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddDivTextWithClass(aString: string; aClass: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'General Formatting Methods'}
     function OpenBold: IHTMLWriter;
@@ -1445,6 +1446,11 @@ end;
 function THTMLWriter.AddDivText(aString: string): IHTMLWriter;
 begin
   Result := AddTag(TBlockTypeStrings[btDiv], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddDivTextWithClass(aString, aClass: string): IHTMLWriter;
+begin
+  Result := OpenDiv.AddClass(aClass).AddText(aString).CloseTag();
 end;
 
 function THTMLWriter.AddDivTextWithID(aString, aID: string): IHTMLWriter;
