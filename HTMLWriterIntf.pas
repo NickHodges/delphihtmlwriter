@@ -130,6 +130,7 @@ type
     function AddSpanText(aString: string): IHTMLWriter;
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddSpanTextWithClass(aString: string; aID: string): IHTMLWriter;
 
     /// <summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
     /// <param name="aString">The text to be added inside teh &lt;div&gt;&lt;/div&gt; tag</param>

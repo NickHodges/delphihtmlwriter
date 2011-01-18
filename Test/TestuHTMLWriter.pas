@@ -130,6 +130,7 @@ type
     procedure TestAddSpanTextWithStyle;
     procedure TestAddDivTextWithStyle;
     procedure TestAddSpanTextWithID;
+    procedure TestAddSpanTextWithClass;
     procedure TestAddDivTextWithID;
     procedure TestAddDivTextWithClass;
     procedure TestAddMetaNamedContent;
@@ -3342,6 +3343,20 @@ begin
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<span style="%s">%s</span>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithStyle(TempString, TempStyle).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddSpanTextWithClass;
+var
+  TempClass: string;
+  TempString: string;
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TempString := 'flooble';
+  TempClass := 'main';
+  ExpectedResult := HTML(Format('<span class="%s">%s</span>', [TempClass, TempString]));
+  TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithClass(TempString, TempClass).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 

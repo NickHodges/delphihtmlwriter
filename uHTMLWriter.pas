@@ -156,6 +156,7 @@ type
     function AddSpanText(aString: string): IHTMLWriter;
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
+    function AddSpanTextWithClass(aString: string; aClass: string): IHTMLWriter;
     function AddDivText(aString: string): IHTMLWriter;
     function AddDivTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
@@ -1486,6 +1487,11 @@ end;
 function THTMLWriter.AddSpanText(aString: string): IHTMLWriter;
 begin
   Result := AddTag(TBlockTypeStrings[btSpan], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddSpanTextWithClass(aString, aClass: string): IHTMLWriter;
+begin
+  Result := OpenSpan.AddClass(aClass).AddText(aString).CloseTag();
 end;
 
 function THTMLWriter.AddSpanTextWithID(aString, aID: string): IHTMLWriter;
