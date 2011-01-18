@@ -154,6 +154,7 @@ type
     procedure TestOpenParagraphWithID;
     procedure TestAddParagraphTextWithStyle;
     procedure TestAddParagraphTextWithID;
+    procedure TestAddParagraphTextWithClass;
     procedure TestOpenSpan;
     procedure TestOpenDiv;
     procedure TestOpenBlockQuote;
@@ -422,6 +423,20 @@ begin
   TempText := 'jimkast';
   ExpectedResult := HTML(Format('<p style="%s">%s</p>', [TempStyle, TempText]));
   TestResult := HTMLWriterFactory('html').AddParagraphTextWithStyle(TempText, TempStyle).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddParagraphTextWithClass;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempClass: string;
+  TempText: string;
+begin
+  TempClass := 'nerster: hormle';
+  TempText := 'jimkast';
+  ExpectedResult := HTML(Format('<p class="%s">%s</p>', [TempClass, TempText]));
+  TestResult := HTMLWriterFactory('html').AddParagraphTextwithClass(TempText, TempClass).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
 
