@@ -88,6 +88,7 @@ type
     ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
     ///	<remarks>Note: This method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
+
     function AddBase(aHREF: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: IHTMLWriter;
