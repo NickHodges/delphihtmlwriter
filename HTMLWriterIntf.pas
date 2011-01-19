@@ -134,7 +134,7 @@ type
     function AddSpanTextWithClass(aString: string; aID: string): IHTMLWriter;
 
     /// <summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside teh &lt;div&gt;&lt;/div&gt; tag</param>
+    /// <param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
     {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "style=" attribute.</summary>
