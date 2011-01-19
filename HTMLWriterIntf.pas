@@ -145,9 +145,14 @@ type
     {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "id=" attribute.</summary>
     ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
-    ///	<param name="aID">As string contaning the id value for teh &lt;div&gt; tag.</param>
+    ///	<param name="aID">As string containing the id value for the &lt;div&gt; tag.</param>
     {$ENDREGION}
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
+    {$REGION 'Documentation'}
+    ///	<summary>Creates a &lt;div&gt; tag with a "class=" attribute.</summary>
+    ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
+    ///	<param name="aID">As string containing the class value for the &lt;div&gt; tag.</param>
+    {$ENDREGION}
     function AddDivTextWithClass(aString: string; aClass: string): IHTMLWriter;
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: IHTMLWriter;
@@ -308,8 +313,27 @@ type
     /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading6Text(aString: string): IHTMLWriter;
 
+
+    {$REGION 'Documentation'}
+    ///	<summary>Addes a style="" attribute to the current HTML.</summary>
+    ///	<param name="aStyle">The string that contains the styling information in CSS format.</param>
+    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
+    ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
+    {$ENDREGION}
     function AddStyle(aStyle: string): IHTMLWriter;
+
+    ///	<summary>Adds a class="" attribute to the current tag.</summary>
+    ///	<param name="aClass">The name of the class to be added in the attribute.</param>
+    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
+    ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
     function AddClass(aClass: string): IHTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>Adds an id="" attribute to the current tag.</summary>
+    ///	<param name="aID">The string containing the ID to be included with the attribute.</param>
+    ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
+    ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
+    {$ENDREGION}
     function AddID(aID: string): IHTMLWriter;
     {$REGION 'Documentation'}
     /// <summary>Adds an attribute to the current tag.   The tag must have its bracket open.  </summary>
