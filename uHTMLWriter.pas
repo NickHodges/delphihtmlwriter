@@ -315,13 +315,6 @@ type
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
     function OpenOptGroup(aLabel: string): IHTMLWriter;
     function OpenOption: IHTMLWriter;
-    { TODO -oNick : Add all supporting tags to <form> }
-    {
-
-      <option>
-      Need to check the HTML book to ensure that this is a complete list
-
-      }
 {$ENDREGION}
 {$REGION 'FieldSet/Legend'}
     function OpenFieldSet: IHTMLWriter;
