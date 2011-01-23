@@ -127,8 +127,6 @@ type
       tsInTableTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
       tsInTableRowTag,
-      /// <summary>Indicates that the current HTML is being written inside of a &lt;form&gt; tag.</summary>
-      tsInFormTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;fieldset&gt; tag.</summary>
       tsInFieldSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
@@ -146,6 +144,10 @@ type
       /// <summary>Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)</summary>
       tbsInTableRowTag);
     TTableStates = set of TTableState;
+
+    TFormState = (fsInFormTag, fsInSelect, fsInOptGroup);
+    TFormStates = set of TFormState;
+
 
     TCanHaveAttributes = (
       /// <summary>Indicates that the given tag can accept attributes.</summary>

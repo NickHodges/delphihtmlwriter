@@ -458,6 +458,9 @@ type
     function OpenButton(aName: string): IHTMLWriter;
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
+    function OpenSelect(aName: string): IHTMLWriter;
+
+
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;
     /// <summary>Opens a &lt;legend&gt; tag.</summary>
