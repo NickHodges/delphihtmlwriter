@@ -53,6 +53,7 @@ resourcestring
   strCantOpenCaptionOutsideTable = 'A <caption> tag can only be added immediately after a <table> tag';
   strParamNameRequired = 'The name of a <param> tag cannot be empty';
   strDeprecatedTag = 'The %s tag is deprecated  in HTML %s.x.';
+  strMustBeInSelectTag = 'A <select> tag must be open in order to use this tag.';
 
 type
   IGetHTML = interface
@@ -99,6 +100,7 @@ type
     EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
     ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException);
     EHTMLErrorHTMLWriterException = class(EHTMLWriterException);
+    ENotInSelectTextHTMLWriterException = class(EHTMLWriterException);
 
   type
 {$REGION 'Documentation'}

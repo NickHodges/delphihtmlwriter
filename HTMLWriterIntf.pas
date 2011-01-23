@@ -465,6 +465,7 @@ type
     ///	<param name="aText">The text to be added inside the &lt;textarea&gt; tag.</param>
     {$ENDREGION}
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
+//    function OpenOptGroup(aLabel: string): IHTMLWriter;
 
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;

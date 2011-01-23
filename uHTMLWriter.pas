@@ -85,6 +85,8 @@ type
     function InFrameSetTag: Boolean;
     function InMapTag: Boolean;
     function InObjectTag: Boolean;
+    function InSelectTag: Boolean;
+    function InOptGroup: Boolean;
 {$ENDREGION}
     procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 {$REGION 'Close and Clean Methods'}
@@ -104,6 +106,7 @@ type
     procedure CheckInTableTag;
     procedure CheckInFramesetTag;
     procedure CheckInMapTag;
+    procedure CheckInSelectTag;
     procedure CheckBracketOpen(aString: string);
     procedure CheckCurrentTagIsHTMLTag;
 {$ENDREGION}
@@ -310,11 +313,11 @@ type
     function OpenLabel(aFor: string): IHTMLWriter; overload;
     function OpenSelect(aName: string): IHTMLWriter;
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
+    function OpenOptGroup(aLabel: string): IHTMLWriter;
     { TODO -oNick : Add all supporting tags to <form> }
     {
       <optgroup>
       <option>
-      <textarea>
       Need to check the HTML book to ensure that this is a complete list
 
       }
@@ -582,6 +585,16 @@ end;
 function THTMLWriter.InObjectTag: Boolean;
 begin
   Result := tsInObjectTag in FTagState;
+end;
+
+function THTMLWriter.InOptGroup: Boolean;
+begin
+  Result := fsInOptGroup in FFormState;
+end;
+
+function THTMLWriter.InSelectTag: Boolean;
+begin
+  Result := fsInSelect in FFormState;
 end;
 
 function THTMLWriter.InSlashOnlyTag: Boolean;
@@ -1078,6 +1091,13 @@ begin
   Result := Temp.AddTag(cObject);
 end;
 
+function THTMLWriter.OpenOptGroup(aLabel: string): IHTMLWriter;
+begin
+  CheckInSelectTag;
+  Include(FFormState, fsInOptGroup);
+  Result := AddTag(cOptGroup)[cLabel, aLabel];
+end;
+
 function THTMLWriter.OpenOrderedList(aNumberType: TNumberType): IHTMLWriter;
 var
   Temp: THTMLWriter;
@@ -1161,6 +1181,17 @@ begin
   begin
     Exclude(FTagState, tsInTableRowTag);
   end;
+
+  if (FCurrentTagName = cSelect) and InSelectTag then
+  begin
+    Exclude(FFormState, fsInSelect);
+  end;
+
+  if (FCurrentTagName = cOptGroup) and InOptGroup then
+  begin
+    Exclude(FFormState, fsInOptGroup);
+  end;
+
 
   FCurrentTagName := '';
 end;
@@ -1634,6 +1665,14 @@ begin
 
 end;
 
+procedure THTMLWriter.CheckInSelectTag;
+begin
+  if (not InSelectTag) and CheckForErrors then
+  begin
+    raise ENotInSelectTextHTMLWriterException.Create(strMustBeInSelectTag);
+  end;
+end;
+
 procedure THTMLWriter.CheckInCommentTag;
 begin
   if (not InCommentTag) and CheckForErrors then
@@ -1781,6 +1820,7 @@ end;
 function THTMLWriter.OpenSelect(aName: string): IHTMLWriter;
 begin
   CheckInFormTag;
+  Include(FFormState, fsInSelect);
   Result :=  AddTag(cSelect)[cName, aName];
 end;
 
