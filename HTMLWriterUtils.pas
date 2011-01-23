@@ -358,6 +358,8 @@ type
     cTextArea = 'textarea';
     cSelect = 'select';
     cFor = 'for';
+    cCols = 'cols';
+    cRows = 'rows';
 
     cOpenBracket = '<';
     cCloseBracket = '>';

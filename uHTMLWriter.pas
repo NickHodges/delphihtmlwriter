@@ -309,10 +309,9 @@ type
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
     function OpenSelect(aName: string): IHTMLWriter;
-
+    function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
     { TODO -oNick : Add all supporting tags to <form> }
     {
-      <select>
       <optgroup>
       <option>
       <textarea>
@@ -931,6 +930,12 @@ function THTMLWriter.OpenTeletype: IHTMLWriter;
 begin
   IsDeprecatedTag(TFormatTypeStrings[ftTeletype], elStrictHTML5);
   Result := OpenFormatTag(ftTeletype);
+end;
+
+function THTMLWriter.OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
+begin
+  CheckInFormTag;
+  Result := AddTag(cTextArea)[cName, aName][cCols, IntToStr(aCols)][cRows, IntToStr(aRows)];
 end;
 
 function THTMLWriter.OpenTitle: IHTMLWriter;
