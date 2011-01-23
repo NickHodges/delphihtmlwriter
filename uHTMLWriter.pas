@@ -87,6 +87,7 @@ type
     function InObjectTag: Boolean;
     function InSelectTag: Boolean;
     function InOptGroup: Boolean;
+    function HasTableContent: Boolean;
 {$ENDREGION}
     procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 {$REGION 'Close and Clean Methods'}
@@ -110,6 +111,7 @@ type
     procedure CheckBracketOpen(aString: string);
     procedure CheckCurrentTagIsHTMLTag;
     procedure CheckNoOtherTableTags;
+    procedure CheckBeforeTableContent;
 {$ENDREGION}
     procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
     function GetAttribute(const Name, Value: string): IHTMLWriter;
@@ -292,6 +294,8 @@ type
     function OpenTableData: IHTMLWriter;
     function AddTableData(aText: string): IHTMLWriter;
     function OpenCaption: IHTMLWriter;
+    function OpenColGroup: IHTMLWriter;
+
 
     {
       Additional Table support required:
@@ -509,6 +513,11 @@ end;
 function THTMLWriter.GetHTML: TStringBuilder;
 begin
   Result := FHTML;
+end;
+
+function THTMLWriter.HasTableContent: Boolean;
+begin
+  Result := (tbsTableHasData in FTableState);
 end;
 
 function THTMLWriter.InBodyTag: Boolean;
@@ -929,7 +938,7 @@ begin
   CheckInTableTag;
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
-  Temp.FTableState := Temp.FTableState + [tbsInTableRowTag];
+  Temp.FTableState := Temp.FTableState + [tbsInTableRowTag, tbsTableHasData];
   Result := Temp.AddTag(cTableRow);
 end;
 
@@ -1242,6 +1251,27 @@ begin
   Result := OpenFormatTag(ftCode);
 end;
 
+function THTMLWriter.OpenColGroup: IHTMLWriter;
+var
+  Temp: THTMLWriter;
+begin
+  if not TableIsOpen then
+  begin
+    raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenCaptionOutsideTable);
+  end;
+
+  CheckBeforeTableContent;
+
+  Include(FTableState, tbsTableHasColGroup);
+
+  Temp := THTMLWriter.Create(Self);
+  Temp.FTableState := Temp.FTableState + [tbsTableHasColGroup];
+  Temp.FParent := Self.FParent;
+
+  Result := AddTag(cColGroup);
+end;
+
+
 function THTMLWriter.AsHTML: string;
 begin
   Result := FHTML.ToString;
@@ -1442,12 +1472,20 @@ begin
 end;
 
 function THTMLWriter.OpenCaption: IHTMLWriter;
+var
+  Temp: THTMLWriter;
 begin
   if not TableIsOpen then
   begin
     raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenCaptionOutsideTable);
   end;
   CheckNoOtherTableTags;
+
+  Temp := THTMLWriter.Create(Self);
+  Temp.FTableState := Temp.FTableState + [tbsTableHasCaption];
+  Temp.FParent := Self.FParent;
+
+
   Result := AddTag(cCaption);
 end;
 
@@ -1614,6 +1652,14 @@ end;
 function THTMLWriter.AddListItem(aText: string): IHTMLWriter;
 begin
   Result := OpenListItem.AddText(aText).CloseTag;
+end;
+
+procedure THTMLWriter.CheckBeforeTableContent;
+begin
+  if CheckForErrors and HasTableContent then
+  begin
+    raise EColGroupMustComeBeforeTableContentHTMLWriter.Create(strColGroupMustComeBeforeTableContent);
+  end;
 end;
 
 procedure THTMLWriter.CheckBracketOpen(aString: string);

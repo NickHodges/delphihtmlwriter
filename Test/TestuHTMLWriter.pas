@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenColGroup;
     procedure TestCaption;
 
     procedure TestOpenOption;
@@ -1911,6 +1912,18 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestOpenColGroup;
+var
+  TestResult: string;
+  TempString: string;
+  ExpectedResult: string;
+begin
+  TempString := 'nestath';
+  TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCaption.OpenColGroup.AddText(TempString).CloseTag.CloseTag.CloseTable.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<table><caption><colgroup>%s</colgroup></caption></table>', [TempString]));
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestOpenComment;
 var
   TestResult: string;
@@ -1929,6 +1942,7 @@ var
   TempString: string;
   ExpectedResult: string;
 begin
+  TempString := 'nestath';
   TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCaption.AddText(TempString).CloseTag.CloseTable.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<table><caption>%s</caption></table>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
@@ -2331,6 +2345,12 @@ begin
   CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
   CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTable.OpenTableRow.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
+  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenColGroup.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <colgroup> tag when <table> is not the current tag.');
+
+  CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise ECaptionMustBeFirstHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
+  CheckException(EColGroupMustComeBeforeTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColGroupMustComeBeforeTableContentHTMLWriter when trying to add a <colgroup> tag when there is alreatdy table content.');
 
 
 end;
