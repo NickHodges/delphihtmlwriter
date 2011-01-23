@@ -35,6 +35,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenSelect;
+
     procedure TestCloseComment;
     procedure TestCloseComment1;
     procedure TestOpenComment;
@@ -498,6 +500,33 @@ begin
 
   TestResult := HTMLWriterFactory('html').OpenScript.AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><script>blah</script></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenSelect;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempName: string;
+begin
+  TempTag := cSelect;
+  TempName := 'grewsack';
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenSelect(TempName).AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s"', [TempTag, TempName]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenSelect(TempName).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s"></%s>', [TempTag, TempName, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenSelect(TempName).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s"></%s></form></html>', [TempTag, TempName, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenSelect(TempName).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s">blah</%s></form></html>', [TempTag, TempName, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 end;
 

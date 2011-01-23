@@ -63,6 +63,7 @@ type
     FCurrentTagName: string;
     FTagState: TTagStates;
     FTableState: TTableStates;
+    FFormState: TFormStates;
     FErrorLevels: THTMLErrorLevels;
     FParent: IHTMLWriter;
     FCanHaveAttributes: TCanHaveAttributes;
@@ -307,6 +308,7 @@ type
     function OpenButton(aName: string): IHTMLWriter;
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
+    function OpenSelect(aName: string): IHTMLWriter;
 
     { TODO -oNick : Add all supporting tags to <form> }
     {
@@ -373,6 +375,7 @@ begin
   HTML.Append(aHTMLWriter.HTML.ToString);
   FCurrentTagName := aHTMLWriter.FCurrentTagName;
   FTagState := aHTMLWriter.FTagState;
+  FFormState := aHTMLWriter.FFormState;
   FTableState := aHTMLWriter.FTableState;
   FErrorLevels := aHTMLWriter.FErrorLevels;
   FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
@@ -539,7 +542,7 @@ end;
 
 function THTMLWriter.InFormTag: Boolean;
 begin
-  Result := tsInFormTag in FTagState;
+  Result := fsInFormTag in FFormState;
 end;
 
 function THTMLWriter.TableIsOpen: Boolean;
@@ -653,7 +656,7 @@ function THTMLWriter.OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fm
 var
   Temp: THTMLWriter;
 begin
-  FTagState := FTagState + [tsInFormTag];
+  Include(FFormState, fsInFormTag);
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Result := Temp.AddTag(cForm);
@@ -1121,7 +1124,7 @@ begin
 
   if (FCurrentTagName = cForm) and InFormTag then
   begin
-    Exclude(FTagState, tsInFormTag);
+    Exclude(FFormState, fsInFormTag);
   end;
 
   if (FCurrentTagName = cUnorderedList) and InListTag then
@@ -1171,6 +1174,7 @@ begin
   Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
   Temp.FParent := Self.FParent;
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
+  Temp.FFormState := Self.FFormState;
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
@@ -1188,6 +1192,7 @@ begin
   Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
   Temp.FParent := Self.FParent;
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
+  Temp.FFormState := Self.FFormState;
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
   TempStr := AsHTML;
@@ -1766,6 +1771,12 @@ end;
 function THTMLWriter.OpenScript: IHTMLWriter;
 begin
   Result := AddTag(cScript);
+end;
+
+function THTMLWriter.OpenSelect(aName: string): IHTMLWriter;
+begin
+  CheckInFormTag;
+  Result :=  AddTag(cSelect)[cName, aName];
 end;
 
 function THTMLWriter.OpenSmall: IHTMLWriter;
