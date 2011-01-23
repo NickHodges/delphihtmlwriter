@@ -125,18 +125,19 @@ type
       tsInListTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;object&gt; tag.</summary>
       tsInObjectTag,
-      /// <summary>Indicates that the current HTML is being written inside of a &lt;table&gt; tag.</summary>
-      tsInTableTag,
-      /// <summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
-      tsInTableRowTag,
+     // /// <summary>Indicates that the current HTML is being written inside of a &lt;table&gt; tag.</summary>
+     // tsInTableTag,
+      // /// <summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
+      //tsInTableRowTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;fieldset&gt; tag.</summary>
       tsInFieldSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
       tsInFrameSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;map&gt; tag.</summary>
-      tsInMapTag,
-      /// <summary>Indicates that a &lt;table&gt; tag is currently open.</summary>
-      tsTableIsOpen);
+      tsInMapTag
+//      /// <summary>Indicates that a &lt;table&gt; tag is currently open.</summary>
+//      tsTableIsOpen
+      );
     TTagStates = set of TTagState;
 
     /// <summary>Enumeration to define possible states of an open &lt;table&gt; tag.</summary>
