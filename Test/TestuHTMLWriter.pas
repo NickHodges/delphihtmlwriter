@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenOption;
     procedure TestOpenOptGroup;
     procedure TestOpenTextArea;
     procedure TestOpenSelect;
@@ -1734,6 +1735,22 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestOpenOption;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempLabel: string;
+  TempName: string;
+begin
+  TempLabel := 'lootwed';
+  TempName := 'sterkhard';
+  ExpectedResult := Format('<html><form method="get"><select name="%s"><optgroup label="%s"><option>blah</option></optgroup></select></form></html>', [TempName, TempLabel]);;
+  TestResult := HTMLWriterFactory(cHTML).OpenForm().OpenSelect(TempName).OpenOptGroup(TempLabel).OpenOption.AddText('blah').CloseTag.CloseTag().CloseTag().CloseTag().CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+
 procedure TestTHTMLWriter.TestOpenTitle;
 var
   TestResult: string;
@@ -2280,6 +2297,8 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
+
+  CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOption.CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
 
   CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOptGroup('hergrad').CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
 

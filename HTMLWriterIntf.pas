@@ -459,13 +459,14 @@ type
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
     function OpenSelect(aName: string): IHTMLWriter;
+    function OpenOption: IHTMLWriter;
     {$REGION 'Documentation'}
     ///	<summary>Creates and opens a &lt;textarea&gt; tag.</summary>
     ///	<param name="aName">A unique identifier given to the tag.</param>
     ///	<param name="aText">The text to be added inside the &lt;textarea&gt; tag.</param>
     {$ENDREGION}
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
-//    function OpenOptGroup(aLabel: string): IHTMLWriter;
+    function OpenOptGroup(aLabel: string): IHTMLWriter;
 
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;

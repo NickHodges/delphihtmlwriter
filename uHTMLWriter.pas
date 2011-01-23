@@ -314,9 +314,10 @@ type
     function OpenSelect(aName: string): IHTMLWriter;
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
     function OpenOptGroup(aLabel: string): IHTMLWriter;
+    function OpenOption: IHTMLWriter;
     { TODO -oNick : Add all supporting tags to <form> }
     {
-      <optgroup>
+
       <option>
       Need to check the HTML book to ensure that this is a complete list
 
@@ -1098,6 +1099,12 @@ begin
   Result := AddTag(cOptGroup)[cLabel, aLabel];
 end;
 
+function THTMLWriter.OpenOption: IHTMLWriter;
+begin
+  CheckInSelectTag;
+  Result := AddTag(cOption);
+end;
+
 function THTMLWriter.OpenOrderedList(aNumberType: TNumberType): IHTMLWriter;
 var
   Temp: THTMLWriter;
@@ -1191,7 +1198,6 @@ begin
   begin
     Exclude(FFormState, fsInOptGroup);
   end;
-
 
   FCurrentTagName := '';
 end;
