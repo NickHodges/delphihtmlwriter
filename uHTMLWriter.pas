@@ -543,7 +543,7 @@ end;
 
 function THTMLWriter.TableIsOpen: Boolean;
 begin
-  Result := tsTableIsOpen in FTagState;
+  Result := tbsInTable in FTableState;
 end;
 
 function THTMLWriter.InFrameSetTag: Boolean;
@@ -598,12 +598,12 @@ end;
 
 function THTMLWriter.InTableRowTag: Boolean;
 begin
-  Result := tsInTableRowTag in FTagState;
+  Result := tbsInTableRowTag in FTableState;
 end;
 
 function THTMLWriter.InTableTag: Boolean;
 begin
-  Result := tsInTableTag in FTagState;
+  Result := tbsInTable in FTableState;
 end;
 
 procedure THTMLWriter.IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
@@ -887,7 +887,7 @@ var
 begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
-  Temp.FTagState := Temp.FTagState + [tsInTableTag, tsTableIsOpen];
+  //Temp.FTagState := Temp.FTagState + [tsInTableTag, tsTableIsOpen];
   Temp.FTableState := Temp.FTableState + [tbsInTable];
 
   Result := Temp.AddTag(cTable);
@@ -929,7 +929,7 @@ begin
   CheckInTableTag;
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
-  Temp.FTagState := Temp.FTagState + [tsInTableRowTag];
+  Temp.FTableState := Temp.FTableState + [tbsInTableRowTag];
   Result := Temp.AddTag(cTableRow);
 end;
 
@@ -1118,7 +1118,6 @@ begin
 
   if TableIsOpen then
   begin
-    Exclude(FTagState, tsTableIsOpen);
     FTableState := [];
   end;
 
@@ -1164,7 +1163,7 @@ begin
 
   if (FCurrentTagName = cTable) and InTableTag then
   begin
-    Exclude(FTagState, tsInTableTag);
+    Exclude(FTableState, tbsInTable);
   end;
 
   if (FCurrentTagName = cHead) and InHeadTag then
@@ -1179,7 +1178,7 @@ begin
 
   if (FCurrentTagName = cTableRow) and InTableRowTag then
   begin
-    Exclude(FTagState, tsInTableRowTag);
+    Exclude(FTableState, tbsInTableRowTag);
   end;
 
   if (FCurrentTagName = cSelect) and InSelectTag then
@@ -1210,6 +1209,7 @@ begin
   Temp.FParent := Self.FParent;
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
   Temp.FFormState := Self.FFormState;
+  Temp.FTableState := Self.FTableState;
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
