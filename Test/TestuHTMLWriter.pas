@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenTextArea;
     procedure TestOpenSelect;
 
     procedure TestCloseComment;
@@ -1689,6 +1690,38 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestOpenTextArea;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempName: string;
+  TempRows: integer;
+  TempCols: integer;
+begin
+  TempTag := cTextArea;
+  TempName := 'prestergrad';
+  TempCols := 42;
+  TempRows := 44;
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenTextArea(TempName, TempCols, TempRows).AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s" cols="%d" rows="%d"', [TempTag, TempName, TempCols, TempRows]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenTextArea(TempName, TempCols, TempRows).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s" cols="%d" rows="%d"></%s>', [TempTag, TempName, TempCols, TempRows, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenTextArea(TempName, TempCols, TempRows).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s" cols="%d" rows="%d"></%s></form></html>', [TempTag, TempName, TempCols, TempRows, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenForm.OpenTextArea(TempName, TempCols, TempRows).AddText('blah').CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><form method="get"><%s name="%s" cols="%d" rows="%d">blah</%s></form></html>', [TempTag, TempName, TempCols, TempRows, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+end;
+
 procedure TestTHTMLWriter.TestOpenTitle;
 var
   TestResult: string;
@@ -2243,6 +2276,23 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
+
+  CheckException(ENotInFormTagHTMLException,
+                 procedure()
+                 begin
+                   TestResult := HTMLWriterFactory(cHTML).OpenSelect('hergrad').CloseTag().CloseTag().AsHTML
+                 end,
+                 'Failed to raise ENotInFormTagHTMLException when calling OpenSelect outside of an open <form> tag. '
+                 );
+
+    CheckException(ENotInFormTagHTMLException,
+                 procedure()
+                 begin
+                   TestResult := HTMLWriterFactory(cHTML).OpenTextArea('hergrad', 32, 55).CloseTag().CloseTag().AsHTML
+                 end,
+                 'Failed to raise ENotInFormTagHTMLException when calling OpenTextArea outside of an open <form> tag. '
+                 );
+
 
   CheckException(EParamNameRequiredHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML; end, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
 
