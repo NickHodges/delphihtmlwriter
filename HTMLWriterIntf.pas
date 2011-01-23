@@ -451,7 +451,9 @@ type
     /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
     {$ENDREGION}
     function AddTableData(aText: string): IHTMLWriter;
-    function AddCaption(aCaption: string): IHTMLWriter;
+    function OpenCaption: IHTMLWriter;
+    function OpenColGroup: IHTMLWriter;
+
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;
