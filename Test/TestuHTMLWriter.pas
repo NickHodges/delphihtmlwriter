@@ -35,6 +35,8 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestCaption;
+
     procedure TestOpenOption;
     procedure TestOpenOptGroup;
     procedure TestOpenTextArea;
@@ -51,7 +53,6 @@ type
     procedure TestThatExceptionsAreRaised;
     procedure TestDeprecated;
 
-    procedure TestCaption;
     procedure TestNewAtttributes;
     procedure TestButton;
     procedure TestInput;
@@ -1928,7 +1929,7 @@ var
   TempString: string;
   ExpectedResult: string;
 begin
-  TestResult := HTMLWriterFactory(cHTML).OpenTable.AddCaption(TempString).CloseTable.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCaption.AddText(TempString).CloseTag.CloseTable.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<table><caption>%s</caption></table>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
 end;
@@ -1943,9 +1944,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenSpan.OpenComment.AddText(TempString).CloseComment.CloseTag.CloseTag.AsHTML;
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
-
-  CheckException(ENotInCommentTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
-
 end;
 
 procedure TestTHTMLWriter.TestCloseComment1;
@@ -2296,6 +2294,8 @@ var
   TestResult: string;
 begin
 
+  CheckException(ENotInCommentTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
+
   CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOption.CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
 
   CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOptGroup('hergrad').CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
@@ -2328,7 +2328,10 @@ begin
 
   CheckException(EHTMLWriterOpenTagRequiredException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML; end, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
 
-  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.AddCaption('horgtay').CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
+  CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTable.OpenTableRow.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
 
 end;
 
