@@ -109,6 +109,7 @@ type
     procedure CheckInSelectTag;
     procedure CheckBracketOpen(aString: string);
     procedure CheckCurrentTagIsHTMLTag;
+    procedure CheckNoOtherTableTags;
 {$ENDREGION}
     procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
     function GetAttribute(const Name, Value: string): IHTMLWriter;
@@ -290,7 +291,7 @@ type
     function OpenTableRow: IHTMLWriter;
     function OpenTableData: IHTMLWriter;
     function AddTableData(aText: string): IHTMLWriter;
-    function AddCaption(aCaption: string): IHTMLWriter;
+    function OpenCaption: IHTMLWriter;
 
     {
       Additional Table support required:
@@ -887,7 +888,6 @@ var
 begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
-  //Temp.FTagState := Temp.FTagState + [tsInTableTag, tsTableIsOpen];
   Temp.FTableState := Temp.FTableState + [tbsInTable];
 
   Result := Temp.AddTag(cTable);
@@ -1441,13 +1441,14 @@ begin
   Result := AddFormattedText(aString, ftBold)
 end;
 
-function THTMLWriter.AddCaption(aCaption: string): IHTMLWriter;
+function THTMLWriter.OpenCaption: IHTMLWriter;
 begin
   if not TableIsOpen then
   begin
     raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenCaptionOutsideTable);
   end;
-  Result := AddTag(cCaption).AddText(aCaption).CloseTag;
+  CheckNoOtherTableTags;
+  Result := AddTag(cCaption);
 end;
 
 function THTMLWriter.AddCenterText(aString: string): IHTMLWriter;
@@ -1628,6 +1629,15 @@ begin
   if (not InTableTag) and CheckForErrors then
   begin
     raise ENotInTableTagException.Create(strMustBeInTable);
+  end;
+end;
+
+procedure THTMLWriter.CheckNoOtherTableTags;
+begin
+  // At this point, FTableState must be exactly [tbsInTable] and nothing else....
+  if CheckForErrors and (not (FTableState = [tbsInTable])) then
+  begin
+    raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
   end;
 end;
 
