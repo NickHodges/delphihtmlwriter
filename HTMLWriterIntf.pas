@@ -89,6 +89,8 @@ type
     ///	<remarks>Note: This method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
 
+    ///	<summary>Creates a &lt;base&gt; tag with an HREF="" attribute.</summary>
+    ///	<param name="aHREF">The HREF to be added to the &lt;base&gt; tag as an attribute.</param>
     function AddBase(aHREF: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: IHTMLWriter;
@@ -134,8 +136,8 @@ type
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
     function AddSpanTextWithClass(aString: string; aID: string): IHTMLWriter;
 
-    /// <summary>Adds the passed in text to a &lt;div&lt;/div&gt; tag.</summary>
-    /// <param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
+    ///	<summary>Adds the passed in text to a &lt;div&gt;&lt;/div&gt; tag.</summary>
+    ///	<param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
     {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "style=" attribute.</summary>
