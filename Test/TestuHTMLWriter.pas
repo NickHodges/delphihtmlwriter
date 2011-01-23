@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenOptGroup;
     procedure TestOpenTextArea;
     procedure TestOpenSelect;
 
@@ -48,7 +49,6 @@ type
     procedure TestLabel;
     procedure TestThatExceptionsAreRaised;
     procedure TestDeprecated;
-
 
     procedure TestCaption;
     procedure TestNewAtttributes;
@@ -1129,10 +1129,7 @@ begin
   ExpectedResult := Format('<html><form method="get"><%s><%s>blah</%s></%s></form></html>', [cFieldSet, cLegend, cLegend, cFieldSet]);
   CheckEquals(ExpectedResult, TestResult, '#7');
 
-
-  CheckException(ENotInFieldsetTagException,
-                 procedure()begin TestResult :=HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML; end,
-                 'Failed to raise an exception adding a <legend> tag outside the <fieldset> tag. ');
+  CheckException(ENotInFieldsetTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenLegend.CloseTag.CloseTag.CloseTag.AsHTML; end, 'Failed to raise an exception adding a <legend> tag outside the <fieldset> tag. ');
 
 end;
 
@@ -1722,6 +1719,21 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenOptGroup;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+  TempLabel: string;
+  TempName: string;
+begin
+  TempLabel := 'lootwed';
+  TempName := 'sterkhard';
+  ExpectedResult := Format('<html><form method="get"><select name="%s"><optgroup label="%s"></optgroup></select></form></html>', [TempName, TempLabel]);;
+  TestResult := HTMLWriterFactory(cHTML).OpenForm().OpenSelect(TempName).OpenOptGroup(TempLabel).CloseTag().CloseTag().CloseTag().CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestOpenTitle;
 var
   TestResult: string;
@@ -1758,11 +1770,7 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.AddTitle('hethland').CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-
-  CheckException(EHeadTagRequiredHTMLException,
-                 procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML; end,
-                 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
-
+  CheckException(EHeadTagRequiredHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).AddTitle('threek').CloseTag.AsHTML; end, 'Failed to raise a EHeadTagRequiredHTMLException when adding a title outside of a <head> tag');
 
 end;
 
@@ -1921,9 +1929,7 @@ begin
   ExpectedResult := HTML(Format('<span><!-- %s --></span>', [TempString]));
   CheckEquals(ExpectedResult, TestResult);
 
-  CheckException(ENotInCommentTagException,
-                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end,
-                 'Failed to raise an exception when closing a comment outside of a comment tag. ');
+  CheckException(ENotInCommentTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
 end;
 
@@ -2087,9 +2093,7 @@ begin
   TestResult := HTMLWriterFactory(cHTML).OpenHead.OpenMeta.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  CheckException(EHeadTagRequiredHTMLException,
-                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML; end,
-                 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
+  CheckException(EHeadTagRequiredHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenMeta.CloseTag.CloseTag.AsHTML; end, 'Failed to raise an exception adding a <meta> tag outside the <head> tag. ');
 
 end;
 
@@ -2277,22 +2281,11 @@ var
   TestResult: string;
 begin
 
-  CheckException(ENotInFormTagHTMLException,
-                 procedure()
-                 begin
-                   TestResult := HTMLWriterFactory(cHTML).OpenSelect('hergrad').CloseTag().CloseTag().AsHTML
-                 end,
-                 'Failed to raise ENotInFormTagHTMLException when calling OpenSelect outside of an open <form> tag. '
-                 );
+  CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOptGroup('hergrad').CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
 
-    CheckException(ENotInFormTagHTMLException,
-                 procedure()
-                 begin
-                   TestResult := HTMLWriterFactory(cHTML).OpenTextArea('hergrad', 32, 55).CloseTag().CloseTag().AsHTML
-                 end,
-                 'Failed to raise ENotInFormTagHTMLException when calling OpenTextArea outside of an open <form> tag. '
-                 );
+  CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenSelect('hergrad').CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInFormTagHTMLException when calling OpenSelect outside of an open <form> tag. ');
 
+  CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTextArea('hergrad', 32, 55).CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInFormTagHTMLException when calling OpenTextArea outside of an open <form> tag. ');
 
   CheckException(EParamNameRequiredHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenObject.OpenParam('').CloseTag.CloseTag.AsHTML; end, 'Failed to raise EParamNameRequiredHTMLWriterException when trying to add a <param> with an empty name');
 
@@ -2381,10 +2374,7 @@ begin
   TestResult := HTMLWriterFactory('html').OpenUnorderedList(bsSquare).OpenListItem.AddAttribute('type', 'zoob').AddText(Temp).CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
-  CheckException(ENotInListTagException,
-                 procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML; end,
-                 'Failed to see that a list item was being added outside a list');
-
+  CheckException(ENotInListTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.OpenDiv.OpenListItem.CloseList.CloseTag.CloseTag.CloseTag.AsHTML; end, 'Failed to see that a list item was being added outside a list');
 
 end;
 
@@ -2448,7 +2438,8 @@ begin
   if aTagName = cHTML then
   begin
     Result := HTMLWriterCreateDocument;
-  end else
+  end
+  else
   begin
     Result := HTMLWriterCreate(aTagName);
   end;
@@ -3296,9 +3287,7 @@ var
   TestResult: string;
 begin
 
-  CheckException(EEmptyTagHTMLWriterException,
-                 procedure()begin TestResult := HTMLWriterFactory('').CloseTag.AsHTML; end,
-                 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
+  CheckException(EEmptyTagHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory('').CloseTag.AsHTML; end, 'Failed to raise EHTMLWriterEmptyTagException when passing an empty tag to constructor');
 
 end;
 
@@ -3337,24 +3326,24 @@ begin
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
-//var
-//  Temp: IHTMLWriter;
+// var
+// Temp: IHTMLWriter;
 begin
   // <font>
   CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
   // Negative test case for <font>
-//  try
-//    Temp := HTMLWriterFactory(cHTML);
-//    Temp.ErrorLevels := [];
-//    Temp := Temp.OpenFont;
-//    Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
-//  except
-//    on E: ETagIsDeprecatedHTMLWriterException do
-//    begin
-//      Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-//    end;
-//  end;
+  // try
+  // Temp := HTMLWriterFactory(cHTML);
+  // Temp.ErrorLevels := [];
+  // Temp := Temp.OpenFont;
+  // Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+  // except
+  // on E: ETagIsDeprecatedHTMLWriterException do
+  // begin
+  // Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+  // end;
+  // end;
 
 end;
 
