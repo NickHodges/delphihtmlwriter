@@ -928,7 +928,7 @@ var
   TempString: string;
   TempTag: string;
 begin
-  TempString := 'grundle';
+  TempString := 'merkleher';
   TempTag := TFormatTypeStrings[ftDefinition];
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
@@ -946,7 +946,7 @@ var
   TempString: string;
   TempTag: string;
 begin
-  TempString := 'grundle';
+  TempString := 'shartip';
   TempTag := TFormatTypeStrings[ftDelete];
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
@@ -963,7 +963,7 @@ var
   TestResult, ExpectedResult: string;
   TempString: string;
 begin
-  TempString := 'grundle';
+  TempString := 'breekton';
 
   ExpectedResult := '<html><div>' + TempString + '</div>';
   TestResult := HTMLWriterFactory('html').AddDivText(TempString).AsHTML;
@@ -995,7 +995,7 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString := 'flooble';
+  TempString := 'fareter';
   TempID := 'main';
   ExpectedResult := HTML(Format('<div id="%s">%s</div>', [TempID, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithID(TempString, TempID).CloseTag.AsHTML;
@@ -1009,7 +1009,7 @@ var
   TestResult: string;
   ExpectedResult: string;
 begin
-  TempString := 'flooble';
+  TempString := 'quented';
   TempStyle := 'border-top:1px solid #c9d7f1;font-size:1px';
   ExpectedResult := HTML(Format('<div style="%s">%s</div>', [TempStyle, TempString]));
   TestResult := HTMLWriterFactory(cHTML).AddDivTextWithStyle(TempString, TempStyle).CloseTag.AsHTML;
@@ -1724,7 +1724,6 @@ procedure TestTHTMLWriter.TestOpenOptGroup;
 var
   TestResult: string;
   ExpectedResult: string;
-  TempTag: string;
   TempLabel: string;
   TempName: string;
 begin
@@ -1739,7 +1738,6 @@ procedure TestTHTMLWriter.TestOpenOption;
 var
   TestResult: string;
   ExpectedResult: string;
-  TempTag: string;
   TempLabel: string;
   TempName: string;
 begin
