@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestOpenTableHeader;
     procedure TestThatExceptionsAreRaised;
 
     procedure TestOpenCol;
@@ -152,6 +153,7 @@ type
     procedure TestOpenTable;
     procedure TestOpenTableRow;
     procedure TestOpenTableData;
+
     procedure TestOpenImage;
     procedure TestAddImage;
     procedure TestOpenMeta;
@@ -1634,6 +1636,16 @@ begin
 
 end;
 
+procedure TestTHTMLWriter.TestOpenTableHeader;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTable.OpenTableRow.OpenTableHeader.AddText('blah').CloseTag.CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><table><tr><th>blah</th></tr></table></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestAddTableData;
 var
   TestResult: string;
@@ -2319,9 +2331,10 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
+  CheckException(ENotInTableTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenTable.OpenTableHeader.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <th> tag when a <table> tag is not open.');
 
   CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
-
+//
   CheckException(EBadTagAfterTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
   CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCol.OpenCaption.CloseTag.CloseTag.CloseTag.AsHTML; end, 'Failed to raise ENoCaptionAfterColElementHTMLWriterException when trying to add a <caption> tag after a <col> tag.');
