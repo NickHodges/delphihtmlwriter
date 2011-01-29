@@ -453,6 +453,7 @@ type
     function AddTableData(aText: string): IHTMLWriter;
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
+    function OpenCol: IHTMLWriter;
 
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
