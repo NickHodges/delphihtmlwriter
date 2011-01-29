@@ -55,7 +55,8 @@ resourcestring
   strParamNameRequired = 'The name of a <param> tag cannot be empty';
   strDeprecatedTag = 'The %s tag is deprecated  in HTML %s.x.';
   strMustBeInSelectTag = 'A <select> tag must be open in order to use this tag.';
-  strColGroupMustComeBeforeTableContent = 'The <colgroup> tag must come before any other table content (exept the <caption> tag)';
+  strCantOpenColOutsideTable = 'The <col> tag must be opened inside of a <table> tag';
+  strBadTagAfterTableContent = 'This tag cannot be added after table content has been added (<tr>, <th>, <tbody>, <tfoot>, etc.)';
 
 type
   IGetHTML = interface
@@ -105,6 +106,9 @@ type
     ENotInSelectTextHTMLWriterException = class(EHTMLWriterException);
     ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException);
     EColGroupMustComeBeforeTableContentHTMLWriter = class(EHTMLWriterException);
+    ENoCaptionAfterColElementHTMLWriterException = class(EHTMLWriterException);
+    EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException);
+
 
   type
 {$REGION 'Documentation'}
@@ -146,6 +150,7 @@ type
       tbsInTableRowTag,
       tbsTableHasCaption,
       tbsTableHasColGroup,
+      tbsTableHasCol,
       tbsTableHasData
                    );
     TTableStates = set of TTableState;
@@ -365,6 +370,7 @@ type
     cCols = 'cols';
     cRows = 'rows';
     cColGroup = 'colgroup';
+    cCol = 'col';
 
     cOpenBracket = '<';
     cCloseBracket = '>';

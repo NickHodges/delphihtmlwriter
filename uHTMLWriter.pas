@@ -1,4 +1,3 @@
-
 unit uHTMLWriter;
 {$REGION 'License'}
 {
@@ -32,24 +31,17 @@ unit uHTMLWriter;
 interface
 
 uses
-          SysUtils
-        , HTMLWriterUtils
-        , Classes
-        , Generics.Collections
-        , HTMLWriterIntf
-        , LoadSaveIntf
-        ;
+  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf, LoadSaveIntf;
 
-
-///	<summary>This function creates a reference to an ITHMLWriter interface. It creates a new HTML document by opening an &lt;html&gt; tag.</summary>
+/// <summary>This function creates a reference to an ITHMLWriter interface. It creates a new HTML document by opening an &lt;html&gt; tag.</summary>
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
-///	<summary>This function creates a reference to an ITHMLWriter interface. It adds the given HTML DOCTYPE header and then opens an &lt;html&gt; tag.</summary>
-///	<param name="aDocType">Indicates what type of HTML document type should be created. Determines which HTML header is placed at the beginning of the document.</param>
+/// <summary>This function creates a reference to an ITHMLWriter interface. It adds the given HTML DOCTYPE header and then opens an &lt;html&gt; tag.</summary>
+/// <param name="aDocType">Indicates what type of HTML document type should be created. Determines which HTML header is placed at the beginning of the document.</param>
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 {$REGION 'Documentation'}
-///	<summary>This function creates a reference to an ITHMLWriter interface. It creates an instance by opening the given tag and leaves the interface ready to add HTML.</summary>
-///	<param name="aTagName">Defines the</param>
-///	<remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
+/// <summary>This function creates a reference to an ITHMLWriter interface. It creates an instance by opening the given tag and leaves the interface ready to add HTML.</summary>
+/// <param name="aTagName">Defines the</param>
+/// <remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
 {$ENDREGION}
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
@@ -81,6 +73,7 @@ type
     function InListTag: Boolean;
     function InTableTag: Boolean;
     function InTableRowTag: Boolean;
+    function TableHasColTag: Boolean;
     function TableIsOpen: Boolean;
     function InFrameSetTag: Boolean;
     function InMapTag: Boolean;
@@ -111,6 +104,7 @@ type
     procedure CheckBracketOpen(aString: string);
     procedure CheckCurrentTagIsHTMLTag;
     procedure CheckNoOtherTableTags;
+    procedure CheckNoColTag;
     procedure CheckBeforeTableContent;
 {$ENDREGION}
     procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
@@ -295,14 +289,13 @@ type
     function AddTableData(aText: string): IHTMLWriter;
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
-
+    function OpenCol: IHTMLWriter;
 
     {
       Additional Table support required:
 
       <th>
       <col>
-      <colgroup>
       <thead>
       <tbody>
       <tfoot>
@@ -327,7 +320,6 @@ type
     function AddLegend(aText: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'IFrame support'}
-
     function OpenIFrame: IHTMLWriter; overload;
 
     function OpenIFrame(aURL: string): IHTMLWriter; overload;
@@ -352,7 +344,6 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-
     function OpenFrameset: IHTMLWriter;
     function OpenFrame: IHTMLWriter;
     function OpenNoFrames: IHTMLWriter;
@@ -367,11 +358,11 @@ type
 
   end;
 
-{ THTMLWriter }
+  { THTMLWriter }
 
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
 begin
-  inherited Create;                    ;
+  inherited Create; ;
   FHTML := TStringBuilder.Create;
   HTML.Append(aHTMLWriter.HTML.ToString);
   FCurrentTagName := aHTMLWriter.FCurrentTagName;
@@ -448,7 +439,8 @@ begin
     Result := Self.FParent;
     Result.HTML.Clear;
     Result.HTML.Append(TempText);
-  end else
+  end
+  else
   begin
     Result := Self;
     Exclude(FTagState, tsTagClosed);
@@ -507,7 +499,7 @@ end;
 
 function THTMLWriter.GetErrorLevels: THTMLErrorLevels;
 begin
- Result := FErrorLevels;
+  Result := FErrorLevels;
 end;
 
 function THTMLWriter.GetHTML: TStringBuilder;
@@ -609,6 +601,11 @@ end;
 function THTMLWriter.InTableRowTag: Boolean;
 begin
   Result := tbsInTableRowTag in FTableState;
+end;
+
+function THTMLWriter.TableHasColTag: Boolean;
+begin
+  Result := tbsTableHasCol in FTableState;
 end;
 
 function THTMLWriter.InTableTag: Boolean;
@@ -1073,9 +1070,12 @@ end;
 procedure THTMLWriter.SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
 begin
   case aCloseTagType of
-    ctNormal:   FClosingTag := TTagMaker.MakeCloseTag(aString);
-    ctEmpty:    FClosingTag := TTagMaker.MakeSlashCloseTag;
-    ctComment:  FClosingTag := TTagMaker.MakeCommentCloseTag;
+    ctNormal:
+      FClosingTag := TTagMaker.MakeCloseTag(aString);
+    ctEmpty:
+      FClosingTag := TTagMaker.MakeSlashCloseTag;
+    ctComment:
+      FClosingTag := TTagMaker.MakeCommentCloseTag;
   end;
 end;
 
@@ -1251,9 +1251,20 @@ begin
   Result := OpenFormatTag(ftCode);
 end;
 
+function THTMLWriter.OpenCol: IHTMLWriter;
+begin
+  if not TableIsOpen then
+  begin
+    raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenColOutsideTable);
+  end;
+  CheckBeforeTableContent;
+
+  Include(FTableState, tbsTableHasCol);
+
+  Result := AddTag(cCol, ctEmpty);
+end;
+
 function THTMLWriter.OpenColGroup: IHTMLWriter;
-var
-  Temp: THTMLWriter;
 begin
   if not TableIsOpen then
   begin
@@ -1264,13 +1275,8 @@ begin
 
   Include(FTableState, tbsTableHasColGroup);
 
-  Temp := THTMLWriter.Create(Self);
-  Temp.FTableState := Temp.FTableState + [tbsTableHasColGroup];
-  Temp.FParent := Self.FParent;
-
   Result := AddTag(cColGroup);
 end;
-
 
 function THTMLWriter.AsHTML: string;
 begin
@@ -1304,8 +1310,10 @@ begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
   case aUseEmptyTag of
-    ietIsEmptyTag:    FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-    ietIsNotEmptyTag: FHTML := FHTML.Append(cCloseBracket);
+    ietIsEmptyTag:
+      FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
+    ietIsNotEmptyTag:
+      FHTML := FHTML.Append(cCloseBracket);
   end;
   Result := Self;
 end;
@@ -1391,7 +1399,7 @@ procedure THTMLWriter.CloseTheTag;
 begin
   if TagIsOpen or InCommentTag then
   begin
-    if StringisEmpty(FClosingTag) then
+    if StringIsEmpty(FClosingTag) then
     begin
       raise ENoClosingTagHTMLWriterException.Create(strNoClosingTag);
     end;
@@ -1472,21 +1480,22 @@ begin
 end;
 
 function THTMLWriter.OpenCaption: IHTMLWriter;
-var
-  Temp: THTMLWriter;
+ var
+ Temp: THTMLWriter;
 begin
   if not TableIsOpen then
   begin
     raise ETableTagNotOpenHTMLWriterException.Create(strCantOpenCaptionOutsideTable);
   end;
+  CheckBeforeTableContent;
   CheckNoOtherTableTags;
+  CheckNoColTag;
 
   Temp := THTMLWriter.Create(Self);
   Temp.FTableState := Temp.FTableState + [tbsTableHasCaption];
   Temp.FParent := Self.FParent;
 
-
-  Result := AddTag(cCaption);
+  Result := Temp.AddTag(cCaption);
 end;
 
 function THTMLWriter.AddCenterText(aString: string): IHTMLWriter;
@@ -1643,8 +1652,10 @@ begin
     FHTML := FHTML.Append(cSpace).AppendFormat('%s="%s"', [cClear, TClearValueStrings[aClearValue]]);
   end;
   case aUseEmptyTag of
-    ietIsEmptyTag:     FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-    ietIsNotEmptyTag:  FHTML := FHTML.Append(cCloseBracket);
+    ietIsEmptyTag:
+      FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
+    ietIsNotEmptyTag:
+      FHTML := FHTML.Append(cCloseBracket);
   end;
   Result := Self;
 end;
@@ -1658,7 +1669,7 @@ procedure THTMLWriter.CheckBeforeTableContent;
 begin
   if CheckForErrors and HasTableContent then
   begin
-    raise EColGroupMustComeBeforeTableContentHTMLWriter.Create(strColGroupMustComeBeforeTableContent);
+    raise EBadTagAfterTableContentHTMLWriter.Create(strBadTagAfterTableContent);
   end;
 end;
 
@@ -1681,11 +1692,22 @@ end;
 procedure THTMLWriter.CheckNoOtherTableTags;
 begin
   // At this point, FTableState must be exactly [tbsInTable] and nothing else....
+  // Note that this means that InTableTag won't work here..
   if CheckForErrors and (not (FTableState = [tbsInTable])) then
   begin
     raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
   end;
 end;
+
+procedure THTMLWriter.CheckNoColTag;
+begin
+  if CheckForErrors and (TableHasColTag) then
+  begin
+    raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
+  end;
+end;
+
+
 
 procedure THTMLWriter.CheckInTableRowTag;
 begin
@@ -1876,7 +1898,7 @@ function THTMLWriter.OpenSelect(aName: string): IHTMLWriter;
 begin
   CheckInFormTag;
   Include(FFormState, fsInSelect);
-  Result :=  AddTag(cSelect)[cName, aName];
+  Result := AddTag(cSelect)[cName, aName];
 end;
 
 function THTMLWriter.OpenSmall: IHTMLWriter;
@@ -1967,7 +1989,7 @@ begin
   Result := THTMLWriter.Create(aTagName, aCloseTagType, aCanAddAttributes);
 end;
 
-function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter ;overload;
+function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 begin
   Result := THTMLWriter.CreateDocument(aDocType);
 end;

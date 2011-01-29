@@ -35,6 +35,9 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestThatExceptionsAreRaised;
+
+    procedure TestOpenCol;
     procedure TestOpenColGroup;
     procedure TestCaption;
 
@@ -51,7 +54,6 @@ type
     procedure TestOpenBold;
 
     procedure TestLabel;
-    procedure TestThatExceptionsAreRaised;
     procedure TestDeprecated;
 
     procedure TestNewAtttributes;
@@ -1912,6 +1914,16 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+procedure TestTHTMLWriter.TestOpenCol;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCaption.OpenCol.CloseTag.CloseTag.CloseTable.CloseTag.AsHTML;
+  ExpectedResult := HTML('<table><caption><col /></caption></table>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
 procedure TestTHTMLWriter.TestOpenColGroup;
 var
   TestResult: string;
@@ -2308,6 +2320,12 @@ var
   TestResult: string;
 begin
 
+  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
+  CheckException(EBadTagAfterTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
+
+  CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenCol.OpenCaption.CloseTag.CloseTag.CloseTag.AsHTML; end, 'Failed to raise ENoCaptionAfterColElementHTMLWriterException when trying to add a <caption> tag after a <col> tag.');
+
   CheckException(ENotInCommentTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBody.CloseComment.CloseTag.AsHTML; end, 'Failed to raise an exception when closing a comment outside of a comment tag. ');
 
   CheckException(ENotInSelectTextHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenOption.CloseTag().CloseTag().AsHTML end, 'Failed to raise ENotInSelectTextHTMLWriterException when calling OpenOptGroup outside of an open <select> tag. ');
@@ -2342,15 +2360,14 @@ begin
 
   CheckException(EHTMLWriterOpenTagRequiredException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML; end, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
 
-  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
-
-  CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTable.OpenTableRow.OpenCaption.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
-
   CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenColGroup.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <colgroup> tag when <table> is not the current tag.');
 
   CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise ECaptionMustBeFirstHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
-  CheckException(EColGroupMustComeBeforeTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColGroupMustComeBeforeTableContentHTMLWriter when trying to add a <colgroup> tag when there is alreatdy table content.');
+  CheckException(EBadTagAfterTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColGroupMustComeBeforeTableContentHTMLWriter when trying to add a <colgroup> tag when there is alreatdy table content.');
+
+  CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenCol.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColMustComeHaveOpenTableHTMLWriter when trying to add a <col> tag when a <table> tag is not open.');
+
 
 
 end;
