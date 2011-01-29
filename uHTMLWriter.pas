@@ -285,17 +285,18 @@ type
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter; overload;
 
     function OpenTableRow: IHTMLWriter;
+    function OpenTableHeader: IHTMLWriter;
     function OpenTableData: IHTMLWriter;
     function AddTableData(aText: string): IHTMLWriter;
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
     function OpenCol: IHTMLWriter;
 
+
     {
       Additional Table support required:
 
       <th>
-      <col>
       <thead>
       <tbody>
       <tfoot>
@@ -926,6 +927,12 @@ function THTMLWriter.OpenTableData: IHTMLWriter;
 begin
   CheckInTableRowTag;
   Result := AddTag(cTableData);
+end;
+
+function THTMLWriter.OpenTableHeader: IHTMLWriter;
+begin
+  CheckInTableRowTag;
+  Result := AddTag(cTableHeader);
 end;
 
 function THTMLWriter.OpenTableRow: IHTMLWriter;

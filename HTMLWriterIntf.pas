@@ -445,6 +445,7 @@ type
     /// <summary>Opens a &lt;td&gt; tag.</summary>
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: IHTMLWriter;
+    function OpenTableHeader: IHTMLWriter;
     {$REGION 'Documentation'}
     /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
     /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
