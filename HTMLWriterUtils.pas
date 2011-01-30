@@ -60,6 +60,7 @@ resourcestring
 
 type
   IGetHTML = interface
+    ['{FB072C2E-B4B4-43BE-9D1A-3BB870883144}']
     function AsHTML: string;
   end;
 
