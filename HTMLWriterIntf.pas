@@ -445,13 +445,20 @@ type
     /// <summary>Opens a &lt;td&gt; tag.</summary>
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: IHTMLWriter;
+    function OpenTableHeader: IHTMLWriter;
+    function OpenTableHead: IHTMLWriter;
+    function OpenTableBody: IHTMLWriter;
+    function OpenTableFoot: IHTMLWriter;
     {$REGION 'Documentation'}
     /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
     /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
     /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
     {$ENDREGION}
     function AddTableData(aText: string): IHTMLWriter;
-    function AddCaption(aCaption: string): IHTMLWriter;
+    function OpenCaption: IHTMLWriter;
+    function OpenColGroup: IHTMLWriter;
+    function OpenCol: IHTMLWriter;
+
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;

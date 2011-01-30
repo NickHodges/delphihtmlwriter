@@ -33,7 +33,8 @@ uses SysUtils, Classes, Generics.Collections;
 
 
 resourcestring
-  StrATagsBracketMust = 'A tag''s bracket must be open to add an attribute.  The Current tag is %s and the attribute being added is %s';
+  strCaptionMustBeFirst = 'A <caption> tag must be the very first tag after a <table> tag.';
+  strATagsBracketMust = 'A tag''s bracket must be open to add an attribute.  The Current tag is %s and the attribute being added is %s';
   strTagNameRequired = 'The aTagName parameter of the THTMLWriter constructor cannot be an empty string.';
   strOpenBracketImpossible = 'It should be impossible that the bracket is open here. Seeing this error means a very bad logic problem.';
   strAMetaTagCanOnly = 'This tag can only be added inside a <head> tag.';
@@ -54,6 +55,8 @@ resourcestring
   strParamNameRequired = 'The name of a <param> tag cannot be empty';
   strDeprecatedTag = 'The %s tag is deprecated  in HTML %s.x.';
   strMustBeInSelectTag = 'A <select> tag must be open in order to use this tag.';
+  strCantOpenColOutsideTable = 'The <col> tag must be opened inside of a <table> tag';
+  strBadTagAfterTableContent = 'This tag cannot be added after table content has been added (<tr>, <th>, <tbody>, <tfoot>, etc.)';
 
 type
   IGetHTML = interface
@@ -101,6 +104,11 @@ type
     ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException);
     EHTMLErrorHTMLWriterException = class(EHTMLWriterException);
     ENotInSelectTextHTMLWriterException = class(EHTMLWriterException);
+    ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException);
+    EColGroupMustComeBeforeTableContentHTMLWriter = class(EHTMLWriterException);
+    ENoCaptionAfterColElementHTMLWriterException = class(EHTMLWriterException);
+    EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException);
+
 
   type
 {$REGION 'Documentation'}
@@ -125,18 +133,13 @@ type
       tsInListTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;object&gt; tag.</summary>
       tsInObjectTag,
-      /// <summary>Indicates that the current HTML is being written inside of a &lt;table&gt; tag.</summary>
-      tsInTableTag,
-      /// <summary>Indicates that the current HTML is being written inside of a &lt;tr&gt; tag.</summary>
-      tsInTableRowTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;fieldset&gt; tag.</summary>
       tsInFieldSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
       tsInFrameSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;map&gt; tag.</summary>
-      tsInMapTag,
-      /// <summary>Indicates that a &lt;table&gt; tag is currently open.</summary>
-      tsTableIsOpen);
+      tsInMapTag
+      );
     TTagStates = set of TTagState;
 
     /// <summary>Enumeration to define possible states of an open &lt;table&gt; tag.</summary>
@@ -144,12 +147,16 @@ type
       /// <summary>Indicates that the current HTML is part of a table. (&lt;table&gt;)</summary>
       tbsInTable,
       /// <summary>Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)</summary>
-      tbsInTableRowTag);
+      tbsInTableRowTag,
+      tbsTableHasCaption,
+      tbsTableHasColGroup,
+      tbsTableHasCol,
+      tbsTableHasData
+                   );
     TTableStates = set of TTableState;
 
     TFormState = (fsInFormTag, fsInSelect, fsInOptGroup);
     TFormStates = set of TFormState;
-
 
     TCanHaveAttributes = (
       /// <summary>Indicates that the given tag can accept attributes.</summary>
@@ -346,6 +353,9 @@ type
     cHeight = 'height';
     cTableRow = 'tr';
     cTableData = 'td';
+    cTableHead = 'thead';
+    cTableBody = 'tbody';
+    cTableFoot = 'tfoot';
     cTableHeader = 'th';
     cTitle = 'title';
     cScript = 'script';
@@ -362,6 +372,8 @@ type
     cFor = 'for';
     cCols = 'cols';
     cRows = 'rows';
+    cColGroup = 'colgroup';
+    cCol = 'col';
 
     cOpenBracket = '<';
     cCloseBracket = '>';
