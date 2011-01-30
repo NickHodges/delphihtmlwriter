@@ -291,12 +291,15 @@ type
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
     function OpenCol: IHTMLWriter;
+    function OpenTableHead: IHTMLWriter;
+    function OpenTableBody: IHTMLWriter;
+    function OpenTableFoot: IHTMLWriter;
+
 
 
     {
       Additional Table support required:
 
-      <th>
       <thead>
       <tbody>
       <tfoot>
@@ -322,7 +325,6 @@ type
 {$ENDREGION}
 {$REGION 'IFrame support'}
     function OpenIFrame: IHTMLWriter; overload;
-
     function OpenIFrame(aURL: string): IHTMLWriter; overload;
     function OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter; overload;
     function AddIFrame(aURL: string; aAlternateText: string): IHTMLWriter; overload;
@@ -923,10 +925,28 @@ begin
   end;
 end;
 
+function THTMLWriter.OpenTableBody: IHTMLWriter;
+begin
+  CheckInTableTag;
+  Result := AddTag(cTableBody);
+end;
+
 function THTMLWriter.OpenTableData: IHTMLWriter;
 begin
-  CheckInTableRowTag;
+  CheckInTableTag;
   Result := AddTag(cTableData);
+end;
+
+function THTMLWriter.OpenTableFoot: IHTMLWriter;
+begin
+  CheckInTableTag;
+  Result := AddTag(cTableFoot);
+end;
+
+function THTMLWriter.OpenTableHead: IHTMLWriter;
+begin
+  CheckInTableTag;
+  Result := AddTag(cTableHead);
 end;
 
 function THTMLWriter.OpenTableHeader: IHTMLWriter;

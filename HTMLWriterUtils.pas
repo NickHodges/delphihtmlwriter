@@ -353,6 +353,9 @@ type
     cHeight = 'height';
     cTableRow = 'tr';
     cTableData = 'td';
+    cTableHead = 'thead';
+    cTableBody = 'tbody';
+    cTableFoot = 'tfoot';
     cTableHeader = 'th';
     cTitle = 'title';
     cScript = 'script';
