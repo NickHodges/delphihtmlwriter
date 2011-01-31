@@ -31,7 +31,13 @@ unit uHTMLWriter;
 interface
 
 uses
-  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf, LoadSaveIntf;
+       SysUtils
+     , HTMLWriterUtils
+     , Classes
+     , Generics.Collections
+     , HTMLWriterIntf
+     , LoadSaveIntf
+     ;
 
 /// <summary>This function creates a reference to an ITHMLWriter interface. It creates a new HTML document by opening an &lt;html&gt; tag.</summary>
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
@@ -40,7 +46,9 @@ function HTMLWriterCreateDocument: IHTMLWriter; overload;
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 {$REGION 'Documentation'}
 /// <summary>This function creates a reference to an ITHMLWriter interface. It creates an instance by opening the given tag and leaves the interface ready to add HTML.</summary>
-/// <param name="aTagName">Defines the</param>
+/// <param name="aTagName">Defines the tag to be used as the initial tag for the HTML string</param>
+/// <param name="aCloseTagType">This optional parameter defines how the starting tag should be closed.</param>
+/// <param name="aCanAddAttributes">This otional parameter defines whether or not the tag should be allowed to take attributes.</param>
 /// <remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
 {$ENDREGION}
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
@@ -294,17 +302,6 @@ type
     function OpenTableHead: IHTMLWriter;
     function OpenTableBody: IHTMLWriter;
     function OpenTableFoot: IHTMLWriter;
-
-
-
-    {
-      Additional Table support required:
-
-      <thead>
-      <tbody>
-      <tfoot>
-
-      }
 {$ENDREGION}
 {$REGION 'Form Methods'}
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
@@ -1507,8 +1504,8 @@ begin
 end;
 
 function THTMLWriter.OpenCaption: IHTMLWriter;
- var
- Temp: THTMLWriter;
+var
+  Temp: THTMLWriter;
 begin
   if not TableIsOpen then
   begin
@@ -1720,7 +1717,7 @@ procedure THTMLWriter.CheckNoOtherTableTags;
 begin
   // At this point, FTableState must be exactly [tbsInTable] and nothing else....
   // Note that this means that InTableTag won't work here..
-  if CheckForErrors and (not (FTableState = [tbsInTable])) then
+  if CheckForErrors and (not(FTableState = [tbsInTable])) then
   begin
     raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
   end;
@@ -1733,8 +1730,6 @@ begin
     raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
   end;
 end;
-
-
 
 procedure THTMLWriter.CheckInTableRowTag;
 begin
