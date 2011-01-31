@@ -548,6 +548,10 @@ type
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
     property HTML: TStringBuilder read GetHTML;
 
+    {TODO -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
+
+
+
 end;
 
 implementation
