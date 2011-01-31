@@ -324,6 +324,7 @@ type
     cNoFrames = 'noframes';
     cMap = 'map';
     cArea = 'area';
+    cAlt = 'alt';
     cBaseFont = 'basefont';
     cLink = 'link';
     cObject = 'object';

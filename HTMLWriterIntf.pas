@@ -531,7 +531,7 @@ type
     /// <summary>Opens a &lt;map /&gt; tag</summary>
     function OpenMap: IHTMLWriter;
     /// <summary>Opens an &lt;area /&gt; tag</summary>
-    function OpenArea: IHTMLWriter;
+    function OpenArea(aAltText: string): IHTMLWriter;
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: IHTMLWriter;
     {$REGION 'Documentation'}

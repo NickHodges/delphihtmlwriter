@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestArea;
     procedure TestOpenTableHeader;
     procedure TestThatExceptionsAreRaised;
 
@@ -73,7 +74,6 @@ type
     procedure TestBaseFont;
     procedure TestStringIsEmpty;
     procedure TestMap;
-    procedure TestArea;
 
     procedure TestFrameset;
     procedure TestFrame;
@@ -1274,24 +1274,26 @@ var
   ExpectedResult: string;
   TempTag: string;
   TempColor: string;
+  TempText: string;
 begin
   TempTag := cArea;
+  TempText := 'fretewsie';
 
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AsHTML;
-  ExpectedResult := Format('<html><map><%s', [TempTag]);
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea(TempText).AsHTML;
+  ExpectedResult := Format('<html><map><%s alt="%s"', [TempTag, TempText]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s />', [TempTag]);
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea(TempText).CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s alt="%s" />', [TempTag, TempText]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.CloseTag.CloseTag.CloseTag.AsHTML;
-  ExpectedResult := Format('<html><map><%s /></map></html>', [TempTag]);
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea(TempText).CloseTag.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><map><%s alt="%s" /></map></html>', [TempTag, TempText]);
   CheckEquals(ExpectedResult, TestResult);
 
   TempColor := 'red';
-  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea.AddAttribute('color', TempColor).CloseTag.CloseTag.CloseDocument.AsHTML;
-  ExpectedResult := Format('<html><map><%s color="%s" /></map></html>', [TempTag, TempColor, TempTag]);
+  TestResult := HTMLWriterFactory('html').OpenMap.OpenArea(TempText).AddAttribute('color', TempColor).CloseTag.CloseTag.CloseDocument.AsHTML;
+  ExpectedResult := Format('<html><map><%s alt="%s" color="%s" /></map></html>', [TempTag, TempText, TempColor, TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2409,7 +2411,7 @@ begin
 
   CheckException(ENotInFrameSetHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenFrame.CloseTag.AsHTML; end, 'Failed to raise ENotInFrameSetHTMLException when trying to add a frame outside of a frameset');
 
-  CheckException(ENotInMapTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenArea.CloseTag.AsHTML; end, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
+  CheckException(ENotInMapTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenArea('hertgrab').CloseTag.AsHTML; end, 'Failed to raise ENotInMapTagHTMLException when trying to add an area outside of a map tag');
 
   CheckException(ENotInFormTagHTMLException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenInput.CloseTag.AsHTML; end, 'Failed to raise ENotInFormTagHTMLException when trying to add an <input> outside of a <form>');
 

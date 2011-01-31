@@ -348,7 +348,7 @@ type
     function OpenFrame: IHTMLWriter;
     function OpenNoFrames: IHTMLWriter;
     function OpenMap: IHTMLWriter;
-    function OpenArea: IHTMLWriter;
+    function OpenArea(aAltText: string): IHTMLWriter;
     function OpenObject: IHTMLWriter;
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
     class function Write: IHTMLWriter;
@@ -1413,10 +1413,10 @@ begin
   Result := OpenAnchor[cName, aName];
 end;
 
-function THTMLWriter.OpenArea: IHTMLWriter;
+function THTMLWriter.OpenArea(aAltText: string): IHTMLWriter;
 begin
   CheckInMapTag;
-  Result := AddTag(cArea, ctEmpty);
+  Result := AddTag(cArea, ctEmpty)[cAlt, aAltText];
 end;
 
 procedure THTMLWriter.CloseTheTag;
