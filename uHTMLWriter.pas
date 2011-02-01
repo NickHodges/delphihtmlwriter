@@ -44,13 +44,11 @@ function HTMLWriterCreateDocument: IHTMLWriter; overload;
 /// <summary>This function creates a reference to an ITHMLWriter interface. It adds the given HTML DOCTYPE header and then opens an &lt;html&gt; tag.</summary>
 /// <param name="aDocType">Indicates what type of HTML document type should be created. Determines which HTML header is placed at the beginning of the document.</param>
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
-{$REGION 'Documentation'}
 /// <summary>This function creates a reference to an ITHMLWriter interface. It creates an instance by opening the given tag and leaves the interface ready to add HTML.</summary>
 /// <param name="aTagName">Defines the tag to be used as the initial tag for the HTML string</param>
 /// <param name="aCloseTagType">This optional parameter defines how the starting tag should be closed.</param>
 /// <param name="aCanAddAttributes">This otional parameter defines whether or not the tag should be allowed to take attributes.</param>
 /// <remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
-{$ENDREGION}
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
 implementation
@@ -122,15 +120,13 @@ type
     function GetHTML: TStringBuilder;
 
   public
-{$REGION 'Constructors'}
-{$REGION 'Documentation'}
+{$REGION 'Constructors/Destructors'}
     /// <summary>Creates an instance of IHTMLWriter by passing in any arbitrary tag. Use this constructur if you want to create a chunk of HTML code not associated with a document.</summary>
     /// <param name="aTagName">The text for the tag you are creating. For instance, if you want to create a &lt;span&gt; tag, you should pass 'span' as the value</param>
     /// <param name="aCloseTagType">Determines the type of the tag being opened upon creation</param>
     /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance, normally the &lt;b&gt; doesn't have attributes. Set this to False if you want to ensure that the tag will not have any attributes.</param>
     /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName parameter</exception>
     /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-{$ENDREGION}
     constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes); overload;
     constructor Create(aHTMLWriter: THTMLWriter); overload;
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
