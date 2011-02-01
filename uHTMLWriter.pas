@@ -113,7 +113,7 @@ type
     procedure CheckNoColTag;
     procedure CheckBeforeTableContent;
 {$ENDREGION}
-    procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
+    procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = cEmptyString);
     function GetAttribute(const Name, Value: string): IHTMLWriter;
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
@@ -141,7 +141,7 @@ type
     function OpenMeta: IHTMLWriter;
     function OpenBase: IHTMLWriter;
     function OpenBaseFont: IHTMLWriter;
-    function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
+    function AddBase(aTarget: TTargetType; aFrameName: string = cEmptyString): IHTMLWriter; overload;
     function AddBase(aHREF: string): IHTMLWriter; overload;
     function OpenTitle: IHTMLWriter;
     function AddTitle(aTitleText: string): IHTMLWriter;
@@ -244,9 +244,9 @@ type
     function AddID(aID: string): IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Miscellaneous Methods'}
-    function AddAttribute(aString: string; aValue: string = ''): IHTMLWriter;
+    function AddAttribute(aString: string; aValue: string = cEmptyString): IHTMLWriter;
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
-    function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
+    function AddHardRule(const aAttributes: string = cEmptyString; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
     function CRLF: IHTMLWriter;
     function Indent(aNumberofSpaces: integer): IHTMLWriter;
     function OpenComment: IHTMLWriter;
@@ -300,9 +300,9 @@ type
     function OpenTableFoot: IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Form Methods'}
-    function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
+    function OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
-    function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;
+    function OpenInput(aType: TInputType; aName: string = cEmptyString): IHTMLWriter; overload;
     function OpenButton(aName: string): IHTMLWriter;
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
@@ -346,7 +346,7 @@ type
     function OpenMap: IHTMLWriter;
     function OpenArea(aAltText: string): IHTMLWriter;
     function OpenObject: IHTMLWriter;
-    function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
+    function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
     class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
@@ -661,7 +661,7 @@ begin
   Result := OpenFormatTag(ftFont);
 end;
 
-function THTMLWriter.OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
+function THTMLWriter.OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
 var
   Temp: THTMLWriter;
 begin
@@ -757,7 +757,7 @@ begin
   Result := AddTag(cImage, ctEmpty).AddAttribute(cSource, aImageSource);
 end;
 
-function THTMLWriter.OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter;
+function THTMLWriter.OpenInput(aType: TInputType; aName: string = cEmptyString): IHTMLWriter;
 begin
   CheckInFormTag;
   Result := OpenInput.AddAttribute(cType, TInputTypeStrings[aType]);
@@ -1056,7 +1056,7 @@ begin
   begin
     Encoding := TEncoding.Default;
   end;
-  SS := TStringStream.Create('', Encoding);
+  SS := TStringStream.Create(cEmptyString, Encoding);
   try
     SS.LoadFromStream(Stream);
     FHTML.Clear;
@@ -1087,7 +1087,7 @@ begin
   FErrorLevels := Value;
 end;
 
-procedure THTMLWriter.SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = '');
+procedure THTMLWriter.SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = cEmptyString);
 begin
   case aCloseTagType of
     ctNormal:
@@ -1220,7 +1220,7 @@ begin
     Exclude(FFormState, fsInOptGroup);
   end;
 
-  FCurrentTagName := '';
+  FCurrentTagName := cEmptyString;
 end;
 
 function THTMLWriter.AddTableData(aText: string): IHTMLWriter;
@@ -1321,7 +1321,7 @@ begin
   Result := OpenTitle.AddText(aTitleText).CloseTag;
 end;
 
-function THTMLWriter.AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
+function THTMLWriter.AddHardRule(const aAttributes: string = cEmptyString; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
 begin
   CloseBracket;
   FHTML := FHTML.Append(cOpenBracket).Append(cHardRule);
@@ -1467,7 +1467,7 @@ begin
   Result := OpenBase.AddAttribute(cHREF, aHREF).CloseTag;
 end;
 
-function THTMLWriter.AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter;
+function THTMLWriter.AddBase(aTarget: TTargetType; aFrameName: string = cEmptyString): IHTMLWriter;
 begin
   if aTarget = ttFrameName then
   begin
@@ -1757,7 +1757,6 @@ begin
   begin
     raise ENotInObjectTagException.Create(strMustBeInObject);
   end;
-
 end;
 
 procedure THTMLWriter.CheckInSelectTag;
@@ -1878,7 +1877,7 @@ begin
   Result := OpenParagraph.AddStyle(aStyle);
 end;
 
-function THTMLWriter.OpenParam(aName: string; aValue: string = ''): IHTMLWriter;
+function THTMLWriter.OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter;
 begin
   CheckInObjectTag;
   if StringIsEmpty(aName) then
@@ -1984,11 +1983,11 @@ begin
   Result := OpenAnchor[cHREF, aHREF].AddText(aText).CloseTag;
 end;
 
-function THTMLWriter.AddAttribute(aString: string; aValue: string = ''): IHTMLWriter;
+function THTMLWriter.AddAttribute(aString: string; aValue: string = cEmptyString): IHTMLWriter;
 begin
   CheckBracketOpen(aString);
   FHTML := FHTML.Append(cSpace).Append(aString);
-  if aValue <> '' then
+  if aValue <> cEmptyString then
   begin
     FHTML := FHTML.Append(Format('="%s"', [aValue]));
   end;
