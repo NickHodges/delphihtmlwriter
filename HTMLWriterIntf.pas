@@ -69,21 +69,17 @@ type
     function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
     /// <summary>Opens a&lt;head&gt; tag to the document.  </summary>
     function OpenHead: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Opens a &lt;meta&gt; tag.</summary>
     /// <exception cref="EHeadTagRequiredHTMLException">Raised if an attempt is made  to call this method
     /// when not inside a &lt;head&gt; tag.</exception>
     /// <remarks>Note that this method can only be called from within &lt;head&gt; tag.   If it is called from
     /// anywhere else, it will raise an exception.</remarks>
-    {$ENDREGION}
     function OpenMeta: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Opens a &lt;base /&gt; tag.</summary>
     /// <exception cref="EHeadTagRequiredHTMLException">Raised if this tag is added outside of the &lt;head&gt;
     /// tag.</exception>
     /// <remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
     /// a &lt;head&gt; tag.</remarks>
-    {$ENDREGION}
     function OpenBase: IHTMLWriter;
     function OpenBaseFont: IHTMLWriter;
     ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
@@ -94,11 +90,9 @@ type
     function AddBase(aHREF: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;title&gt; tag.</summary>
     function OpenTitle: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds a &lt;title&gt; tag including the passed in text.</summary>
     /// <param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
     /// <remarks>There is no need to close this tag manually.   All "AddXXXX" methods close themselves.</remarks>
-    {$ENDREGION}
     function AddTitle(aTitleText: string): IHTMLWriter;
     function AddMetaNamedContent(aName: string; aContent: string): IHTMLWriter;
     /// <summary>Opens a &lt;body&gt; tag.</summary>
@@ -115,16 +109,12 @@ type
     function OpenDiv: IHTMLWriter;
     /// <summary>Opens a &lt;blockquote&gt; tag.</summary>
     function OpenBlockQuote: IHTMLWriter;
-{$REGION 'Documentation'}
     /// <summary>Adds the passed in text to the HTML inside of a &lt;p&gt; tag.</summary>
     /// <param name="aString">The text to be added into the &lt;p&gt; tag.</param>
-{$ENDREGION}
     function AddParagraphText(aString: string): IHTMLWriter;
-{$REGION 'Documentation'}
     /// <summary>Adds the passed in text into a &lt;p&gt; tag and adds in the given Style attribute.</summary>
     /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
     /// <param name="aStyle">The value for the Style attribute  to be added to the &lt;p&gt; tag.</param>
-{$ENDREGION}
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
     function AddParagraphTextWithClass(aString: string; aClass: string): IHTMLWriter;
@@ -137,23 +127,17 @@ type
     ///	<summary>Adds the passed in text to a &lt;div&gt;&lt;/div&gt; tag.</summary>
     ///	<param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "style=" attribute.</summary>
     ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
     ///	<param name="aStyle">A string representing the CSS style information for the &lt;div&gt; tag.</param>
-    {$ENDREGION}
     function AddDivTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "id=" attribute.</summary>
     ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
     ///	<param name="aID">As string containing the id value for the &lt;div&gt; tag.</param>
-    {$ENDREGION}
     function AddDivTextWithID(aString: string; aID: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Creates a &lt;div&gt; tag with a "class=" attribute.</summary>
     ///	<param name="aString">The text to be placed in the &lt;div&gt; tag.</param>
     ///	<param name="aID">As string containing the class value for the &lt;div&gt; tag.</param>
-    {$ENDREGION}
     function AddDivTextWithClass(aString: string; aClass: string): IHTMLWriter;
     /// <summary>Opens up a &lt;b&gt; tag. Once a tag is open, it can be added to as desired.</summary>
     function OpenBold: IHTMLWriter;
@@ -313,26 +297,21 @@ type
     /// <summary>Inserts a &lt;h6&gt;&lt;/h6&gt; tag and places the given text in it.</summary>
     /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading6Text(aString: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Addes a style="" attribute to the current HTML.</summary>
     ///	<param name="aStyle">The string that contains the styling information in CSS format.</param>
     ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
     ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
-    {$ENDREGION}
     function AddStyle(aStyle: string): IHTMLWriter;
     ///	<summary>Adds a class="" attribute to the current tag.</summary>
     ///	<param name="aClass">The name of the class to be added in the attribute.</param>
     ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
     ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
     function AddClass(aClass: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Adds an id="" attribute to the current tag.</summary>
     ///	<param name="aID">The string containing the ID to be included with the attribute.</param>
     ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
     ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
-    {$ENDREGION}
     function AddID(aID: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds an attribute to the current tag.   The tag must have its bracket open.  </summary>
     /// <param name="aString">The name of the attribute to be added.   If this is the only parameter passed in,
     /// then this string should contain the entire attribute string.</param>
@@ -340,21 +319,16 @@ type
     /// <i>name</i>, and this one the <i>value</i>, in a <i>name=value</i> pair.</param>
     /// <exception cref="EHTMLWriterOpenTagRequiredException">Raised when this method is called on a tag that doesn't
     /// have it's bracket open.</exception>
-    {$ENDREGION}
     function AddAttribute(aString: string; aValue: string = ''): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds a &lt;br /&gt; tag</summary>
     /// <param name="aClearValue">An optional parameter that determines if a clear attribute will be added.   The
     /// default value is not to include the clear attribute.</param>
     /// <param name="aUseCloseSlash">An optional parameter that determines if the tag will close with a /&gt;.
     /// The default is to do so.</param>
-    {$ENDREGION}
     function AddLineBreak(const aClearValue: TClearValue = cvNoValue; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds an &lt;hr&gt; tag to the HTML</summary>
     /// <param name="aAttributes">Attributes that should be added to the &lt;hr&gt; tag.</param>
     /// <param name="aUseEmptyTag">Determines if the &lt;hr&gt; tag should be rendered as &lt;hr /&gt;</param>
-    {$ENDREGION}
     function AddHardRule(const aAttributes: string = ''; aUseEmptyTag: TIsEmptyTag = ietIsEmptyTag): IHTMLWriter;
     /// <summary>Adds a Carriage Return and a Line Feed to the HTML.</summary>
     function CRLF: IHTMLWriter;
@@ -363,26 +337,20 @@ type
     function Indent(aNumberofSpaces: integer): IHTMLWriter;
     /// <summary>Opens a &lt;comment&gt; tag</summary>
     function OpenComment: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds any text to the HTML.  </summary>
     /// <param name="aString">The string to be added</param>
     /// <remarks>AddText will close the current tag and then add the text passed in the string parameter</remarks>
-    {$ENDREGION}
     function AddText(aString: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>AddRawText will inject the passed in string directly into the HTML.  </summary>
     /// <param name="aString">The text to be added to the HTML</param>
     /// <remarks>AddRawText  will not make any other changes to open tags or open brackets.   It just injects
     /// the passed text directly onto the HTML.</remarks>
-    {$ENDREGION}
     function AddRawText(aString: string): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Returns a string containing the current HTML for the
     /// HTMLWriter</summary>
     /// <remarks>This property will return the HTML in whatever state it is
     /// in when called.   This may mean that brackets or even tags are
     /// open, attributes hanging undone, etc.  </remarks>
-    {$ENDREGION}
     function AsHTML: string;
     /// <summary>Adds a comment to the HTML stream</summary>
     /// <param name="aCommentText">The text to be added inside the comment</param>
@@ -396,11 +364,9 @@ type
     function OpenNoScript: IHTMLWriter;
     /// <summary>Opens a &lt;link /&gt; tag.</summary>
     function OpenLink: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Closes an open tag.</summary>
     /// <param name="aUseCRLF">Determines if CRLF should be added after the closing of the tag.</param>
     /// <exception cref="ETryingToCloseClosedTag">Raised if you try to close a tag when no tag is open.</exception>
-    {$ENDREGION}
     function CloseTag(aUseCRLF: TUseCRLFOptions = ucoNoCRLF): IHTMLWriter;
     /// <summary>Closes an open comment tag.</summary>
     function CloseComment: IHTMLWriter;
@@ -423,11 +389,9 @@ type
     function OpenAnchor(aName: string): IHTMLWriter; overload;
     function OpenAnchor(const aHREF: string; aText: string): IHTMLWriter; overload;
     function AddAnchor(const aHREF: string; aText: string): IHTMLWriter; overload;
-    {$REGION 'Documentation'}
     /// <summary>Opens a &lt;table&gt; tag</summary>
     /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
     /// open.</remarks>
-    {$ENDREGION}
     function OpenTable: IHTMLWriter; overload;
     /// <summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
     function OpenTable(aBorder: integer): IHTMLWriter; overload;
@@ -443,11 +407,9 @@ type
     function OpenTableHead: IHTMLWriter;
     function OpenTableBody: IHTMLWriter;
     function OpenTableFoot: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
     /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
     /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
-    {$ENDREGION}
     function AddTableData(aText: string): IHTMLWriter;
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
@@ -460,11 +422,9 @@ type
     function OpenLabel(aFor: string): IHTMLWriter; overload;
     function OpenSelect(aName: string): IHTMLWriter;
     function OpenOption: IHTMLWriter;
-    {$REGION 'Documentation'}
     ///	<summary>Creates and opens a &lt;textarea&gt; tag.</summary>
     ///	<param name="aName">A unique identifier given to the tag.</param>
     ///	<param name="aText">The text to be added inside the &lt;textarea&gt; tag.</param>
-    {$ENDREGION}
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
     function OpenOptGroup(aLabel: string): IHTMLWriter;
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
@@ -487,11 +447,9 @@ type
     /// <param name="aBulletShape">An optional parameter indicating the bullet type that the list should use.</param>
     /// <seealso cref="TBulletShape">TBulletShape</seealso>
     function OpenUnorderedList(aBulletShape: TBulletShape = bsNone): IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Opens an ordered list tag (&lt;ol&gt;)</summary>
     /// <param name="aNumberType">An optional parameter indicating the numbering type that the list should use.</param>
     /// <seealso cref="TNumberType">TNumberType</seealso>
-    {$ENDREGION}
     function OpenOrderedList(aNumberType: TNumberType = ntNone): IHTMLWriter;
     /// <summary>Opens a list item (&lt;li&gt;) inside of a list.</summary>
     function OpenListItem: IHTMLWriter;
@@ -501,12 +459,10 @@ type
     ///	<summary>Opens a &lt;frameset&gt; tag.</summary>
     ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
     function OpenFrameset: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Opens a &lt;frame&gt; tag.</summary>
     /// <exception cref="ENotInFrameSetHTMLException">Raised if this is called outside of a &lt;frameset&gt;
     /// tag.</exception>
     ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
-    {$ENDREGION}
     function OpenFrame: IHTMLWriter;
     /// <summary>Opens a &lt;noframes&gt; tag.</summary>
     ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
@@ -517,14 +473,12 @@ type
     function OpenArea(aAltText: string): IHTMLWriter;
     /// <summary>Opens an &lt;object&gt; tag</summary>
     function OpenObject: IHTMLWriter;
-    {$REGION 'Documentation'}
     /// <summary>Opens a &lt;param&gt; tag</summary>
     /// <param name="aName">The name for the parameter</param>
     /// <param name="aValue">The value to be assigned to the paramter</param>
     /// <remarks>This tag can only be used inside of an &lt;object&gt; tag.</remarks>
     /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
     /// tag</exception>
-    {$ENDREGION}
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
