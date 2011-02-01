@@ -34,6 +34,7 @@ uses
       HTMLWriterUtils
     , Classes
     , SysUtils
+    , LoadSaveIntf
     ;
 
 type
@@ -59,7 +60,7 @@ type
   /// <item>The same is true for list items inside lists.</item>
   /// </list>
   /// </remarks>
-  IHTMLWriter = interface
+  IHTMLWriter = interface(ILoadSave)
   ['{7D6CC975-3FAB-453C-8BAB-45D6E55DE376}']
     function GetAttribute(const Name, Value: string): IHTMLWriter;
     function GetErrorLevels: THTMLErrorLevels;
@@ -507,14 +508,6 @@ type
     /// <summary>Adds a List item (&lt;li&gt;) with the given text</summary>
     /// <param name="aText">The text to be added to the list item.</param>
     function AddListItem(aText: string): IHTMLWriter;
-    procedure LoadFromFile(const FileName: string); overload;
-    procedure LoadFromFile(const FileName: string; Encoding: TEncoding); overload;
-    procedure LoadFromStream(Stream: TStream); overload;
-    procedure LoadFromStream(Stream: TStream; Encoding: TEncoding); overload;
-    procedure SaveToFile(const FileName: string); overload;
-    procedure SaveToFile(const FileName: string; Encoding: TEncoding); overload;
-    procedure SaveToStream(Stream: TStream); overload;
-    procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload;
     ///	<summary>Opens a &lt;frameset&gt; tag.</summary>
     ///	<remarks>This tag is not part of the HTML5 specification.</remarks>
     function OpenFrameset: IHTMLWriter;
