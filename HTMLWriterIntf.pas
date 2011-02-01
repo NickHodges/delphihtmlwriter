@@ -38,8 +38,8 @@ uses
     ;
 
 type
-  /// <summary>An interface for creating HTML.   IHTMLWriter uses the fluent interface. It can be used to create either
-  /// complete HTML documents or chunks of HTML. By using the fluent interface, you can link together number of methods
+  /// <summary>An interface for creating HTML.  IHTMLWriter uses the fluent interface. It can be used to create either
+  /// complete HTML documents or chunks of HTML.  By using the fluent interface, you can link together number of methods
   /// to create a complete document.</summary>
   /// <remarks>
   /// <para>Most methods begin with either "Open" or "Add". Methods that start with "Open" will
@@ -89,7 +89,6 @@ type
     ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
     ///	<remarks>Note: This method can only be called inside an open &lt;head&gt; tag.</remarks>
     function AddBase(aTarget: TTargetType; aFrameName: string = ''): IHTMLWriter; overload;
-
     ///	<summary>Creates a &lt;base&gt; tag with an HREF="" attribute.</summary>
     ///	<param name="aHREF">The HREF to be added to the &lt;base&gt; tag as an attribute.</param>
     function AddBase(aHREF: string): IHTMLWriter; overload;
@@ -129,14 +128,12 @@ type
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
     function AddParagraphTextWithClass(aString: string; aClass: string): IHTMLWriter;
-
     /// <summary>Adds text inside of a &lt;span&gt; tag.</summary>
     /// <param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
     function AddSpanText(aString: string): IHTMLWriter;
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
     function AddSpanTextWithClass(aString: string; aID: string): IHTMLWriter;
-
     ///	<summary>Adds the passed in text to a &lt;div&gt;&lt;/div&gt; tag.</summary>
     ///	<param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
     function AddDivText(aString: string): IHTMLWriter;
@@ -316,8 +313,6 @@ type
     /// <summary>Inserts a &lt;h6&gt;&lt;/h6&gt; tag and places the given text in it.</summary>
     /// <param name="aString">The text to be placed inside the heading tag.</param>
     function AddHeading6Text(aString: string): IHTMLWriter;
-
-
     {$REGION 'Documentation'}
     ///	<summary>Addes a style="" attribute to the current HTML.</summary>
     ///	<param name="aStyle">The string that contains the styling information in CSS format.</param>
@@ -325,13 +320,11 @@ type
     ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
     {$ENDREGION}
     function AddStyle(aStyle: string): IHTMLWriter;
-
     ///	<summary>Adds a class="" attribute to the current tag.</summary>
     ///	<param name="aClass">The name of the class to be added in the attribute.</param>
     ///	<exception cref="EHTMLWriterOpenTagRequiredException">Raised if this method is called while a tag is not open.</exception>
     ///	<remarks>This method can only be called when a tag is open and ready to take attributes.</remarks>
     function AddClass(aClass: string): IHTMLWriter;
-
     {$REGION 'Documentation'}
     ///	<summary>Adds an id="" attribute to the current tag.</summary>
     ///	<param name="aID">The string containing the ID to be included with the attribute.</param>
@@ -459,7 +452,6 @@ type
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
     function OpenCol: IHTMLWriter;
-
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;
@@ -475,7 +467,6 @@ type
     {$ENDREGION}
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
     function OpenOptGroup(aLabel: string): IHTMLWriter;
-
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;
     /// <summary>Opens a &lt;legend&gt; tag.</summary>
@@ -501,7 +492,6 @@ type
     /// <param name="aNumberType">An optional parameter indicating the numbering type that the list should use.</param>
     /// <seealso cref="TNumberType">TNumberType</seealso>
     {$ENDREGION}
-
     function OpenOrderedList(aNumberType: TNumberType = ntNone): IHTMLWriter;
     /// <summary>Opens a list item (&lt;li&gt;) inside of a list.</summary>
     function OpenListItem: IHTMLWriter;
@@ -542,8 +532,6 @@ type
     property HTML: TStringBuilder read GetHTML;
 
     {TODO -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
-
-
 
 end;
 
