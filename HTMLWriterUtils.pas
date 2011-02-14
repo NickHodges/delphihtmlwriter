@@ -57,6 +57,9 @@ resourcestring
   strMustBeInSelectTag = 'A <select> tag must be open in order to use this tag.';
   strCantOpenColOutsideTable = 'The <col> tag must be opened inside of a <table> tag';
   strBadTagAfterTableContent = 'This tag cannot be added after table content has been added (<tr>, <th>, <tbody>, <tfoot>, etc.)';
+  strMustBeInDefinitionList = 'This tag can only be included in a Definition List <dl> tag.';
+  strCannotNestDefLists = 'You cannot nest a definition list inside another definition list';
+  strCannotAddDefItemWithoutDefTerm = 'You cannot add a <dd> tag except right after a <dl> tag or another <dd> tag';
 
 type
   IGetHTML = interface
@@ -87,6 +90,7 @@ type
   { TODO -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
     EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
+    {TODO -oNick -cGeneral : Rename the exception below}
     EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
     EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
     ETryingToCloseClosedTag = class(EHTMLWriterException); // Tested
@@ -109,6 +113,9 @@ type
     EColGroupMustComeBeforeTableContentHTMLWriter = class(EHTMLWriterException);
     ENoCaptionAfterColElementHTMLWriterException = class(EHTMLWriterException);
     EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException);
+    ENotInDefinitionListHTMLError = class(EHTMLWriterException);
+    ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException);
+    ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException);
 
 
   type
@@ -120,11 +127,11 @@ type
     TTagState = (
       /// <summary>Indicates that the current state of the tag is that the left bracket has been added but the right has not been. (e.g. "&lt;span " The tag is able to accept attributes at this point.</summary>
       tsBracketOpen,
-      /// <summary>Indicates that the tag is open and the bracket has been added. (e.g. "&lt;span&gt;"</summary>
+      /// <summary>Indicates that the tag is open and the bracket has been added. (e.g. "&lt;span&gt;)"</summary>
       tsTagOpen,
       /// <summary>Indicates that the current HTML is part of a comment.</summary>
       tsCommentOpen,
-      /// <summary>Indicates that the tag is currently closed (e.g. "&lt;span&gt;&lt;/span&gt;"</summary>
+      /// <summary>Indicates that the tag is currently closed (e.g. "&lt;span&gt;&lt;/span&gt;)"</summary>
       tsTagClosed,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;head&gt; tag.</summary>
       tsInHeadTag,
@@ -139,7 +146,12 @@ type
       /// <summary>Indicates that the current HTML is being written inside of a &lt;frameset&gt; tag.</summary>
       tsInFrameSetTag,
       /// <summary>Indicates that the current HTML is being written inside of a &lt;map&gt; tag.</summary>
-      tsInMapTag
+      tsInMapTag,
+      tsInDefinitionList,
+      tsHasDefinitionTerm,
+      tsDefTermIsCurrent,
+      tsDefItemIsCurrent
+
       );
     TTagStates = set of TTagState;
 
@@ -376,6 +388,10 @@ type
     cRows = 'rows';
     cColGroup = 'colgroup';
     cCol = 'col';
+
+    cDD = 'dd';
+    cDT = 'dt';
+    cDL = 'dl';
 
     cOpenBracket = '<';
     cCloseBracket = '>';

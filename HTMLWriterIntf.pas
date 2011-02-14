@@ -480,13 +480,18 @@ type
     /// <exception cref="ENotInObjectTagException">Raised if this method is called outside of an &lt;object&gt;
     /// tag</exception>
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
+
+
+
+    {TODO -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
+    function OpenDefinitionList: IHTMLWriter;
+    function OpenDefinitionTerm: IHTMLWriter;
+    function OpenDefinitionItem: IHTMLWriter;
+
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
     property HTML: TStringBuilder read GetHTML;
-
-    {TODO -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
-
 end;
 
 implementation
