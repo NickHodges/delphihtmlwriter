@@ -87,6 +87,7 @@ type
     function InSelectTag: Boolean;
     function InOptGroup: Boolean;
     function HasTableContent: Boolean;
+    function InDefList: Boolean;
 {$ENDREGION}
     procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
 {$REGION 'Close and Clean Methods'}
@@ -112,6 +113,10 @@ type
     procedure CheckNoOtherTableTags;
     procedure CheckNoColTag;
     procedure CheckBeforeTableContent;
+    procedure CheckInDefList;
+    procedure CheckIfNestedDefList;
+    procedure CheckDefTermIsCurrent;
+    procedure CheckDefItemIsCurrent;
 {$ENDREGION}
     procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = cEmptyString);
     function GetAttribute(const Name, Value: string): IHTMLWriter;
@@ -347,6 +352,11 @@ type
     function OpenArea(aAltText: string): IHTMLWriter;
     function OpenObject: IHTMLWriter;
     function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
+
+    function OpenDefinitionList: IHTMLWriter;
+    function OpenDefinitionTerm: IHTMLWriter;
+    function OpenDefinitionItem: IHTMLWriter;
+
     class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
@@ -516,6 +526,11 @@ end;
 function THTMLWriter.InCommentTag: Boolean;
 begin
   Result := tsCommentOpen in FTagState;
+end;
+
+function THTMLWriter.InDefList: Boolean;
+begin
+  Result := tsInDefinitionList in FTagState;
 end;
 
 function THTMLWriter.Indent(aNumberofSpaces: integer): IHTMLWriter;
@@ -1220,6 +1235,14 @@ begin
     Exclude(FFormState, fsInOptGroup);
   end;
 
+  if (FCurrentTagName = cDL) and InDefList then
+  begin
+    Exclude(FTagState, tsInDefinitionList);
+    Exclude(FTagState, tsHasDefinitionTerm);
+    Exclude(FTagState, tsDefTermIsCurrent);
+    Exclude(FTagState, tsDefItemIsCurrent);
+  end;
+
   FCurrentTagName := cEmptyString;
 end;
 
@@ -1767,11 +1790,27 @@ begin
   end;
 end;
 
+procedure THTMLWriter.CheckIfNestedDefList;
+begin
+  if InDefList and CheckForErrors then
+  begin
+    raise ECannotNestDefinitionListsHTMLWriterException.Create(strCannotNestDefLists);
+  end;
+end;
+
 procedure THTMLWriter.CheckInCommentTag;
 begin
   if (not InCommentTag) and CheckForErrors then
   begin
     raise ENotInCommentTagException.Create(strMustBeInComment);
+  end;
+end;
+
+procedure THTMLWriter.CheckInDefList;
+begin
+  if (not InDefList) and CheckForErrors then
+  begin
+    raise ENotInDefinitionListHTMLError.Create(strMustBeInDefinitionList);
   end;
 end;
 
@@ -1788,6 +1827,22 @@ begin
   if (FCurrentTagName <> cHTML) and CheckForErrors then
   begin
     raise EClosingDocumentWithOpenTagsHTMLException.Create(strOtherTagsOpen);
+  end;
+end;
+
+procedure THTMLWriter.CheckDefItemIsCurrent;
+begin
+  if CheckForErrors and (not (tsDefItemIsCurrent in FTagState)) then
+  begin
+    raise ECannotAddDefItemWithoutDefTermHTMLWriterException.Create(strCannotAddDefItemWithoutDefTerm);
+  end;
+end;
+
+procedure THTMLWriter.CheckDefTermIsCurrent;
+begin
+  if CheckForErrors and (not (tsDefTermIsCurrent in FTagState)) then
+  begin
+    raise ECannotAddDefItemWithoutDefTermHTMLWriterException.Create(strCannotAddDefItemWithoutDefTerm);
   end;
 end;
 
@@ -1936,6 +1991,40 @@ end;
 function THTMLWriter.OpenDefinition: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftDefinition);
+end;
+
+function THTMLWriter.OpenDefinitionList: IHTMLWriter;
+begin
+  CheckIfNestedDefList;
+  Include(FTagState, tsInDefinitionList);
+  Result := AddTag(cDL);
+end;
+
+function THTMLWriter.OpenDefinitionTerm: IHTMLWriter;
+var
+  Temp: THTMLWriter;
+begin
+  CheckInDefList;
+  Temp := THTMLWriter.Create(Self);
+  Temp.FParent := Self.FParent;
+  Include(Temp.FTagState, tsDefTermIsCurrent);
+
+  Result := Temp.AddTag(cDT);
+end;
+
+function THTMLWriter.OpenDefinitionItem: IHTMLWriter;
+begin
+  try
+    CheckDefTermIsCurrent;
+  except
+    on E: ECannotAddDefItemWithoutDefTermHTMLWriterException do
+    begin
+      CheckDefItemIsCurrent;
+    end;
+  end;
+  Exclude(FTagState, tsDefTermIsCurrent);
+  Include(FTagState, tsDefItemIsCurrent);
+  Result := AddTag(cDD);
 end;
 
 function THTMLWriter.OpenDelete: IHTMLWriter;
