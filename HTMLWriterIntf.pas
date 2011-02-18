@@ -483,7 +483,7 @@ type
 
 
 
-    {TODO -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
+    {DONE -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
     function OpenDefinitionList: IHTMLWriter;
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;

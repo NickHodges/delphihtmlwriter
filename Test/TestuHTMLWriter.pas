@@ -2429,7 +2429,7 @@ CheckException(ECannotAddDefItemWithoutDefTermHTMLWriterException, procedure()be
 
   CheckException(ECaptionMustBeFirstHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise ECaptionMustBeFirstHTMLWriterException when trying to add a <caption> tag when <table> is not the current tag.');
 
-  CheckException(EBadTagAfterTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColGroupMustComeBeforeTableContentHTMLWriter when trying to add a <colgroup> tag when there is alreatdy table content.');
+  CheckException(EBadTagAfterTableContentHTMLWriter, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenTable.OpenTableRow.OpenColGroup.OpenCaption.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EBadTagAfterTableContentHTMLWriter when trying to add a <colgroup> tag when there is alreatdy table content.');
 
   CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenCol.CloseTag.CloseTag.AsHTML; end, 'Failed to raise EColMustComeHaveOpenTableHTMLWriter when trying to add a <col> tag when a <table> tag is not open.');
 
