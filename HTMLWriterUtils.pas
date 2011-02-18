@@ -91,7 +91,7 @@ type
   EHTMLWriterException = class(Exception);
     EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
     {TODO -oNick -cGeneral : Rename the exception below}
-    EHTMLWriterOpenTagRequiredException = class(EHTMLWriterException);
+    EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException);
     EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
     ETryingToCloseClosedTag = class(EHTMLWriterException); // Tested
     ENotInListTagException = class(EHTMLWriterException); // Tested
