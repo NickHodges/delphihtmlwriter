@@ -90,8 +90,8 @@ type
   { TODO -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
     EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
-    {TODO -oNick -cGeneral : Rename the exception below}
-    EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException);
+    {DONE -oNick -cGeneral : Rename the exception below}
+    EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException); //Tested
     EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
     ETryingToCloseClosedTag = class(EHTMLWriterException); // Tested
     ENotInListTagException = class(EHTMLWriterException); // Tested
@@ -106,16 +106,13 @@ type
     EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException); // Tested.
     ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException); // Tested
     EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
-    ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException);
-    EHTMLErrorHTMLWriterException = class(EHTMLWriterException);
-    ENotInSelectTextHTMLWriterException = class(EHTMLWriterException);
-    ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException);
-    EColGroupMustComeBeforeTableContentHTMLWriter = class(EHTMLWriterException);
-    ENoCaptionAfterColElementHTMLWriterException = class(EHTMLWriterException);
-    EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException);
-    ENotInDefinitionListHTMLError = class(EHTMLWriterException);
-    ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException);
-    ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException);
+    ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException); // Tested
+    ENotInSelectTextHTMLWriterException = class(EHTMLWriterException); // Tested
+    ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException); // Tested
+    EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException); // Tested
+    ENotInDefinitionListHTMLError = class(EHTMLWriterException); // Tested
+    ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException); // Tested
+    ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException); //Tested
 
 
   type
