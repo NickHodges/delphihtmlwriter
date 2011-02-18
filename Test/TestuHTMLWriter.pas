@@ -2423,7 +2423,7 @@ CheckException(ECannotAddDefItemWithoutDefTermHTMLWriterException, procedure()be
 
   CheckException(ENotInObjectTagException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenParam('herdle').CloseTag.AsHTML; end, 'Failed to raise ENotInObjectTagException when trying to add an <param> outside of a <object>');
 
-  CheckException(EHTMLWriterOpenTagRequiredException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML; end, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
+  CheckException(EOpenTagRequiredHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenBold.CloseTag.AddAttribute('grastin').AsHTML; end, 'Failed to raise EHTMLWriterOpenTagRequiredException when trying to add an attribute to a closed tag.');
 
   CheckException(ETableTagNotOpenHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenColGroup.CloseTag.AsHTML; end, 'Failed to raise ETableTagNotOpenHTMLWriterException when trying to add a <colgroup> tag when <table> is not the current tag.');
 
@@ -3020,7 +3020,7 @@ var
   TempString: string;
   TempTag: string;
 begin
-  TempString := 'grundle';
+  TempString := 'brethwast';
   TempTag := 'center';
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
@@ -3038,7 +3038,7 @@ var
   TempString: string;
   TempTag: string;
 begin
-  TempString := 'grundle';
+  TempString := 'Mertper';
   TempTag := TFormatTypeStrings[ftCitation];
 
   ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
@@ -3083,8 +3083,6 @@ begin
   ExpectedResult := HTML(Format('<dl><dt></dt><%s></%s><%s></%s><dt></dt><%s></%s></dl>', [TempTag, TempTag, TempTag, TempTag, TempTag, TempTag]));
   TestResult := HTMLWriterFactory('html').OpenDefinitionList.OpenDefinitionTerm.CloseTag.OpenDefinitionItem.CloseTag.OpenDefinitionItem.CloseTag.OpenDefinitionTerm.CloseTag.OpenDefinitionItem.CloseTag.CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-
-
 
 end;
 

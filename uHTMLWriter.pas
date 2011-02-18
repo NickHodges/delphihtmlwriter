@@ -1720,7 +1720,7 @@ procedure THTMLWriter.CheckBracketOpen(aString: string);
 begin
   if (not(tsBracketOpen in FTagState)) and CheckForErrors then
   begin
-    raise EHTMLWriterOpenTagRequiredException.CreateFmt(StrATagsBracketMust, [Self.FCurrentTagName, aString]);
+    raise EOpenTagRequiredHTMLWriterException.CreateFmt(StrATagsBracketMust, [Self.FCurrentTagName, aString]);
   end;
 end;
 
