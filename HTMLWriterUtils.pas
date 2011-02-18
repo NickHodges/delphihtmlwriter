@@ -87,7 +87,7 @@ type
   end;
 
 type
-  { TODO -oNick : Make sure that all the exceptions have been tested. }
+  { DONE -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
     EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
     {DONE -oNick -cGeneral : Rename the exception below}
@@ -165,7 +165,15 @@ type
                    );
     TTableStates = set of TTableState;
 
-    TFormState = (fsInFormTag, fsInSelect, fsInOptGroup);
+    ///	<remarks>These tags are used to keep track of the cursor inside of a &lt;form&gt; tag.</remarks>
+    TFormState = (
+      ///	<summary>Indicates that the cursor is curerntly inside of a &lt;form&gt; tag</summary>
+      fsInFormTag,
+      ///	<summary>Indicates that the cursor is curerntly inside of a &lt;select&gt; tag</summary>
+      fsInSelect,
+      ///	<summary>Indicates that the cursor is curerntly inside of a &lt;optgroup&gt; tag</summary>
+      fsInOptGroup
+    );
     TFormStates = set of TFormState;
 
     TCanHaveAttributes = (
