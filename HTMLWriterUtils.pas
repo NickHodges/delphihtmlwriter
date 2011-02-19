@@ -79,12 +79,6 @@ type
     function WidthAsString: string;
   end;
 
-  THTMLSize = record
-    Size: integer;
-    constructor Create(aSize: integer);
-    function AsPixels: string;
-    function AsInteger: integer;
-  end;
 
 type
   { DONE -oNick : Make sure that all the exceptions have been tested. }
@@ -489,24 +483,6 @@ function THTMLWidth.WidthString: string;
 begin
   Result := Format('width="%s"', [IntToStr(Width)]);
 end;
-
-{ THTMLSize }
-
-constructor THTMLSize.Create(aSize: integer);
-begin
-  Size := aSize;
-end;
-
-function THTMLSize.AsInteger: integer;
-begin
-  Result := Size;
-end;
-
-function THTMLSize.AsPixels: string;
-begin
-  Result := Format('%spx', [Size]);
-end;
-
 
 
 end.
