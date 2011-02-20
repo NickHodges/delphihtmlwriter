@@ -404,13 +404,12 @@ type
     /// <param name="aCountSpacesOnlyAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
     /// If passed in as True, a string with nothing but spaces in it will be counted as empty.&#160; Defaults to
     /// True.</param>
-
     function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
     function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
 
   type
 
-    /// <summary>A class for producing tags, including opening and closing tags.</summary>
+    /// <summary>A class for producing edge tags, including opening and closing tags.</summary>
     TTagMaker = class
       class function MakeOpenTag(aTag: string): string; static;
       class function MakeCloseTag(aTag: string): string; static;
