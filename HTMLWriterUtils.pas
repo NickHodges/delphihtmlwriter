@@ -87,10 +87,8 @@ type
   end;
 
 type
-  { DONE -oNick : Make sure that all the exceptions have been tested. }
   EHTMLWriterException = class(Exception);
     EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
-    {DONE -oNick -cGeneral : Rename the exception below}
     EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException); //Tested
     EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
     ETryingToCloseClosedTag = class(EHTMLWriterException); // Tested
