@@ -79,12 +79,6 @@ type
     function WidthAsString: string;
   end;
 
-  THTMLSize = record
-    Size: integer;
-    constructor Create(aSize: integer);
-    function AsPixels: string;
-    function AsInteger: integer;
-  end;
 
 type
   EHTMLWriterException = class(Exception);
@@ -240,11 +234,10 @@ type
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
     TIsEmptyTag = (ietIsEmptyTag, ietIsNotEmptyTag);
-    {$REGION 'Documentation'}
+
     ///	<summary>Enumeration to define the different types of bullets that can be used with the &lt;ol&gt; and &lt;ul&gt; tags.</summary>
     ///	<remarks>This type is used in conjunction with the OpenUnorderdedList function</remarks>
     ///	<seealso cref="OpenUnorderedList">OpenUnorderedList</seealso>
-    {$ENDREGION}
     TBulletShape = (
       ///	<summary>Indicates that no bullet should be used</summary>
       bsNone,
@@ -282,11 +275,9 @@ type
 
     TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
 
-{$REGION 'Documentation'}
     /// <summary>
     /// <para>Indicates the action type to be taken by a &lt;form&gt; tag</para>
     /// </summary>
-{$ENDREGION}
     TFormMethod = (
       /// <summary>Indicates no action</summary>
       fmNone,
@@ -405,19 +396,18 @@ type
     cEmptyString = '';
 
     THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
-{$REGION 'Documentation'}
+
     /// <summary>Function to determine if a string is empty.</summary>
     /// <param name="aString">The string to be examined for emptiness.</param>
     /// <param name="aCountSpacesOnlyAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
     /// If passed in as True, a string with nothing but spaces in it will be counted as empty.&#160; Defaults to
     /// True.</param>
-{$ENDREGION}
     function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
     function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
 
   type
 
-    /// <summary>A class for producing tags, including opening and closing tags.</summary>
+    /// <summary>A class for producing edge tags, including opening and closing tags.</summary>
     TTagMaker = class
       class function MakeOpenTag(aTag: string): string; static;
       class function MakeCloseTag(aTag: string): string; static;
@@ -487,24 +477,6 @@ function THTMLWidth.WidthString: string;
 begin
   Result := Format('width="%s"', [IntToStr(Width)]);
 end;
-
-{ THTMLSize }
-
-constructor THTMLSize.Create(aSize: integer);
-begin
-  Size := aSize;
-end;
-
-function THTMLSize.AsInteger: integer;
-begin
-  Result := Size;
-end;
-
-function THTMLSize.AsPixels: string;
-begin
-  Result := Format('%spx', [Size]);
-end;
-
 
 
 end.
