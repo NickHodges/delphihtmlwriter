@@ -481,9 +481,6 @@ type
     /// tag</exception>
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
 
-
-
-    {DONE -oNick -cGeneral : The following tags are missing: <dd>, <dl>, <dt>}
     function OpenDefinitionList: IHTMLWriter;
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;
