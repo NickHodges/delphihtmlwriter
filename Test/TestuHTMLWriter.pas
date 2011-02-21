@@ -2367,9 +2367,7 @@ procedure TestTHTMLWriter.TestThatExceptionsAreRaised;
 var
   TestResult: string;
 begin
-
-
-CheckException(ECannotAddDefItemWithoutDefTermHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenDefinitionList.OpenDefinitionItem.CloseTag.AsHTML; end, 'Failed to raise ECannotAddDefItemWithoutDefTermHTMLWriterException when trying to add a <dd> tag that doesn''t follow a <dt> tag or another <dd> tag');
+  CheckException(ECannotAddDefItemWithoutDefTermHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenDefinitionList.OpenDefinitionItem.CloseTag.AsHTML; end, 'Failed to raise ECannotAddDefItemWithoutDefTermHTMLWriterException when trying to add a <dd> tag that doesn''t follow a <dt> tag or another <dd> tag');
 
   CheckException(ECannotAddDefItemWithoutDefTermHTMLWriterException, procedure()begin TestResult := HTMLWriterFactory(cHTML).OpenDefinitionList.OpenDefinitionItem.CloseTag.AsHTML; end, 'Failed to raise ECannotAddDefItemWithoutDefTermHTMLWriterException when trying to add a <dd> tag that doesn''t follow a <dt> tag or another <dd> tag');
 

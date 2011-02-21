@@ -123,6 +123,8 @@ type
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
     function GetHTML: TStringBuilder;
+    procedure InitializeHTMLWriter(aCloseTagType: TCloseTagType; aTagName: string);
+    procedure RemoveDefinitionFlags;
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -464,13 +466,7 @@ begin
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
-  FCurrentTagName := aTagName;
-  FCanHaveAttributes := chaCanHaveAttributes;
-  FHTML := TStringBuilder.Create;
-  FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
-  FTagState := FTagState + [tsBracketOpen];
-  FErrorLevels := [elErrors];
-  SetClosingTagValue(aCloseTagType, aTagName);
+  InitializeHTMLWriter(aCloseTagType, aTagName);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
@@ -572,6 +568,25 @@ end;
 class function THTMLWriter.Write: IHTMLWriter;
 begin
   Result := THTMLWriter.CreateDocument;
+end;
+
+procedure THTMLWriter.RemoveDefinitionFlags;
+begin
+  Exclude(FTagState, tsInDefinitionList);
+  Exclude(FTagState, tsHasDefinitionTerm);
+  Exclude(FTagState, tsDefTermIsCurrent);
+  Exclude(FTagState, tsDefItemIsCurrent);
+end;
+
+procedure THTMLWriter.InitializeHTMLWriter(aCloseTagType: TCloseTagType; aTagName: string);
+begin
+  FCurrentTagName := aTagName;
+  FCanHaveAttributes := chaCanHaveAttributes;
+  FHTML := TStringBuilder.Create;
+  FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
+  FTagState := FTagState + [tsBracketOpen];
+  FErrorLevels := [elErrors];
+  SetClosingTagValue(aCloseTagType, aTagName);
 end;
 
 function THTMLWriter.InHeadTag: Boolean;
@@ -1237,10 +1252,7 @@ begin
 
   if (FCurrentTagName = cDL) and InDefList then
   begin
-    Exclude(FTagState, tsInDefinitionList);
-    Exclude(FTagState, tsHasDefinitionTerm);
-    Exclude(FTagState, tsDefTermIsCurrent);
-    Exclude(FTagState, tsDefItemIsCurrent);
+    RemoveDefinitionFlags;
   end;
 
   FCurrentTagName := cEmptyString;
@@ -2008,7 +2020,6 @@ begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsDefTermIsCurrent);
-
   Result := Temp.AddTag(cDT);
 end;
 
