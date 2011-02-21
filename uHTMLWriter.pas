@@ -124,6 +124,7 @@ type
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
     function GetHTML: TStringBuilder;
     procedure InitializeHTMLWriter(aCloseTagType: TCloseTagType; aTagName: string);
+    procedure RemoveDefinitionFlags;
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -567,6 +568,14 @@ end;
 class function THTMLWriter.Write: IHTMLWriter;
 begin
   Result := THTMLWriter.CreateDocument;
+end;
+
+procedure THTMLWriter.RemoveDefinitionFlags;
+begin
+  Exclude(FTagState, tsInDefinitionList);
+  Exclude(FTagState, tsHasDefinitionTerm);
+  Exclude(FTagState, tsDefTermIsCurrent);
+  Exclude(FTagState, tsDefItemIsCurrent);
 end;
 
 procedure THTMLWriter.InitializeHTMLWriter(aCloseTagType: TCloseTagType; aTagName: string);
@@ -1243,10 +1252,7 @@ begin
 
   if (FCurrentTagName = cDL) and InDefList then
   begin
-    Exclude(FTagState, tsInDefinitionList);
-    Exclude(FTagState, tsHasDefinitionTerm);
-    Exclude(FTagState, tsDefTermIsCurrent);
-    Exclude(FTagState, tsDefItemIsCurrent);
+    RemoveDefinitionFlags;
   end;
 
   FCurrentTagName := cEmptyString;
