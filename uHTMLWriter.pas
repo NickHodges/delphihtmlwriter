@@ -2020,7 +2020,6 @@ begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Include(Temp.FTagState, tsDefTermIsCurrent);
-
   Result := Temp.AddTag(cDT);
 end;
 
