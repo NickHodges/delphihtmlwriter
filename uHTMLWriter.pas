@@ -124,6 +124,7 @@ type
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
     function GetHTML: TStringBuilder;
     procedure InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
+    procedure InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -358,7 +359,6 @@ type
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;
 
-    class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
     property HTML: TStringBuilder read GetHTML;
@@ -457,13 +457,7 @@ begin
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
-  FCurrentTagName := aTagName;
-  FCanHaveAttributes := chaCanHaveAttributes;
-  FHTML := TStringBuilder.Create;
-  FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
-  FTagState := FTagState + [tsBracketOpen];
-  FErrorLevels := [elErrors];
-  SetClosingTagValue(aCloseTagType, aTagName);
+  InitializeFullConstructor(aTagName, aCloseTagType);
 end;
 
 constructor THTMLWriter.CreateDocument(aDocType: THTMLDocType);
@@ -562,9 +556,15 @@ begin
   Result := tsTagOpen in FTagState;
 end;
 
-class function THTMLWriter.Write: IHTMLWriter;
+procedure THTMLWriter.InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
 begin
-  Result := THTMLWriter.CreateDocument;
+  FCurrentTagName := aTagName;
+  FCanHaveAttributes := chaCanHaveAttributes;
+  FHTML := TStringBuilder.Create;
+  FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
+  FTagState := FTagState + [tsBracketOpen];
+  FErrorLevels := [elErrors];
+  SetClosingTagValue(aCloseTagType, aTagName);
 end;
 
 procedure THTMLWriter.InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
