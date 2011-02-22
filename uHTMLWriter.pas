@@ -123,6 +123,7 @@ type
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
     function GetHTML: TStringBuilder;
+    procedure InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -369,15 +370,7 @@ type
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
 begin
   inherited Create; ;
-  FHTML := TStringBuilder.Create;
-  HTML.Append(aHTMLWriter.HTML.ToString);
-  FCurrentTagName := aHTMLWriter.FCurrentTagName;
-  FTagState := aHTMLWriter.FTagState;
-  FFormState := aHTMLWriter.FFormState;
-  FTableState := aHTMLWriter.FTableState;
-  FErrorLevels := aHTMLWriter.FErrorLevels;
-  FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
-  FClosingTag := aHTMLWriter.FClosingTag;
+  InitializeFromExistingInstance(aHTMLWriter);
 end;
 
 function THTMLWriter.CloseBracket: IHTMLWriter;
@@ -572,6 +565,19 @@ end;
 class function THTMLWriter.Write: IHTMLWriter;
 begin
   Result := THTMLWriter.CreateDocument;
+end;
+
+procedure THTMLWriter.InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
+begin
+  FHTML := TStringBuilder.Create;
+  HTML.Append(aHTMLWriter.HTML.ToString);
+  FCurrentTagName := aHTMLWriter.FCurrentTagName;
+  FTagState := aHTMLWriter.FTagState;
+  FFormState := aHTMLWriter.FFormState;
+  FTableState := aHTMLWriter.FTableState;
+  FErrorLevels := aHTMLWriter.FErrorLevels;
+  FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
+  FClosingTag := aHTMLWriter.FClosingTag;
 end;
 
 function THTMLWriter.InHeadTag: Boolean;
