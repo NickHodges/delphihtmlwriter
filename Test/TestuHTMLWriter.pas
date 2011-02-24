@@ -35,6 +35,7 @@ type
     procedure TearDown; override;
 
   published
+    procedure TestDeprecated;
     procedure TestDefinitionListStuff;
     procedure TestArea;
     procedure TestOpenTableHeader;
@@ -57,7 +58,6 @@ type
     procedure TestOpenBold;
 
     procedure TestLabel;
-    procedure TestDeprecated;
 
     procedure TestNewAtttributes;
     procedure TestButton;
@@ -3482,24 +3482,24 @@ begin
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
-// var
-// Temp: IHTMLWriter;
+var
+  Temp: IHTMLWriter;
 begin
   // <font>
   CheckException(ETagIsDeprecatedHTMLWriterException, procedure()var Temp: IHTMLWriter; begin Temp := HTMLWriterFactory(cHTML); Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML4]; Temp.OpenFont; end, 'Failed to raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
 
-  // Negative test case for <font>
-  // try
-  // Temp := HTMLWriterFactory(cHTML);
-  // Temp.ErrorLevels := [];
-  // Temp := Temp.OpenFont;
-  // Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
-  // except
-  // on E: ETagIsDeprecatedHTMLWriterException do
-  // begin
-  // Check(False, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
-  // end;
-  // end;
+   //Negative test case for <font>
+   try
+     Temp := HTMLWriterFactory(cHTML);
+     Temp.ErrorLevels := [elErrors, elStrictHTML4];
+     Temp := Temp.OpenFont;
+     Check(False, 'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
+   except
+     on E: ETagIsDeprecatedHTMLWriterException do
+     begin
+       Check(True, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
+     end;
+   end;
 
 end;
 
