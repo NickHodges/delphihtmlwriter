@@ -3500,7 +3500,6 @@ begin
        Check(True, 'Incorrectly called ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was marked deprecated');
      end;
    end;
-
 end;
 
 procedure TestTHTMLWriter.TestLoadSave;
