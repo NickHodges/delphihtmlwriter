@@ -24,28 +24,28 @@
 			<MSBuild Projects="HTMLWriterTestApp.dproj"/>
 		</Target>
 		<Target Name="HTMLWriterTestApp:Clean">
-			<MSBuild Targets="Clean" Projects="HTMLWriterTestApp.dproj"/>
+			<MSBuild Projects="HTMLWriterTestApp.dproj" Targets="Clean"/>
 		</Target>
 		<Target Name="HTMLWriterTestApp:Make">
-			<MSBuild Targets="Make" Projects="HTMLWriterTestApp.dproj"/>
+			<MSBuild Projects="HTMLWriterTestApp.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="HTMLWriterTestPackage">
 			<MSBuild Projects="HTMLWriterTestPackage.dproj"/>
 		</Target>
 		<Target Name="HTMLWriterTestPackage:Clean">
-			<MSBuild Targets="Clean" Projects="HTMLWriterTestPackage.dproj"/>
+			<MSBuild Projects="HTMLWriterTestPackage.dproj" Targets="Clean"/>
 		</Target>
 		<Target Name="HTMLWriterTestPackage:Make">
-			<MSBuild Targets="Make" Projects="HTMLWriterTestPackage.dproj"/>
+			<MSBuild Projects="HTMLWriterTestPackage.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="HTMLWriterTestAppTests">
 			<MSBuild Projects="Test\HTMLWriterTestAppTests.dproj"/>
 		</Target>
 		<Target Name="HTMLWriterTestAppTests:Clean">
-			<MSBuild Targets="Clean" Projects="Test\HTMLWriterTestAppTests.dproj"/>
+			<MSBuild Projects="Test\HTMLWriterTestAppTests.dproj" Targets="Clean"/>
 		</Target>
 		<Target Name="HTMLWriterTestAppTests:Make">
-			<MSBuild Targets="Make" Projects="Test\HTMLWriterTestAppTests.dproj"/>
+			<MSBuild Projects="Test\HTMLWriterTestAppTests.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="Build">
 			<CallTarget Targets="HTMLWriterTestApp;HTMLWriterTestPackage;HTMLWriterTestAppTests"/>
@@ -56,5 +56,5 @@
 		<Target Name="Make">
 			<CallTarget Targets="HTMLWriterTestApp:Make;HTMLWriterTestPackage:Make;HTMLWriterTestAppTests:Make"/>
 		</Target>
-		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

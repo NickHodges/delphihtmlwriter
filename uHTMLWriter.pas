@@ -347,21 +347,29 @@ type
     procedure SaveToStream(Stream: TStream); overload; virtual;
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
-    function OpenFrameset: IHTMLWriter;
-    function OpenFrame: IHTMLWriter;
-    function OpenNoFrames: IHTMLWriter;
-    function OpenMap: IHTMLWriter;
-    function OpenArea(aAltText: string): IHTMLWriter;
-    function OpenObject: IHTMLWriter;
-    function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
+{$REGION 'Frames'}
+      function OpenFrameset: IHTMLWriter;
+      function OpenFrame: IHTMLWriter;
+      function OpenNoFrames: IHTMLWriter;
 
-    function OpenDefinitionList: IHTMLWriter;
-    function OpenDefinitionTerm: IHTMLWriter;
-    function OpenDefinitionItem: IHTMLWriter;
+{$ENDREGION}
+{$REGION 'Miscellaneous'}
+      function OpenMap: IHTMLWriter;
+      function OpenArea(aAltText: string): IHTMLWriter;
+      function OpenObject: IHTMLWriter;
+      function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
 
-    property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
-    property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
-    property HTML: TStringBuilder read GetHTML;
+{$ENDREGION}
+{$REGION 'Defintion Lists'}
+      function OpenDefinitionList: IHTMLWriter;
+      function OpenDefinitionTerm: IHTMLWriter;
+      function OpenDefinitionItem: IHTMLWriter;
+{$ENDREGION}
+{$REGION 'Properties'}
+      property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
+      property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
+      property HTML: TStringBuilder read GetHTML;
+{$ENDREGION}
 
   end;
 
@@ -420,7 +428,7 @@ var
 begin
   if tsTagClosed in FTagState then
   begin
-    raise ETryingToCloseClosedTag.Create(strClosingClosedTag);
+    raise ETryingToCloseClosedTagHTMLWriterException.Create(strClosingClosedTag);
   end;
 
   if (not InSlashOnlyTag) and (not InCommentTag) then
@@ -453,7 +461,7 @@ end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 begin
-  if StringIsEmpty(aTagName) then
+  if StringIsEmpty(aTagName, False) then
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
@@ -680,6 +688,7 @@ function THTMLWriter.OpenFont: IHTMLWriter;
 begin
   IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML4);
   Result := OpenFormatTag(ftFont);
+
 end;
 
 function THTMLWriter.OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
@@ -1718,7 +1727,7 @@ procedure THTMLWriter.CheckBeforeTableContent;
 begin
   if CheckForErrors and HasTableContent then
   begin
-    raise EBadTagAfterTableContentHTMLWriter.Create(strBadTagAfterTableContent);
+    raise EBadTagAfterTableContentHTMLWriterException.Create(strBadTagAfterTableContent);
   end;
 end;
 
@@ -1734,7 +1743,7 @@ procedure THTMLWriter.CheckInTableTag;
 begin
   if (not InTableTag) and CheckForErrors then
   begin
-    raise ENotInTableTagException.Create(strMustBeInTable);
+    raise ENotInTableTagHTMLWriterException.Create(strMustBeInTable);
   end;
 end;
 
@@ -1760,7 +1769,7 @@ procedure THTMLWriter.CheckInTableRowTag;
 begin
   if (not InTableRowTag) and CheckForErrors then
   begin
-    raise ENotInTableTagException.Create(strMustBeInTableRow);
+    raise ENotInTableTagHTMLWriterException.Create(strMustBeInTableRow);
   end;
 end;
 
@@ -1768,7 +1777,7 @@ procedure THTMLWriter.CheckInListTag;
 begin
   if (not InListTag) and CheckForErrors then
   begin
-    raise ENotInListTagException.Create(strMustBeInList);
+    raise ENotInListTagHTMLWriterException.Create(strMustBeInList);
   end;
 end;
 
@@ -1776,7 +1785,7 @@ procedure THTMLWriter.CheckInMapTag;
 begin
   if (not InMapTag) and CheckForErrors then
   begin
-    raise ENotInMapTagHTMLException.Create(strNotInMapTag);
+    raise ENotInMapTagHTMLWriterException.Create(strNotInMapTag);
   end;
 end;
 
@@ -1784,7 +1793,7 @@ procedure THTMLWriter.CheckInObjectTag;
 begin
   if (not InObjectTag) and CheckForErrors then
   begin
-    raise ENotInObjectTagException.Create(strMustBeInObject);
+    raise ENotInObjectTagHTMLWriterException.Create(strMustBeInObject);
   end;
 end;
 
@@ -1808,7 +1817,7 @@ procedure THTMLWriter.CheckInCommentTag;
 begin
   if (not InCommentTag) and CheckForErrors then
   begin
-    raise ENotInCommentTagException.Create(strMustBeInComment);
+    raise ENotInCommentTagHTMLWriterException.Create(strMustBeInComment);
   end;
 end;
 
@@ -1816,7 +1825,7 @@ procedure THTMLWriter.CheckInDefList;
 begin
   if (not InDefList) and CheckForErrors then
   begin
-    raise ENotInDefinitionListHTMLError.Create(strMustBeInDefinitionList);
+    raise ENotInDefinitionListHTMLWriterException.Create(strMustBeInDefinitionList);
   end;
 end;
 
@@ -1824,7 +1833,7 @@ procedure THTMLWriter.CheckInFieldSetTag;
 begin
   if (not InFieldSetTag) and CheckForErrors then
   begin
-    raise ENotInFieldsetTagException.Create(strNotInFieldTag);
+    raise ENotInFieldsetTagHTMLWriterException.Create(strNotInFieldTag);
   end;
 end;
 
@@ -1832,7 +1841,7 @@ procedure THTMLWriter.CheckCurrentTagIsHTMLTag;
 begin
   if (FCurrentTagName <> cHTML) and CheckForErrors then
   begin
-    raise EClosingDocumentWithOpenTagsHTMLException.Create(strOtherTagsOpen);
+    raise EClosingDocumentWithOpenTagsHTMLWriterException.Create(strOtherTagsOpen);
   end;
 end;
 
@@ -1861,7 +1870,7 @@ procedure THTMLWriter.CheckInFormTag;
 begin
   if (not InFormTag) and CheckForErrors then
   begin
-    raise ENotInFormTagHTMLException.Create(strNotInFormTag);
+    raise ENotInFormTagHTMLWriterException.Create(strNotInFormTag);
   end;
 end;
 
@@ -1869,7 +1878,7 @@ procedure THTMLWriter.CheckInFramesetTag;
 begin
   if (not InFrameSetTag) and CheckForErrors then
   begin
-    raise ENotInFrameSetHTMLException.Create(strNotInFrameSet);
+    raise ENotInFrameSetHTMLWriterException.Create(strNotInFrameSet);
   end;
 end;
 
