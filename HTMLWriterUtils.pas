@@ -87,30 +87,32 @@ type
   end;
 
 type
-  EHTMLWriterException = class(Exception);
-    EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
-    EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException); //Tested
-    EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
-    ETryingToCloseClosedTag = class(EHTMLWriterException); // Tested
-    ENotInListTagException = class(EHTMLWriterException); // Tested
-    ENotInTableTagException = class(EHTMLWriterException); // Tested
-    ENotInCommentTagException = class(EHTMLWriterException); // Tested
-    ENotInFieldsetTagException = class(EHTMLWriterException); // Tested
-    ENoClosingTagHTMLWriterException = class(EHTMLWriterException);
-    ENotInFrameSetHTMLException = class(EHTMLWriterException); // Tested
-    ENotInMapTagHTMLException = class(EHTMLWriterException); // Tested
-    ENotInFormTagHTMLException = class(EHTMLWriterException); // Tested
-    ENotInObjectTagException = class(EHTMLWriterException); // Tested
-    EClosingDocumentWithOpenTagsHTMLException = class(EHTMLWriterException); // Tested.
-    ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException); // Tested
-    EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
-    ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException); // Tested
-    ENotInSelectTextHTMLWriterException = class(EHTMLWriterException); // Tested
-    ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException); // Tested
-    EBadTagAfterTableContentHTMLWriter = class(EHTMLWriterException); // Tested
-    ENotInDefinitionListHTMLError = class(EHTMLWriterException); // Tested
-    ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException); // Tested
-    ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException); //Tested
+{$REGION 'Exceptions'}
+    EHTMLWriterException = class(Exception);
+      EOpenTagRequiredHTMLWriterException = class(EHTMLWriterException); //Tested
+      EHeadTagRequiredHTMLException = class(EHTMLWriterException); // Tested
+      ETryingToCloseClosedTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInListTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInTableTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      EEmptyTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInCommentTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInFieldsetTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENoClosingTagHTMLWriterException = class(EHTMLWriterException);
+      ENotInFrameSetHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInMapTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInFormTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInObjectTagHTMLWriterException = class(EHTMLWriterException); // Tested
+      EClosingDocumentWithOpenTagsHTMLWriterException = class(EHTMLWriterException); // Tested.
+      ETableTagNotOpenHTMLWriterException = class(EHTMLWriterException); // Tested
+      EParamNameRequiredHTMLWriterException = class(EHTMLWriterException); // Tested
+      ETagIsDeprecatedHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInSelectTextHTMLWriterException = class(EHTMLWriterException); // Tested
+      ECaptionMustBeFirstHTMLWriterException = class(EHTMLWriterException); // Tested
+      EBadTagAfterTableContentHTMLWriterException = class(EHTMLWriterException); // Tested
+      ENotInDefinitionListHTMLWriterException = class(EHTMLWriterException); // Tested
+      ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException); // Tested
+      ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException); //Tested
+{$ENDREGION}
 
 
   type
@@ -303,6 +305,7 @@ type
 
     THTMLErrorLevels = set of THTMLErrorLevel;
 
+
   const
     ///	<summary>String array for use with the TFormatType</summary>
     ///	<seealso cref="TFormatType">TFormatType</seealso>
@@ -318,91 +321,92 @@ type
     THTMLErrorLevelStrings: array [THTMLErrorLevel] of string = ('', '4.x', '5.x', 'xhmtl');
 
 
-    cHTML = 'html';
-    cHead = 'head';
-    cBody = 'body';
-    cBlockQuote = 'blockquote';
-    cClass = 'class';
-    cStyle = 'style';
-    cID = 'id';
-    cMeta = 'meta';
-    cName = 'name';
-    cContent = 'content';
-    cform = 'form';
-    cInput = 'input';
-    cButton = 'button';
+      {$REGION 'A whole bunch of string constants'}
+      cHTML = 'html';
+      cHead = 'head';
+      cBody = 'body';
+      cBlockQuote = 'blockquote';
+      cClass = 'class';
+      cStyle = 'style';
+      cID = 'id';
+      cMeta = 'meta';
+      cName = 'name';
+      cContent = 'content';
+      cform = 'form';
+      cInput = 'input';
+      cButton = 'button';
 
-    cFieldSet = 'fieldset';
-    cLegend = 'legend';
-    cFrameset = 'frameset';
-    cFrame = 'frame';
-    cNoFrames = 'noframes';
-    cMap = 'map';
-    cArea = 'area';
-    cAlt = 'alt';
-    cBaseFont = 'basefont';
-    cLink = 'link';
-    cObject = 'object';
-    cParam = 'param';
-    cAction = 'action';
-    cMethod = 'method';
-    cValue = 'value';
+      cFieldSet = 'fieldset';
+      cLegend = 'legend';
+      cFrameset = 'frameset';
+      cFrame = 'frame';
+      cNoFrames = 'noframes';
+      cMap = 'map';
+      cArea = 'area';
+      cAlt = 'alt';
+      cBaseFont = 'basefont';
+      cLink = 'link';
+      cObject = 'object';
+      cParam = 'param';
+      cAction = 'action';
+      cMethod = 'method';
+      cValue = 'value';
 
-    cCRLF = #13#10;
+      cCRLF = #13#10;
 
-    cAnchor = 'a';
-    cHREF = 'href';
-    cImage = 'img';
-    cURL = 'url';
-    cSource = 'src';
-    cHardRule = 'hr';
-    cBreak = 'br';
-    cUnorderedList = 'ul';
-    cOrderedList = 'ol';
-    cListItem = 'li';
-    cClear = 'clear';
-    cType = 'type';
-    cTable = 'table';
-    cBorder = 'border';
-    cCellPadding = 'cellpadding';
-    cCellSpacing = 'cellspacing';
-    cWidth = 'width';
-    cHeight = 'height';
-    cTableRow = 'tr';
-    cTableData = 'td';
-    cTableHead = 'thead';
-    cTableBody = 'tbody';
-    cTableFoot = 'tfoot';
-    cTableHeader = 'th';
-    cTitle = 'title';
-    cScript = 'script';
-    cNoScript = 'noscript';
-    cIFrame = 'iframe';
-    cBase = 'base';
-    cTarget = 'target';
-    cOption = 'option';
-    cOptGroup = 'optgroup';
-    cCaption = 'caption';
-    cLabel = 'label';
-    cTextArea = 'textarea';
-    cSelect = 'select';
-    cFor = 'for';
-    cCols = 'cols';
-    cRows = 'rows';
-    cColGroup = 'colgroup';
-    cCol = 'col';
+      cAnchor = 'a';
+      cHREF = 'href';
+      cImage = 'img';
+      cURL = 'url';
+      cSource = 'src';
+      cHardRule = 'hr';
+      cBreak = 'br';
+      cUnorderedList = 'ul';
+      cOrderedList = 'ol';
+      cListItem = 'li';
+      cClear = 'clear';
+      cType = 'type';
+      cTable = 'table';
+      cBorder = 'border';
+      cCellPadding = 'cellpadding';
+      cCellSpacing = 'cellspacing';
+      cWidth = 'width';
+      cHeight = 'height';
+      cTableRow = 'tr';
+      cTableData = 'td';
+      cTableHead = 'thead';
+      cTableBody = 'tbody';
+      cTableFoot = 'tfoot';
+      cTableHeader = 'th';
+      cTitle = 'title';
+      cScript = 'script';
+      cNoScript = 'noscript';
+      cIFrame = 'iframe';
+      cBase = 'base';
+      cTarget = 'target';
+      cOption = 'option';
+      cOptGroup = 'optgroup';
+      cCaption = 'caption';
+      cLabel = 'label';
+      cTextArea = 'textarea';
+      cSelect = 'select';
+      cFor = 'for';
+      cCols = 'cols';
+      cRows = 'rows';
+      cColGroup = 'colgroup';
+      cCol = 'col';
 
-    cDD = 'dd';
-    cDT = 'dt';
-    cDL = 'dl';
-
-    cOpenBracket = '<';
-    cCloseBracket = '>';
-    cCloseSlashBracket = '/>';
-    cComment = '!--';
-    cCloseComment = '-->';
-    cSpace = ' ';
-    cEmptyString = '';
+      cDD = 'dd';
+      cDT = 'dt';
+      cDL = 'dl';
+      cOpenBracket = '<';
+      cCloseBracket = '>';
+      cCloseSlashBracket = '/>';
+      cComment = '!--';
+      cCloseComment = '-->';
+      cSpace = ' ';
+      cEmptyString = '';
+   {$ENDREGION}
 
     THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 {$REGION 'Documentation'}
