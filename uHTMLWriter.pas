@@ -642,7 +642,7 @@ procedure THTMLWriter.IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErr
 begin
   if aDeprecationLevel in ErrorLevels then
   begin
-    raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
+      raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
   end;
 end;
 
