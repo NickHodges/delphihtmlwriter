@@ -55,7 +55,7 @@ implementation
 
 type
   THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
-  private
+  strict private
     FHTML: TStringBuilder;
     FClosingTag: string;
     FCurrentTagName: string;
@@ -127,6 +127,7 @@ type
     procedure InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
     function ProcessTableTag(aTableTag: string): IHTMLWriter;
     function ProcessBasicHeadTag(aBase: string): IHTMLWriter;
+    function ProcessFormattingTag(aFormatTag: TFormatType; aErrorLevel: THTMLErrorLevel): IHTMLWriter;
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -659,10 +660,15 @@ begin
   Result := AddTag(cButton).AddAttribute(cName, aName);
 end;
 
+function THTMLWriter.ProcessFormattingTag(aFormatTag: TFormatType; aErrorLevel: THTMLErrorLevel): IHTMLWriter;
+begin
+  IsDeprecatedTag(TFormatTypeStrings[aFormatTag], aErrorLevel);
+  Result := OpenFormatTag(aFormatTag);
+end;
+
 function THTMLWriter.OpenCenter: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftCenter], elStrictHTML4);
-  Result := OpenFormatTag(ftCenter);
+  Result := ProcessFormattingTag(ftCenter, elStrictHTML4);
 end;
 
 function THTMLWriter.OpenCite: IHTMLWriter;
@@ -688,9 +694,7 @@ end;
 
 function THTMLWriter.OpenFont: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML4);
-  Result := OpenFormatTag(ftFont);
-
+  Result := ProcessFormattingTag(ftFont, elStrictHTML4);
 end;
 
 function THTMLWriter.OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
@@ -886,8 +890,7 @@ end;
 
 function THTMLWriter.OpenStrike: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftStrike], elStrictHTML4);
-  Result := OpenFormatTag(ftStrike);
+  Result := ProcessFormattingTag(ftStrike, elStrictHTML4);
 end;
 
 function THTMLWriter.OpenStrong: IHTMLWriter;
@@ -994,8 +997,7 @@ end;
 
 function THTMLWriter.OpenTeletype: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftTeletype], elStrictHTML5);
-  Result := OpenFormatTag(ftTeletype);
+  Result := ProcessFormattingTag(ftTeletype, elStrictHTML5);
 end;
 
 function THTMLWriter.OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
@@ -1012,8 +1014,7 @@ end;
 
 function THTMLWriter.OpenUnderline: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftUnderline], elStrictHTML4);
-  Result := OpenFormatTag(ftUnderline);
+  Result := ProcessFormattingTag(ftUnderline, elStrictHTML4)
 end;
 
 function THTMLWriter.OpenUnorderedList(aBulletShape: TBulletShape = bsNone): IHTMLWriter;
@@ -1431,8 +1432,7 @@ end;
 
 function THTMLWriter.OpenAcronym: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftAcronym], elStrictHTML5);
-  Result := OpenFormatTag(ftAcronym);
+  Result := ProcessFormattingTag(ftAcronym, elStrictHTML5)
 end;
 
 function THTMLWriter.OpenAddress: IHTMLWriter;
@@ -1492,8 +1492,7 @@ end;
 
 function THTMLWriter.OpenBig: IHTMLWriter;
 begin
-  IsDeprecatedTag(TFormatTypeStrings[ftBig], elStrictHTML5);
-  Result := OpenFormatTag(ftBig);
+  Result := ProcessFormattingTag(ftBig, elStrictHTML5)
 end;
 
 function THTMLWriter.OpenBlockQuote: IHTMLWriter;
