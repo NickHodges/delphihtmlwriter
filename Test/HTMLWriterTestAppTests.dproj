@@ -2,7 +2,7 @@
 		<PropertyGroup>
 			<ProjectGuid>{6776CF32-E2CB-422E-90B4-0DF1B244298F}</ProjectGuid>
 			<ProjectVersion>12.3</ProjectVersion>
-			<Config Condition="'$(Config)'==''">Console</Config>
+			<Config Condition="'$(Config)'==''">Debug</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 			<MainSource>HTMLWriterTestAppTests.dpr</MainSource>
 			<Base>True</Base>

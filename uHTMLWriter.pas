@@ -125,6 +125,7 @@ type
     function GetHTML: TStringBuilder;
     procedure InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
     procedure InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
+    function ProcessTableTag(aTableTag: string): IHTMLWriter;
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -948,28 +949,30 @@ begin
   end;
 end;
 
-function THTMLWriter.OpenTableBody: IHTMLWriter;
+function THTMLWriter.ProcessTableTag(aTableTag: string): IHTMLWriter;
 begin
   CheckInTableTag;
-  Result := AddTag(cTableBody);
+  Result := AddTag(aTableTag);
+end;
+
+function THTMLWriter.OpenTableBody: IHTMLWriter;
+begin
+  Result := ProcessTableTag(cTableBody);
 end;
 
 function THTMLWriter.OpenTableData: IHTMLWriter;
 begin
-  CheckInTableTag;
-  Result := AddTag(cTableData);
+  Result := ProcessTableTag(cTableData);
 end;
 
 function THTMLWriter.OpenTableFoot: IHTMLWriter;
 begin
-  CheckInTableTag;
-  Result := AddTag(cTableFoot);
+  Result := ProcessTableTag(cTableFoot);
 end;
 
 function THTMLWriter.OpenTableHead: IHTMLWriter;
 begin
-  CheckInTableTag;
-  Result := AddTag(cTableHead);
+  Result := ProcessTableTag(cTableHead);
 end;
 
 function THTMLWriter.OpenTableHeader: IHTMLWriter;
@@ -1750,7 +1753,7 @@ end;
 procedure THTMLWriter.CheckNoOtherTableTags;
 begin
   // At this point, FTableState must be exactly [tbsInTable] and nothing else....
-  // Note that this means that InTableTag won't work here..
+  // Note that this means that the InTableTag function won't work here..
   if CheckForErrors and (not(FTableState = [tbsInTable])) then
   begin
     raise ECaptionMustBeFirstHTMLWriterException.Create(strCaptionMustBeFirst);
