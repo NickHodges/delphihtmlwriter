@@ -126,6 +126,7 @@ type
     procedure InitializeFromExistingInstance(aHTMLWriter: THTMLWriter);
     procedure InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
     function ProcessTableTag(aTableTag: string): IHTMLWriter;
+    function ProcessBasicHeadTag(aBase: string): IHTMLWriter;
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -869,8 +870,7 @@ end;
 
 function THTMLWriter.OpenMeta: IHTMLWriter;
 begin
-  CheckInHeadTag;
-  Result := AddTag(cMeta, ctEmpty);
+  Result :=ProcessBasicHeadTag(cMeta);
 end;
 
 function THTMLWriter.OpenNoFrames: IHTMLWriter;
@@ -1468,17 +1468,21 @@ begin
   end;
 end;
 
-function THTMLWriter.OpenBase: IHTMLWriter;
+function THTMLWriter.ProcessBasicHeadTag(aBase: string): IHTMLWriter;
 begin
   CheckInHeadTag;
-  Result := AddTag(cBase, ctEmpty);
+  Result := AddTag(aBase, ctEmpty);
+end;
+
+function THTMLWriter.OpenBase: IHTMLWriter;
+begin
+  Result := ProcessBasicHeadTag(cBase);
 end;
 
 function THTMLWriter.OpenBaseFont: IHTMLWriter;
 begin
   IsDeprecatedTag(cBaseFont, elStrictHTML4);
-  CheckInHeadTag;
-  Result := AddTag(cBaseFont, ctEmpty);
+  Result := ProcessBasicHeadTag(cBaseFont);
 end;
 
 function THTMLWriter.OpenBDO: IHTMLWriter;
