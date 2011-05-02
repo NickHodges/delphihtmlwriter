@@ -485,11 +485,46 @@ type
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;
 
+
+
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
     property HTML: TStringBuilder read GetHTML;
 end;
+
+IHTML5 = interface
+    // HTML 5 Only Tags
+    function OpenArticle: IHTMLWriter;
+    function OpenAside: IHTMLWriter;
+    function OpenAudio: IHTMLWriter;
+    function OpenCanvas: IHTMLWriter;
+    function OpenCommand: IHTMLWriter;
+    function OpenDatalist: IHTMLWriter;
+    function OpenDetails: IHTMLWriter;
+    function OpenEmbed: IHTMLWriter;
+    function OpenFigCaption: IHTMLWriter;
+    function OpenFigure: IHTMLWriter;
+    function OpenFooter: IHTMLWriter;
+    function OpenHeader: IHTMLWriter;
+    function OpenHGroup: IHTMLWriter;
+    function OpenKeyGen: IHTMLWriter;
+    function OpenMark: IHTMLWriter;
+    function OpenMeter: IHTMLWriter;
+    function OpenNav: IHTMLWriter;
+    function OpenOutput: IHTMLWriter;
+    function OpenProgress: IHTMLWriter;
+    function OpenRP: IHTMLWriter;
+    function OpenRT: IHTMLWriter;
+    function OpenRuby: IHTMLWriter;
+    function OpenSection: IHTMLWriter;
+    function OpenSource: IHTMLWriter;
+    function OpenSummary: IHTMLWriter;
+    function OpenTime: IHTMLWriter;
+    function OpenVideo: IHTMLWriter;
+    function OpenWBR: IHTMLWriter;
+end;
+
 
 implementation
 

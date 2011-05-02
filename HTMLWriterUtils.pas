@@ -60,6 +60,7 @@ resourcestring
   strMustBeInDefinitionList = 'This tag can only be included in a Definition List <dl> tag.';
   strCannotNestDefLists = 'You cannot nest a definition list inside another definition list';
   strCannotAddDefItemWithoutDefTerm = 'You cannot add a <dd> tag except right after a <dl> tag or another <dd> tag';
+  strCantUseHTML5 = 'You are attempting to use and HTML 5 tag in a document that is HTML4 only';
 
 type
   IGetHTML = interface
@@ -112,6 +113,7 @@ type
       ENotInDefinitionListHTMLWriterException = class(EHTMLWriterException); // Tested
       ECannotNestDefinitionListsHTMLWriterException = class(EHTMLWriterException); // Tested
       ECannotAddDefItemWithoutDefTermHTMLWriterException = class(EHTMLWriterException); //Tested
+      ECantUseHTML5TagHTMLWriterException = class(EHTMLWriterException);
 {$ENDREGION}
 
 
