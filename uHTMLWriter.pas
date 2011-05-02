@@ -25,19 +25,14 @@ unit uHTMLWriter;
   * Contributor(s):
   *
   * ***** END LICENSE BLOCK *****
-  }
+}
 {$ENDREGION}
 
 interface
 
 uses
-       SysUtils
-     , HTMLWriterUtils
-     , Classes
-     , Generics.Collections
-     , HTMLWriterIntf
-     , LoadSaveIntf
-     ;
+  SysUtils, HTMLWriterUtils, Classes, Generics.Collections, HTMLWriterIntf,
+  LoadSaveIntf;
 
 /// <summary>This function creates a reference to an ITHMLWriter interface. It creates a new HTML document by opening an &lt;html&gt; tag.</summary>
 function HTMLWriterCreateDocument: IHTMLWriter; overload;
@@ -54,7 +49,7 @@ function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNor
 implementation
 
 type
-  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
+  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter, IHTML5)
   strict private
     FHTML: TStringBuilder;
     FClosingTag: string;
@@ -90,6 +85,7 @@ type
     function InDefList: Boolean;
 {$ENDREGION}
     procedure IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErrorLevel);
+    function IsUsingHTML5: Boolean;
 {$REGION 'Close and Clean Methods'}
     function CloseBracket: IHTMLWriter;
     procedure CleanUpTagState;
@@ -117,6 +113,7 @@ type
     procedure CheckIfNestedDefList;
     procedure CheckDefTermIsCurrent;
     procedure CheckDefItemIsCurrent;
+    procedure CheckIsUsingHTML5;
 {$ENDREGION}
     procedure SetClosingTagValue(aCloseTagType: TCloseTagType; aString: string = cEmptyString);
     function GetAttribute(const Name, Value: string): IHTMLWriter;
@@ -351,36 +348,67 @@ type
     procedure SaveToStream(Stream: TStream; Encoding: TEncoding); overload; virtual;
 {$ENDREGION}
 {$REGION 'Frames'}
-      function OpenFrameset: IHTMLWriter;
-      function OpenFrame: IHTMLWriter;
-      function OpenNoFrames: IHTMLWriter;
+    function OpenFrameset: IHTMLWriter;
+    function OpenFrame: IHTMLWriter;
+    function OpenNoFrames: IHTMLWriter;
 
 {$ENDREGION}
 {$REGION 'Miscellaneous'}
-      function OpenMap: IHTMLWriter;
-      function OpenArea(aAltText: string): IHTMLWriter;
-      function OpenObject: IHTMLWriter;
-      function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
+    function OpenMap: IHTMLWriter;
+    function OpenArea(aAltText: string): IHTMLWriter;
+    function OpenObject: IHTMLWriter;
+    function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
 
 {$ENDREGION}
 {$REGION 'Defintion Lists'}
-      function OpenDefinitionList: IHTMLWriter;
-      function OpenDefinitionTerm: IHTMLWriter;
-      function OpenDefinitionItem: IHTMLWriter;
+    function OpenDefinitionList: IHTMLWriter;
+    function OpenDefinitionTerm: IHTMLWriter;
+    function OpenDefinitionItem: IHTMLWriter;
 {$ENDREGION}
 {$REGION 'Properties'}
-      property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
-      property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
-      property HTML: TStringBuilder read GetHTML;
+    property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
+    property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
+    property HTML: TStringBuilder read GetHTML;
 {$ENDREGION}
 
+{$REGION 'IHTML5 interface implementation'}
+      function OpenArticle: IHTMLWriter;
+      function OpenAside: IHTMLWriter;
+      function OpenAudio: IHTMLWriter;
+      function OpenCanvas: IHTMLWriter;
+      function OpenCommand: IHTMLWriter;
+      function OpenDatalist: IHTMLWriter;
+      function OpenDetails: IHTMLWriter;
+      function OpenEmbed: IHTMLWriter;
+      function OpenFigCaption: IHTMLWriter;
+      function OpenFigure: IHTMLWriter;
+      function OpenFooter: IHTMLWriter;
+      function OpenHeader: IHTMLWriter;
+      function OpenHGroup: IHTMLWriter;
+      function OpenKeyGen: IHTMLWriter;
+      function OpenMark: IHTMLWriter;
+      function OpenMeter: IHTMLWriter;
+      function OpenNav: IHTMLWriter;
+      function OpenOutput: IHTMLWriter;
+      function OpenProgress: IHTMLWriter;
+      function OpenRP: IHTMLWriter;
+      function OpenRT: IHTMLWriter;
+      function OpenRuby: IHTMLWriter;
+      function OpenSection: IHTMLWriter;
+      function OpenSource: IHTMLWriter;
+      function OpenSummary: IHTMLWriter;
+      function OpenTime: IHTMLWriter;
+      function OpenVideo: IHTMLWriter;
+      function OpenWBR: IHTMLWriter;
+
+{$ENDREGION}
   end;
 
   { THTMLWriter }
 
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
 begin
-  inherited Create; ;
+  inherited Create;;
   InitializeFromExistingInstance(aHTMLWriter);
 end;
 
@@ -645,8 +673,13 @@ procedure THTMLWriter.IsDeprecatedTag(aName: string; aDeprecationLevel: THTMLErr
 begin
   if aDeprecationLevel in ErrorLevels then
   begin
-      raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
+    raise ETagIsDeprecatedHTMLWriterException.Create(Format(strDeprecatedTag, [aName, THTMLErrorLevelStrings[aDeprecationLevel]]));
   end;
+end;
+
+function THTMLWriter.IsUsingHTML5: Boolean;
+begin
+  Result := elStrictHTML5 in ErrorLevels;
 end;
 
 function THTMLWriter.OpenBold: IHTMLWriter;
@@ -676,6 +709,11 @@ begin
   Result := OpenFormatTag(ftCitation);
 end;
 
+function THTMLWriter.OpenEmbed: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenEmphasis: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftEmphasis);
@@ -692,9 +730,24 @@ begin
   Result := Temp.AddTag(cFieldSet);
 end;
 
+function THTMLWriter.OpenFigCaption: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenFigure: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenFont: IHTMLWriter;
 begin
   Result := ProcessFormattingTag(ftFont, elStrictHTML4);
+end;
+
+function THTMLWriter.OpenFooter: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
@@ -768,6 +821,11 @@ begin
   Result := AddTag(THeadingTypeStrings[htHeading6]);
 end;
 
+function THTMLWriter.OpenHGroup: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenImage: IHTMLWriter;
 begin
   Result := AddTag(cImage, ctEmpty);
@@ -834,6 +892,11 @@ begin
   Result := OpenFormatTag(ftKeyboard);
 end;
 
+function THTMLWriter.OpenKeyGen: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenLabel: IHTMLWriter;
 begin
   CheckInFormTag;
@@ -872,9 +935,24 @@ begin
   Result := Temp.AddTag(cMap);
 end;
 
+function THTMLWriter.OpenMark: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenMeta: IHTMLWriter;
 begin
-  Result :=ProcessBasicHeadTag(cMeta);
+  Result := ProcessBasicHeadTag(cMeta);
+end;
+
+function THTMLWriter.OpenMeter: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenNav: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenNoFrames: IHTMLWriter;
@@ -896,6 +974,11 @@ end;
 function THTMLWriter.OpenStrong: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftStrong);
+end;
+
+function THTMLWriter.OpenSummary: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenTable: IHTMLWriter;
@@ -1006,6 +1089,11 @@ begin
   Result := AddTag(cTextArea)[cName, aName][cCols, IntToStr(aCols)][cRows, IntToStr(aRows)];
 end;
 
+function THTMLWriter.OpenTime: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenTitle: IHTMLWriter;
 begin
   CheckInHeadTag;
@@ -1034,6 +1122,16 @@ end;
 function THTMLWriter.OpenVariable: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftVariable);
+end;
+
+function THTMLWriter.OpenVideo: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenWBR: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 procedure THTMLWriter.SaveToFile(const FileName: string);
@@ -1175,6 +1273,11 @@ begin
   end;
 end;
 
+function THTMLWriter.OpenOutput: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 procedure THTMLWriter.CleanUpTagState;
 begin
   FTagState := FTagState + [tsTagClosed] - [tsTagOpen, tsBracketOpen];
@@ -1289,6 +1392,11 @@ begin
   Result := Temp;
 end;
 
+function THTMLWriter.OpenCommand: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenComment: IHTMLWriter;
 var
   Temp: THTMLWriter;
@@ -1390,6 +1498,11 @@ begin
   Result := Temp.AddTag(cHead, ctNormal, chaCanHaveAttributes);
 end;
 
+function THTMLWriter.OpenHeader: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.AddHeading1Text(aString: string): IHTMLWriter;
 begin
   Result := AddHeadingText(aString, htHeading1);
@@ -1454,6 +1567,21 @@ function THTMLWriter.OpenArea(aAltText: string): IHTMLWriter;
 begin
   CheckInMapTag;
   Result := AddTag(cArea, ctEmpty)[cAlt, aAltText];
+end;
+
+function THTMLWriter.OpenArticle: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenAside: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenAudio: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 procedure THTMLWriter.CloseTheTag;
@@ -1541,6 +1669,11 @@ end;
 function THTMLWriter.AddBoldText(aString: string): IHTMLWriter;
 begin
   Result := AddFormattedText(aString, ftBold)
+end;
+
+function THTMLWriter.OpenCanvas: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenCaption: IHTMLWriter;
@@ -1753,6 +1886,14 @@ begin
   end;
 end;
 
+procedure THTMLWriter.CheckIsUsingHTML5;
+begin
+  if not IsUsingHTML5 then
+  begin
+    raise ECantUseHTML5TagHTMLWriterException.Create(strCantUseHTML5);
+  end;
+end;
+
 procedure THTMLWriter.CheckNoOtherTableTags;
 begin
   // At this point, FTableState must be exactly [tbsInTable] and nothing else....
@@ -1853,7 +1994,7 @@ end;
 
 procedure THTMLWriter.CheckDefItemIsCurrent;
 begin
-  if CheckForErrors and (not (tsDefItemIsCurrent in FTagState)) then
+  if CheckForErrors and (not(tsDefItemIsCurrent in FTagState)) then
   begin
     raise ECannotAddDefItemWithoutDefTermHTMLWriterException.Create(strCannotAddDefItemWithoutDefTerm);
   end;
@@ -1861,7 +2002,7 @@ end;
 
 procedure THTMLWriter.CheckDefTermIsCurrent;
 begin
-  if CheckForErrors and (not (tsDefTermIsCurrent in FTagState)) then
+  if CheckForErrors and (not(tsDefTermIsCurrent in FTagState)) then
   begin
     raise ECannotAddDefItemWithoutDefTermHTMLWriterException.Create(strCannotAddDefItemWithoutDefTerm);
   end;
@@ -1972,9 +2113,29 @@ begin
   Result := OpenFormatTag(ftPreformatted);
 end;
 
+function THTMLWriter.OpenProgress: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenQuotation: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftQuotation);
+end;
+
+function THTMLWriter.OpenRP: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenRT: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
+function THTMLWriter.OpenRuby: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenSample: IHTMLWriter;
@@ -1985,6 +2146,11 @@ end;
 function THTMLWriter.OpenScript: IHTMLWriter;
 begin
   Result := AddTag(cScript);
+end;
+
+function THTMLWriter.OpenSection: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenSelect(aName: string): IHTMLWriter;
@@ -1999,6 +2165,11 @@ begin
   Result := OpenFormatTag(ftSmall);
 end;
 
+function THTMLWriter.OpenSource: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
+end;
+
 function THTMLWriter.OpenSpan: IHTMLWriter;
 begin
   Result := AddTag(TBlockTypeStrings[btSpan], ctNormal, chaCanHaveAttributes);
@@ -2007,6 +2178,11 @@ end;
 function THTMLWriter.AddStyle(aStyle: string): IHTMLWriter;
 begin
   Result := AddAttribute(cStyle, aStyle);
+end;
+
+function THTMLWriter.OpenDatalist: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenDefinition: IHTMLWriter;
@@ -2051,6 +2227,11 @@ end;
 function THTMLWriter.OpenDelete: IHTMLWriter;
 begin
   Result := OpenFormatTag(ftDelete);
+end;
+
+function THTMLWriter.OpenDetails: IHTMLWriter;
+begin
+  CheckIsUsingHTML5;
 end;
 
 function THTMLWriter.OpenDiv: IHTMLWriter;
