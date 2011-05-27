@@ -38,7 +38,6 @@ resourcestring
   strTagNameRequired = 'The aTagName parameter of the THTMLWriter constructor cannot be an empty string.';
   strOpenBracketImpossible = 'It should be impossible that the bracket is open here. Seeing this error means a very bad logic problem.';
   strAMetaTagCanOnly = 'This tag can only be added inside a <head> tag.';
-  strThisMethodCanOnly = 'This method can only be called inside a <meta> tag.';
   strClosingClosedTag = 'An attempt is being made to close a tag that is already closed.';
   strMustBeInList = 'A list must be open in order to call CloseList.';
   strMustBeInTable = 'A <table> tag must be open in order to call this.';
@@ -359,7 +358,6 @@ type
       cAnchor = 'a';
       cHREF = 'href';
       cImage = 'img';
-      cURL = 'url';
       cSource = 'src';
       cHardRule = 'hr';
       cBreak = 'br';
