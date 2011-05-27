@@ -1888,7 +1888,7 @@ end;
 
 procedure THTMLWriter.CheckIsUsingHTML5;
 begin
-  if not IsUsingHTML5 then
+  if (not IsUsingHTML5) and CheckForErrors then
   begin
     raise ECantUseHTML5TagHTMLWriterException.Create(strCantUseHTML5);
   end;

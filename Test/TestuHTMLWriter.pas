@@ -152,7 +152,6 @@ type
     procedure TestAddDivTextWithClass;
     procedure TestAddMetaNamedContent;
 
-    procedure TestAsHTML;
     procedure TestAddText;
     procedure TestAddHead;
     procedure TestOpenTitle;
@@ -213,18 +212,11 @@ type
     procedure TestAddID;
     procedure TestAddAttribute;
     procedure TestCloseTag;
-  end;
-  // Test methods for class IGetHTML
 
-  TestIGetHTML = class(TTestCase)
-  strict private
-    FIGetHTML: IGetHTML;
-  public
-    procedure SetUp; override;
-    procedure TearDown; override;
-  published
     procedure TestAsHTML;
+
   end;
+
 
 implementation
 
@@ -1312,7 +1304,6 @@ var
   TestResult: string;
   ExpectedResult: string;
   TempTag: string;
-  TempName: string;
   TempType: TInputType;
 begin
   TempTag := cInput;
@@ -1337,7 +1328,6 @@ begin
     [TempTag]);
   CheckEquals(ExpectedResult, TestResult);
 
-  TempName := 'Verdana';
   TempType := itHidden;
   TestResult := HTMLWriterFactory('html').OpenForm.OpenInput(TempType, 'farble')
     .CloseTag.CloseTag.CloseTag.AsHTML;
@@ -1463,10 +1453,8 @@ procedure TestTHTMLWriter.TestLabel;
 var
   TestResult: string;
   ExpectedResult: string;
-  TempName: string;
   Temp: IHTMLWriter;
 begin
-  TempName := 'kreetom';
   ExpectedResult := Format(HTML('<form method="get"><%s></%s></form>'),
     [cLabel, cLabel]);
   Temp := HTMLWriterFactory(cHTML);
@@ -3999,12 +3987,12 @@ begin
     cCRLF + '  </b>' + cCRLF + '</html>';
   TempWriter := HTMLWriterFactory(cHTML).CRLF.Indent(2).OpenBold.CRLF.Indent(4)
     .AddText(TempStr).CRLF.Indent(2).CloseTag.CRLF.CloseTag;
-
+  CheckEquals(ExpectedResult, TempWriter.AsHTML, 'CRLF and indentations not correctly done.');
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
 var
-  Temp: IHTMLWriter;
+  TempWriter: IHTMLWriter;
 begin
   // <font>
   CheckException(ETagIsDeprecatedHTMLWriterException,
@@ -4019,9 +4007,9 @@ begin
 
   // Negative test case for <font>
   try
-    Temp := HTMLWriterFactory(cHTML);
-    Temp.ErrorLevels := [elErrors, elStrictHTML4];
-    Temp := Temp.OpenFont;
+    TempWriter := HTMLWriterFactory(cHTML);
+    TempWriter.ErrorLevels := [elErrors, elStrictHTML4];
+    TempWriter := TempWriter.OpenFont;
     Check(False,
       'Did not raise ETagIsDeprecatedHTMLWriterException when trying to add a <font> when it was not marked deprecated');
   except
@@ -4152,22 +4140,6 @@ begin
   TestResult := HTMLWriterFactory(cHTML).AddSpanTextWithID(TempString, TempID)
     .CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
-end;
-
-procedure TestIGetHTML.SetUp;
-begin
-end;
-
-procedure TestIGetHTML.TearDown;
-begin
-  FIGetHTML := nil;
-end;
-
-procedure TestIGetHTML.TestAsHTML;
-var
-  ReturnValue: string;
-begin
-  ReturnValue := FIGetHTML.AsHTML;
 end;
 
 initialization
