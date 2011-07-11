@@ -60,7 +60,7 @@ type
     FErrorLevels: THTMLErrorLevels;
     FParent: IHTMLWriter;
     function AddFormattedText(aString: string; aFormatType: TFormatType): IHTMLWriter;
-    function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): IHTMLWriter;
+    function OpenFormatTag(aFormatType: TFormatType): IHTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): IHTMLWriter;
 {$REGION 'In Tag Type Methods'}
     function InHeadTag: Boolean;
@@ -368,7 +368,7 @@ type
 {$ENDREGION}
 {$REGION 'Properties'}
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
-    property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
+    property ErrorLevels: THTMLErrorLevels read FErrorLevels write FErrorLevels;
     property HTML: TStringBuilder read GetHTML;
 {$ENDREGION}
 
@@ -767,7 +767,7 @@ begin
   end;
 end;
 
-function THTMLWriter.OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): IHTMLWriter;
+function THTMLWriter.OpenFormatTag(aFormatType: TFormatType): IHTMLWriter;
 begin
   Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal, chaCannotHaveAttributes);
 end;
