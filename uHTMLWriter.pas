@@ -59,7 +59,6 @@ type
     FFormState: TFormStates;
     FErrorLevels: THTMLErrorLevels;
     FParent: IHTMLWriter;
-    FCanHaveAttributes: TCanHaveAttributes;
     function AddFormattedText(aString: string; aFormatType: TFormatType): IHTMLWriter;
     function OpenFormatTag(aFormatType: TFormatType; aCanAddAttributes: TCanHaveAttributes = chaCannotHaveAttributes): IHTMLWriter;
     function AddHeadingText(aString: string; aHeadingType: THeadingType): IHTMLWriter;
@@ -600,7 +599,6 @@ end;
 procedure THTMLWriter.InitializeFullConstructor(aTagName: string; aCloseTagType: TCloseTagType);
 begin
   FCurrentTagName := aTagName;
-  FCanHaveAttributes := chaCanHaveAttributes;
   FHTML := TStringBuilder.Create;
   FHTML := FHTML.Append(cOpenBracket).Append(FCurrentTagName);
   FTagState := FTagState + [tsBracketOpen];
@@ -617,7 +615,6 @@ begin
   FFormState := aHTMLWriter.FFormState;
   FTableState := aHTMLWriter.FTableState;
   FErrorLevels := aHTMLWriter.FErrorLevels;
-  FCanHaveAttributes := aHTMLWriter.FCanHaveAttributes;
   FClosingTag := aHTMLWriter.FClosingTag;
 end;
 
