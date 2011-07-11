@@ -17,3 +17,5 @@ glob:*.dcp
 glob:out/**
 glob:CreateFileToUpload.bat
 glob:send2goog
+glob:*.aqt
+

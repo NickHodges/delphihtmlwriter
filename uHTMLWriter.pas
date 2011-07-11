@@ -125,6 +125,8 @@ type
     function ProcessTableTag(aTableTag: string): IHTMLWriter;
     function ProcessBasicHeadTag(aBase: string): IHTMLWriter;
     function ProcessFormattingTag(aFormatTag: TFormatType; aErrorLevel: THTMLErrorLevel): IHTMLWriter;
+  private
+    procedure ProcessUseEmptyTag(aUseEmptyTag: TIsEmptyTag);
 
   public
 {$REGION 'Constructors/Destructors'}
@@ -1134,6 +1136,16 @@ begin
   CheckIsUsingHTML5;
 end;
 
+procedure THTMLWriter.ProcessUseEmptyTag(aUseEmptyTag: TIsEmptyTag);
+begin
+  case aUseEmptyTag of
+    ietIsEmptyTag:
+      FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
+    ietIsNotEmptyTag:
+      FHTML := FHTML.Append(cCloseBracket);
+  end;
+end;
+
 procedure THTMLWriter.SaveToFile(const FileName: string);
 begin
   SaveToFile(FileName, nil);
@@ -1479,12 +1491,7 @@ begin
   begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
-  case aUseEmptyTag of
-    ietIsEmptyTag:
-      FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-    ietIsNotEmptyTag:
-      FHTML := FHTML.Append(cCloseBracket);
-  end;
+  ProcessUseEmptyTag(aUseEmptyTag);
   Result := Self;
 end;
 
@@ -1848,12 +1855,7 @@ begin
   begin
     FHTML := FHTML.Append(cSpace).AppendFormat('%s="%s"', [cClear, TClearValueStrings[aClearValue]]);
   end;
-  case aUseEmptyTag of
-    ietIsEmptyTag:
-      FHTML := FHTML.Append(TTagMaker.MakeSlashCloseTag);
-    ietIsNotEmptyTag:
-      FHTML := FHTML.Append(cCloseBracket);
-  end;
+  ProcessUseEmptyTag(aUseEmptyTag);
   Result := Self;
 end;
 
