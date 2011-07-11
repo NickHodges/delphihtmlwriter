@@ -124,7 +124,6 @@ type
     function ProcessTableTag(aTableTag: string): IHTMLWriter;
     function ProcessBasicHeadTag(aBase: string): IHTMLWriter;
     function ProcessFormattingTag(aFormatTag: TFormatType; aErrorLevel: THTMLErrorLevel): IHTMLWriter;
-  private
     procedure ProcessUseEmptyTag(aUseEmptyTag: TIsEmptyTag);
 
   public
