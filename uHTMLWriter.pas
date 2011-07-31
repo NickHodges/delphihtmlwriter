@@ -1575,6 +1575,7 @@ end;
 function THTMLWriter.OpenArticle: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+
 end;
 
 function THTMLWriter.OpenAside: IHTMLWriter;

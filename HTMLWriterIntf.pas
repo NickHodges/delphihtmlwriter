@@ -485,8 +485,6 @@ type
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;
 
-
-
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
