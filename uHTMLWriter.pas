@@ -44,7 +44,7 @@ function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload
 /// <param name="aCloseTagType">This optional parameter defines how the starting tag should be closed.</param>
 /// <param name="aCanAddAttributes">This otional parameter defines whether or not the tag should be allowed to take attributes.</param>
 /// <remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
-function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
+function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal): IHTMLWriter; overload;
 
 function HTMLWriterCreateHTML5Document: IHTMLWriter;
 
@@ -136,7 +136,7 @@ type
     /// <param name="aCanAddAttributes">Indicates if the tag should be allowed to have attributes. For instance, normally the &lt;b&gt; doesn't have attributes. Set this to False if you want to ensure that the tag will not have any attributes.</param>
     /// <exception cref="EHTMLWriterEmptyTagException">raised if an empty tag is passed as the aTagName parameter</exception>
     /// <seealso cref="CreateDocument">The CreateDocument constructor</seealso>
-    constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes); overload;
+    constructor Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal); overload;
     constructor Create(aHTMLWriter: THTMLWriter); overload;
     /// <summary>The CreateDocument constructor will create a standard HTML document.</summary>
     constructor CreateDocument; overload;
@@ -144,7 +144,7 @@ type
 
     destructor Destroy; override;
 {$ENDREGION}
-    function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+    function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal): IHTMLWriter;
 {$REGION 'Main Section Methods'}
     function OpenHead: IHTMLWriter;
     function OpenMeta: IHTMLWriter;
@@ -492,7 +492,7 @@ begin
   end;
 end;
 
-constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
+constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal);
 begin
   if StringIsEmpty(aTagName, False) then
   begin
@@ -517,7 +517,7 @@ end;
 
 constructor THTMLWriter.CreateDocument;
 begin
-  Create(cHTML, ctNormal, chaCanHaveAttributes);
+  Create(cHTML, ctNormal);
 end;
 
 destructor THTMLWriter.Destroy;
@@ -774,7 +774,7 @@ end;
 
 function THTMLWriter.OpenFormatTag(aFormatType: TFormatType): IHTMLWriter;
 begin
-  Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal, chaCannotHaveAttributes);
+  Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal);
 end;
 
 function THTMLWriter.OpenFrame: IHTMLWriter;
@@ -1398,12 +1398,12 @@ begin
   Result := OpenTableData.AddText(aText).CloseTag;
 end;
 
-function THTMLWriter.AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+function THTMLWriter.AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal): IHTMLWriter;
 var
   Temp: THTMLWriter;
 begin
   CloseBracket;
-  Temp := THTMLWriter.Create(aString, aCloseTagType, aCanAddAttributes);
+  Temp := THTMLWriter.Create(aString, aCloseTagType);
   Temp.FParent := Self.FParent;
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
   Temp.FFormState := Self.FFormState;
@@ -1428,7 +1428,7 @@ var
   TempStr: string;
 begin
   CloseBracket;
-  Temp := THTMLWriter.Create(cComment, ctComment, chaCannotHaveAttributes);
+  Temp := THTMLWriter.Create(cComment, ctComment);
   Temp.FParent := Self.FParent;
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
   Temp.FFormState := Self.FFormState;
@@ -1515,7 +1515,7 @@ begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Temp.FTagState := Temp.FTagState + [tsInHeadTag];
-  Result := Temp.AddTag(cHead, ctNormal, chaCanHaveAttributes);
+  Result := Temp.AddTag(cHead, ctNormal);
 end;
 
 function THTMLWriter.OpenHeader: IHTMLWriter;
@@ -1649,12 +1649,12 @@ end;
 
 function THTMLWriter.OpenBlockQuote: IHTMLWriter;
 begin
-  Result := AddTag(cBlockQuote, ctNormal, chaCanHaveAttributes);
+  Result := AddTag(cBlockQuote, ctNormal);
 end;
 
 function THTMLWriter.OpenBody: IHTMLWriter;
 begin
-  Result := AddTag(cBody, ctNormal, chaCanHaveAttributes);
+  Result := AddTag(cBody, ctNormal);
 end;
 
 function THTMLWriter.AddBase(aHREF: string): IHTMLWriter;
@@ -1687,7 +1687,7 @@ end;
 
 function THTMLWriter.AddBlockQuoteText(aString: string): IHTMLWriter;
 begin
-  Result := AddTag(cBlockQuote, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(cBlockQuote, ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddBoldText(aString: string): IHTMLWriter;
@@ -1757,7 +1757,7 @@ end;
 
 function THTMLWriter.AddDivText(aString: string): IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btDiv], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btDiv], ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddDivTextWithClass(aString, aClass: string): IHTMLWriter;
@@ -1797,7 +1797,7 @@ end;
 
 function THTMLWriter.AddSpanText(aString: string): IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btSpan], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btSpan], ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddSpanTextWithClass(aString, aClass: string): IHTMLWriter;
@@ -2065,7 +2065,7 @@ end;
 
 function THTMLWriter.AddParagraphText(aString: string): IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btParagraph], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TBlockTypeStrings[btParagraph], ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddParagraphTextWithClass(aString, aClass: string): IHTMLWriter;
@@ -2106,7 +2106,7 @@ end;
 
 function THTMLWriter.OpenParagraph: IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btParagraph], ctNormal, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btParagraph], ctNormal);
 end;
 
 function THTMLWriter.OpenParagraphWithStyle(aStyle: string): IHTMLWriter;
@@ -2198,7 +2198,7 @@ end;
 
 function THTMLWriter.OpenSpan: IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btSpan], ctNormal, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btSpan], ctNormal);
 end;
 
 function THTMLWriter.AddStyle(aStyle: string): IHTMLWriter;
@@ -2264,7 +2264,7 @@ end;
 
 function THTMLWriter.OpenDiv: IHTMLWriter;
 begin
-  Result := AddTag(TBlockTypeStrings[btDiv], ctNormal, chaCanHaveAttributes);
+  Result := AddTag(TBlockTypeStrings[btDiv], ctNormal);
 end;
 
 function THTMLWriter.AddFontText(aString: string): IHTMLWriter;
@@ -2274,12 +2274,12 @@ end;
 
 function THTMLWriter.AddFormattedText(aString: string; aFormatType: TFormatType): IHTMLWriter;
 begin
-  Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(TFormatTypeStrings[aFormatType], ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddHeadingText(aString: string; aHeadingType: THeadingType): IHTMLWriter;
 begin
-  Result := AddTag(THeadingTypeStrings[aHeadingType], ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+  Result := AddTag(THeadingTypeStrings[aHeadingType], ctNormal).AddText(aString).CloseTag;
 end;
 
 function THTMLWriter.AddAbbreviationText(aString: string): IHTMLWriter;
@@ -2320,9 +2320,9 @@ begin
   Result := THTMLWriter.CreateDocument;
 end;
 
-function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal): IHTMLWriter;
 begin
-  Result := THTMLWriter.Create(aTagName, aCloseTagType, aCanAddAttributes);
+  Result := THTMLWriter.Create(aTagName, aCloseTagType);
 end;
 
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;

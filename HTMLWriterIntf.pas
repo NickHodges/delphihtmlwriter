@@ -67,7 +67,7 @@ type
     function GetErrorLevels: THTMLErrorLevels;
     procedure SetErrorLevels(const Value: THTMLErrorLevels);
     function GetHTML: TStringBuilder;
-    function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+    function AddTag(aString: string; aCloseTagType: TCloseTagType = ctNormal): IHTMLWriter;
     /// <summary>Opens a&lt;head&gt; tag to the document.  </summary>
     function OpenHead: IHTMLWriter;
     /// <summary>Opens a &lt;meta&gt; tag.</summary>
