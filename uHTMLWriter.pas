@@ -712,6 +712,7 @@ end;
 function THTMLWriter.OpenEmbed: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cEmbed);
 end;
 
 function THTMLWriter.OpenEmphasis: IHTMLWriter;
@@ -733,11 +734,13 @@ end;
 function THTMLWriter.OpenFigCaption: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cFigCaption);
 end;
 
 function THTMLWriter.OpenFigure: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cFigure);
 end;
 
 function THTMLWriter.OpenFont: IHTMLWriter;
@@ -748,6 +751,7 @@ end;
 function THTMLWriter.OpenFooter: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cFooter);
 end;
 
 function THTMLWriter.OpenForm(aActionURL: string = cEmptyString; aMethod: TFormMethod = fmGet): IHTMLWriter;
@@ -824,6 +828,7 @@ end;
 function THTMLWriter.OpenHGroup: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cHGroup);
 end;
 
 function THTMLWriter.OpenImage: IHTMLWriter;
@@ -895,6 +900,7 @@ end;
 function THTMLWriter.OpenKeyGen: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cKeyGen);
 end;
 
 function THTMLWriter.OpenLabel: IHTMLWriter;
@@ -938,6 +944,7 @@ end;
 function THTMLWriter.OpenMark: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cMark);
 end;
 
 function THTMLWriter.OpenMeta: IHTMLWriter;
@@ -948,11 +955,13 @@ end;
 function THTMLWriter.OpenMeter: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cMeter);
 end;
 
 function THTMLWriter.OpenNav: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cNav);
 end;
 
 function THTMLWriter.OpenNoFrames: IHTMLWriter;
@@ -979,6 +988,7 @@ end;
 function THTMLWriter.OpenSummary: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cSummary);
 end;
 
 function THTMLWriter.OpenTable: IHTMLWriter;
@@ -1092,6 +1102,7 @@ end;
 function THTMLWriter.OpenTime: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cTime);
 end;
 
 function THTMLWriter.OpenTitle: IHTMLWriter;
@@ -1127,11 +1138,13 @@ end;
 function THTMLWriter.OpenVideo: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cVideo);
 end;
 
 function THTMLWriter.OpenWBR: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cWBR);
 end;
 
 procedure THTMLWriter.ProcessUseEmptyTag(aUseEmptyTag: TIsEmptyTag);
@@ -1286,6 +1299,7 @@ end;
 function THTMLWriter.OpenOutput: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cOutput);
 end;
 
 procedure THTMLWriter.CleanUpTagState;
@@ -1405,6 +1419,7 @@ end;
 function THTMLWriter.OpenCommand: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cCommand);
 end;
 
 function THTMLWriter.OpenComment: IHTMLWriter;
@@ -1506,6 +1521,7 @@ end;
 function THTMLWriter.OpenHeader: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cHeader);
 end;
 
 function THTMLWriter.AddHeading1Text(aString: string): IHTMLWriter;
@@ -1583,11 +1599,13 @@ end;
 function THTMLWriter.OpenAside: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cAside);
 end;
 
 function THTMLWriter.OpenAudio: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cAudio);
 end;
 
 procedure THTMLWriter.CloseTheTag;
@@ -1680,6 +1698,7 @@ end;
 function THTMLWriter.OpenCanvas: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cCanvas);
 end;
 
 function THTMLWriter.OpenCaption: IHTMLWriter;
@@ -2117,6 +2136,7 @@ end;
 function THTMLWriter.OpenProgress: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cProgress);
 end;
 
 function THTMLWriter.OpenQuotation: IHTMLWriter;
@@ -2127,16 +2147,19 @@ end;
 function THTMLWriter.OpenRP: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cRP);
 end;
 
 function THTMLWriter.OpenRT: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cRT);
 end;
 
 function THTMLWriter.OpenRuby: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cRuby);
 end;
 
 function THTMLWriter.OpenSample: IHTMLWriter;
@@ -2152,6 +2175,7 @@ end;
 function THTMLWriter.OpenSection: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cSection);
 end;
 
 function THTMLWriter.OpenSelect(aName: string): IHTMLWriter;
@@ -2169,6 +2193,7 @@ end;
 function THTMLWriter.OpenSource: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cSource5);
 end;
 
 function THTMLWriter.OpenSpan: IHTMLWriter;
@@ -2184,6 +2209,7 @@ end;
 function THTMLWriter.OpenDatalist: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cDataList);
 end;
 
 function THTMLWriter.OpenDefinition: IHTMLWriter;
@@ -2233,6 +2259,7 @@ end;
 function THTMLWriter.OpenDetails: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
+  Result := AddTag(cDetails);
 end;
 
 function THTMLWriter.OpenDiv: IHTMLWriter;
