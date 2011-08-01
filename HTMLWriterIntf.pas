@@ -38,6 +38,7 @@ uses
     ;
 
 type
+
   /// <summary>An interface for creating HTML.  IHTMLWriter uses the fluent interface. It can be used to create either
   /// complete HTML documents or chunks of HTML.  By using the fluent interface, you can link together number of methods
   /// to create a complete document.</summary>
@@ -489,9 +490,7 @@ type
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>
     property ErrorLevels: THTMLErrorLevels read GetErrorLevels write SetErrorLevels;
     property HTML: TStringBuilder read GetHTML;
-end;
 
-IHTML5 = interface
     // HTML 5 Only Tags
     function OpenArticle: IHTMLWriter;
     function OpenAside: IHTMLWriter;

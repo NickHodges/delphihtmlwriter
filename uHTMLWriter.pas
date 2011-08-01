@@ -46,10 +46,12 @@ function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload
 /// <remarks>Use this function when you need to create a "chunk" of HTML, and not a complete HTML document.</remarks>
 function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
+function HTMLWriterCreateHTML5Document: IHTMLWriter;
+
 implementation
 
 type
-  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter, IHTML5)
+  THTMLWriter = class(TInterfacedObject, IGetHTML, ILoadSave, IHTMLWriter)
   strict private
     FHTML: TStringBuilder;
     FClosingTag: string;
@@ -1575,7 +1577,7 @@ end;
 function THTMLWriter.OpenArticle: IHTMLWriter;
 begin
   CheckIsUsingHTML5;
-
+  Result := AddTag(cArticle);
 end;
 
 function THTMLWriter.OpenAside: IHTMLWriter;
@@ -2300,5 +2302,12 @@ function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload
 begin
   Result := THTMLWriter.CreateDocument(aDocType);
 end;
+
+function HTMLWriterCreateHTML5Document: IHTMLWriter;
+begin
+  Result := THTMLWriter.CreateDocument(dtHTML5);
+  Result.ErrorLevels := Result.ErrorLevels + [elStrictHTML5];
+end;
+
 
 end.
