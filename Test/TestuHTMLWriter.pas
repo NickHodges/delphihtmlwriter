@@ -38,6 +38,48 @@ type
     procedure TearDown; override;
 
   published
+   // HTML 5 tests
+
+   procedure TestOpenArticle;
+   procedure TestOpenAside;
+   procedure TestOpenAudio;
+   procedure TestOpenCanvas;
+   procedure TestOpenCommand;
+   procedure TestOpenDatalist;
+   procedure TestOpenDetails;
+   procedure TestOpenEmbed;
+   procedure TestOpenFigCaption;
+   procedure TestOpenFigure;
+   procedure TestOpenFooter;
+   procedure TestOpenHeader;
+   procedure TestOpenHGroup;
+   procedure TestOpenKeyGen;
+   procedure TestOpenMark;
+   procedure TestOpenMeter;
+   procedure TestOpenNav;
+   procedure TestOpenOutput;
+   procedure TestOpenProgress;
+   procedure TestOpenRP;
+   procedure TestOpenRT;
+   procedure TestOpenRuby;
+   procedure TestOpenSection;
+   procedure TestOpenSource;
+   procedure TestOpenSummary;
+   procedure TestOpenTime;
+   procedure TestOpenVideo;
+   procedure TestOpenWBR;
+
+
+
+
+
+
+
+
+
+
+
+   // HTML4 tests
     procedure TestDeprecated;
     procedure TestDefinitionListStuff;
     procedure TestArea;
@@ -1401,6 +1443,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
 end;
+
 
 procedure TestTHTMLWriter.TestBaseFont;
 var
@@ -4141,6 +4184,168 @@ begin
     .CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 end;
+
+procedure TestTHTMLWriter.TestOpenArticle;
+var
+  Temp: IHTMLWriter;
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := cArticle;
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenArticle.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenArticle.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenArticle.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenArticle.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenAside;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenAudio;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenCanvas;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenCommand;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenDatalist;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenDetails;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenEmbed;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenFigCaption;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenFigure;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenFooter;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenHeader;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenHGroup;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenKeyGen;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenMark;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenMeter;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenNav;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenOutput;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenProgress;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenRP;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenRT;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenRuby;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenSection;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenSource;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenSummary;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenTime;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenVideo;
+begin
+
+end;
+
+procedure TestTHTMLWriter.TestOpenWBR;
+begin
+
+end;
+
 
 initialization
 
