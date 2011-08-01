@@ -4185,9 +4185,10 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
+// IHTML5 Methods
+
 procedure TestTHTMLWriter.TestOpenArticle;
 var
-  Temp: IHTMLWriter;
   TestResult: string;
   ExpectedResult: string;
   TempTag: string;
@@ -4212,140 +4213,677 @@ begin
 end;
 
 procedure TestTHTMLWriter.TestOpenAside;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cAside;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenAside.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAside.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAside.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAside.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenAudio;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cAudio;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenAudio.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAudio.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAudio.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenAudio.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenCanvas;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cCanvas;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenCanvas.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCanvas.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCanvas.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCanvas.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenCommand;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cCommand;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenCommand.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCommand.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCommand.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenCommand.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenDatalist;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cDataList;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenDatalist.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDatalist.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDatalist.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDatalist.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenDetails;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cDetails;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenDetails.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDetails.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDetails.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenDetails.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenEmbed;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cEmbed;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenEmbed.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenEmbed.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenEmbed.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenEmbed.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenFigCaption;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cFigCaption;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigCaption.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigCaption.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigCaption.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigCaption.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenFigure;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cFigure;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigure.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigure.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigure.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFigure.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenFooter;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cFooter;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenFooter.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFooter.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFooter.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenFooter.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHeader;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cHeader;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenHeader.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHeader.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHeader.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHeader.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenHGroup;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cHGroup;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenHGroup.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHGroup.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHGroup.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenHGroup.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenKeyGen;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cKeyGen;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenKeyGen.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenKeyGen.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenKeyGen.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenKeyGen.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 procedure TestTHTMLWriter.TestOpenMark;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cMark;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenMark.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMark.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMark.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMark.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenMeter;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cMeter;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenMeter.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMeter.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMeter.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenMeter.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenNav;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cNav;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenNav.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenNav.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenNav.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenNav.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenOutput;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cOutput;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenOutput.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenOutput.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenOutput.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenOutput.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenProgress;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cProgress;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenProgress.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenProgress.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenProgress.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenProgress.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenRP;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cRP;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenRP.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRP.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRP.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRP.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenRT;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cRT;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenRT.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRT.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRT.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRT.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenRuby;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cRuby;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenRuby.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRuby.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRuby.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenRuby.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenSection;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cSection;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenSection.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSection.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSection.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSection.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenSource;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cSource5;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenSource.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSource.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSource.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSource.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenSummary;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cSummary;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenSummary.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSummary.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSummary.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenSummary.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenTime;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cTime;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenTime.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenTime.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenTime.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenTime.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 procedure TestTHTMLWriter.TestOpenVideo;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cVideo;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenVideo.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenVideo.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenVideo.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenVideo.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 procedure TestTHTMLWriter.TestOpenWBR;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
 begin
+  TempTag := cWBR;
 
+  TestResult := HTMLWriterCreateHTML5Document.OpenWBR.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenWBR.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenWBR.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterCreateHTML5Document.OpenWBR.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format(THTMLDocTypeStrings[dtHTML5] + '<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
 end;
-
 
 initialization
 
