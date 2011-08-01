@@ -177,12 +177,6 @@ type
     );
     TFormStates = set of TFormState;
 
-//    TCanHaveAttributes = (
-//      /// <summary>Indicates that the given tag can accept attributes.</summary>
-//      chaCanHaveAttributes,
-//      /// <summary>Indicates that the given tag cannot accept attributes.</summary>
-//      chaCannotHaveAttributes);
-
     /// <summary>An enumeration listing the different ways that text can be formatted</summary>
     TFormatType = (
       /// <summary>Formats with a &lt;b&gt; tag</summary>
