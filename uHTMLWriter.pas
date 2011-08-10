@@ -406,6 +406,24 @@ type
 {$ENDREGION}
   end;
 
+
+  { Tags explicitly not supported in HTML5:
+
+    acronym
+    applet
+    basefont
+    big
+    center
+    dir
+    font
+    frame/frameset/noframes
+    strike
+    tt
+    u
+    xmp
+
+  }
+
   { THTMLWriter }
 
 constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
@@ -858,6 +876,11 @@ end;
 
 function THTMLWriter.OpenInput(aType: TInputType; aName: string = cEmptyString): IHTMLWriter;
 begin
+  if aType > itText then
+  begin
+    CheckIsUsingHTML5;
+  end;
+
   CheckInFormTag;
   Result := OpenInput.AddAttribute(cType, TInputTypeStrings[aType]);
   if StringIsNotEmpty(aName) then

@@ -292,7 +292,11 @@ type
       /// <summary>Indicates a POST action</summary>
       fmPost);
 
-    TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
+    TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText,
+                  // The following are HTML 5 Input types.  Any item here above itText
+                  // will be HTML 5 only.
+                  itTel, itSearch, itURL, itEmail, itDateTime, itDate, itMonth, itWeek, itTime, itDateTimeLocal, itNumber, itRange, itColor
+                  );
 
     TBlockType = (btDiv, btSpan, btParagraph);
 
@@ -311,7 +315,8 @@ type
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
     TTargetTypeStrings: array [TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
-    TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
+    TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text',
+                                                       'tel', 'search', 'url', 'email', 'datetime', 'date', 'month', 'week', 'time', 'datetime-local', 'number', 'range', 'color' );
     TFormMethodStrings: array [TFormMethod] of string = ('', 'get', 'post');
     THTMLErrorLevelStrings: array [THTMLErrorLevel] of string = ('', '4.x', '5.x', 'xhmtl');
 
