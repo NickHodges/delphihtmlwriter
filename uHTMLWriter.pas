@@ -368,9 +368,11 @@ type
     function OpenObject: IHTMLWriter;
     function OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter; // name parameter is required
 
-    function OpenDefinitionList: IHTMLWriter;
-    function OpenDefinitionTerm: IHTMLWriter;
-    function OpenDefinitionItem: IHTMLWriter;
+{$REGION 'DefinitionList items'}
+      function OpenDefinitionList: IHTMLWriter;
+      function OpenDefinitionTerm: IHTMLWriter;
+      function OpenDefinitionItem: IHTMLWriter;
+{$ENDREGION}
 
     class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
