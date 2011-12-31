@@ -387,7 +387,7 @@ constructor THTMLWriter.Create(aHTMLWriter: THTMLWriter);
 begin
   inherited Create; ;
   FHTML := TStringBuilder.Create;
-  HTML.Append(aHTMLWriter.HTML.ToString);
+  HTML.Append(aHTMLWriter.HTML);
   FCurrentTagName := aHTMLWriter.FCurrentTagName;
   FTagState := aHTMLWriter.FTagState;
   FFormState := aHTMLWriter.FFormState;
