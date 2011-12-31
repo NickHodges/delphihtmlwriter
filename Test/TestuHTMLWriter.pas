@@ -225,7 +225,7 @@ type
 
 implementation
 
-uses Windows;
+uses Windows, LoadSaveIntf;
 
 procedure TestTHTMLWriter.SetUp;
 begin
