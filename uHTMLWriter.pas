@@ -477,7 +477,7 @@ end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 begin
-  if StringIsEmpty(aTagName) then
+  if TStringDecorator.StringIsEmpty(aTagName) then
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
@@ -714,7 +714,7 @@ begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Result := Temp.AddTag(cForm);
-  if not StringIsEmpty(aActionURL) then
+  if not TStringDecorator.StringIsEmpty(aActionURL) then
   begin
     Result := Result[cAction, aActionURL];
   end;
@@ -806,7 +806,7 @@ function THTMLWriter.OpenInput(aType: TInputType; aName: string = cEmptyString):
 begin
   CheckInFormTag;
   Result := OpenInput[cType, TInputTypeStrings[aType]];
-  if StringIsNotEmpty(aName) then
+  if TStringDecorator.StringIsNotEmpty(aName) then
   begin
     Result := Result[cName, aName];
   end;
@@ -926,7 +926,7 @@ end;
 
 function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): IHTMLWriter;
 begin
-  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, ipIsNotPercentage));   { TODO : no boolean parameters. }
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, ipIsNotPercentage));   { DONE : no boolean parameters. }
 end;
 
 function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter;
@@ -1375,7 +1375,7 @@ function THTMLWriter.AddHardRule(const aAttributes: string = cEmptyString; aUseE
 begin
   CloseBracket;
   FHTML := FHTML.Append(cOpenBracket).Append(cHardRule);
-  if not StringIsEmpty(aAttributes) then
+  if not TStringDecorator.StringIsEmpty(aAttributes) then
   begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
@@ -1469,7 +1469,7 @@ procedure THTMLWriter.CloseTheTag;
 begin
   if TagIsOpen or InCommentTag then
   begin
-    if StringIsEmpty(FClosingTag) then
+    if TStringDecorator.StringIsEmpty(FClosingTag) then
     begin
       raise ENoClosingTagHTMLWriterException.Create(strNoClosingTag);
     end;
@@ -1962,12 +1962,12 @@ end;
 function THTMLWriter.OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter;
 begin
   CheckInObjectTag;
-  if StringIsEmpty(aName) then
+  if TStringDecorator.StringIsEmpty(aName) then
   begin
     raise EParamNameRequiredHTMLWriterException.Create(strParamNameRequired);
   end;
   Result := AddTag(cParam)[cName, aName];
-  if StringIsNotEmpty(aValue) then
+  if TStringDecorator.StringIsNotEmpty(aValue) then
   begin
     Result := Result[cValue, aValue];
   end;
