@@ -670,7 +670,7 @@ end;
 function THTMLWriter.OpenButton(aName: string): IHTMLWriter;
 begin
   CheckInFormTag;
-  Result := AddTag(cButton).AddAttribute(cName, aName);
+  Result := AddTag(cButton)[cName, aName];
 end;
 
 function THTMLWriter.OpenCenter: IHTMLWriter;
@@ -789,23 +789,23 @@ end;
 
 function THTMLWriter.OpenIFrame(aURL: string): IHTMLWriter;
 begin
-  Result := OpenIFrame.AddAttribute(cSource, aURL);
+  Result := OpenIFrame[cSource, aURL];     { TODO : Use index notation? }
 end;
 
 function THTMLWriter.OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter;
 begin
-  Result := OpenIFrame(aURL).AddAttribute(aWidth.WidthString).AddAttribute(cHeight, IntToStr(aHeight));
+  Result := OpenIFrame(aURL).AddAttribute(aWidth.WidthString)[cHeight, IntToStr(aHeight)];
 end;
 
 function THTMLWriter.OpenImage(aImageSource: string): IHTMLWriter;
 begin
-  Result := AddTag(cImage, ctEmpty).AddAttribute(cSource, aImageSource);
+  Result := AddTag(cImage, ctEmpty)[cSource, aImageSource];
 end;
 
 function THTMLWriter.OpenInput(aType: TInputType; aName: string = cEmptyString): IHTMLWriter;
 begin
   CheckInFormTag;
-  Result := OpenInput.AddAttribute(cType, TInputTypeStrings[aType]);
+  Result := OpenInput[cType, TInputTypeStrings[aType]];
   if StringIsNotEmpty(aName) then
   begin
     Result := Result[cName, aName];
@@ -926,7 +926,7 @@ end;
 
 function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): IHTMLWriter;
 begin
-  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, False));
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, False));   { TODO : no boolean parameters. }
 end;
 
 function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter;
@@ -940,21 +940,21 @@ begin
   Result := Temp.AddTag(cTable);
   if aBorder >= 0 then
   begin
-    Result := Result.AddAttribute(cBorder, IntToStr(aBorder));
+    Result := Result[cBorder, IntToStr(aBorder)];
   end;
   if aCellPadding >= 0 then
   begin
-    Result := Result.AddAttribute(cCellPadding, IntToStr(aCellPadding));
+    Result := Result[cCellPadding, IntToStr(aCellPadding)];
   end;
   if aCellSpacing >= 0 then
   begin
-    Result := Result.AddAttribute(cCellSpacing, IntToStr(aCellSpacing));
+    Result := Result[cCellSpacing, IntToStr(aCellSpacing)];
   end;
   if aWidth.Width >= 0 then
   begin
     if aWidth.IsPercentage then
     begin
-      Result := Result.AddAttribute(cWidth, aWidth.AsPercentage);
+      Result := Result[cWidth, aWidth.AsPercentage];
     end
     else
     begin
@@ -1038,7 +1038,7 @@ begin
   Result := Temp.AddTag(cUnorderedList);
   if aBulletShape <> bsNone then
   begin
-    Result := Result.AddAttribute(cType, TBulletShapeStrings[aBulletShape]);
+    Result := Result[cType, TBulletShapeStrings[aBulletShape]];
   end;
 end;
 
@@ -1182,7 +1182,7 @@ begin
   Result := Temp.AddTag(cOrderedList);
   if aNumberType <> ntNone then
   begin
-    Result := Result.AddAttribute(cType, TNumberTypeStrings[aNumberType]);
+    Result := Result[cType, TNumberTypeStrings[aNumberType]];
   end;
 end;
 
@@ -1451,7 +1451,7 @@ end;
 
 function THTMLWriter.OpenAnchor(const aHREF: string; aText: string): IHTMLWriter;
 begin
-  Result := OpenAnchor.AddAttribute(cHREF, aHREF).AddText(aText);
+  Result := OpenAnchor[cHREF, aHREF].AddText(aText);
 end;
 
 function THTMLWriter.OpenAnchor(aName: string): IHTMLWriter;
@@ -1514,18 +1514,18 @@ end;
 function THTMLWriter.AddBase(aHREF: string): IHTMLWriter;
 begin
   CheckInHeadTag;
-  Result := OpenBase.AddAttribute(cHREF, aHREF).CloseTag;
+  Result := OpenBase[cHREF, aHREF].CloseTag;
 end;
 
 function THTMLWriter.AddBase(aTarget: TTargetType; aFrameName: string = cEmptyString): IHTMLWriter;
 begin
   if aTarget = ttFrameName then
   begin
-    Result := OpenBase.AddAttribute(cTarget, aFrameName).CloseTag;
+    Result := OpenBase[cTarget, aFrameName].CloseTag;
   end
   else
   begin
-    Result := OpenBase.AddAttribute(cTarget, TTargetTypeStrings[aTarget]).CloseTag;
+    Result := OpenBase[cTarget, TTargetTypeStrings[aTarget]].CloseTag;
   end;
 end;
 
@@ -1562,9 +1562,9 @@ begin
   CheckNoColTag;
 
   Temp := THTMLWriter.Create(Self);
-  Temp.FTableState := Temp.FTableState + [tbsTableHasCaption];
   Temp.FParent := Self.FParent;
 
+  Temp.FTableState := Temp.FTableState + [tbsTableHasCaption];
   Result := Temp.AddTag(cCaption);
 end;
 
