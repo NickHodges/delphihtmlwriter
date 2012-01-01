@@ -81,13 +81,15 @@ type
     function AsHTML: string;
   end;
 
+  TIsPercentage = (ipIsPercentage, ipIsNotPercentage);
+
 
   /// <summary>A data structure that holds a width, and then publishes that width in various ways useful in
   /// HTML.</summary>
   THTMLWidth = record
     Width: integer;
-    IsPercentage: Boolean;
-    constructor Create(aWidth: integer; aIsPercentage: Boolean);
+    IsPercentage: TIsPercentage;
+    constructor Create(aWidth: integer; aIsPercentage: TIsPercentage);
     function AsPercentage: string;
     function WidthString: string;
     function WidthAsString: string;
@@ -470,13 +472,13 @@ end;
 function THTMLWidth.AsPercentage: string;
 begin
   Result := '';
-  if IsPercentage then
+  if IsPercentage = ipIsPercentage then
   begin
     Result := Format('%d%%', [Width]);
   end;
 end;
 
-constructor THTMLWidth.Create(aWidth: integer; aIsPercentage: Boolean);
+constructor THTMLWidth.Create(aWidth: integer; aIsPercentage: TIsPercentage);
 begin
   Width := aWidth;
   IsPercentage := aIsPercentage;

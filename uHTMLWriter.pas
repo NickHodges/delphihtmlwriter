@@ -789,7 +789,7 @@ end;
 
 function THTMLWriter.OpenIFrame(aURL: string): IHTMLWriter;
 begin
-  Result := OpenIFrame[cSource, aURL];     { TODO : Use index notation? }
+  Result := OpenIFrame[cSource, aURL];
 end;
 
 function THTMLWriter.OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter;
@@ -926,7 +926,7 @@ end;
 
 function THTMLWriter.OpenTable(aBorder, aCellPadding, aCellSpacing: integer): IHTMLWriter;
 begin
-  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, False));   { TODO : no boolean parameters. }
+  Result := OpenTable(aBorder, aCellPadding, aCellSpacing, THTMLWidth.Create(-1, ipIsNotPercentage));   { TODO : no boolean parameters. }
 end;
 
 function THTMLWriter.OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter;
@@ -952,7 +952,7 @@ begin
   end;
   if aWidth.Width >= 0 then
   begin
-    if aWidth.IsPercentage then
+    if aWidth.IsPercentage = ipIsPercentage then
     begin
       Result := Result[cWidth, aWidth.AsPercentage];
     end
