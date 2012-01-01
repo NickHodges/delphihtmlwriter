@@ -413,13 +413,41 @@ type
 
     THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 
-    /// <summary>Function to determine if a string is empty.</summary>
-    /// <param name="aString">The string to be examined for emptiness.</param>
-    /// <param name="aCountSpacesOnlyAsEmpty">An optional parameter that determines if empty spaces should be included.&#160;
-    /// If passed in as True, a string with nothing but spaces in it will be counted as empty.&#160; Defaults to
-    /// True.</param>
-    function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
-    function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+type
+    ///	<summary>
+    ///	  Type that determines if spaces should count as content or as empty space
+    ///	</summary>
+    ///	<remarks>
+    ///	  Used with TStringIsEmpty class functions
+    ///	</remarks>
+    TCountSpaces = (
+      ///	<summary>
+      ///	  Spaces should count as empty space. Use this member when you want a string to be considered empty if it contains spaces.  For instance, a string that consists of nothing but three spaces will be considered empty when this member is passed.
+      ///	</summary>
+      csSpacesCountAsEmpty,
+
+      ///	<summary>
+      ///	  Spaces should count as content.  Use this member when you want spaces to indicate that a string is not empty.  For instance, a string with nothing but three spaces in it would be considered not empty when this member is chosen. 
+      ///	</summary>
+      csSpacesCountAsContent
+    );
+
+ type
+    /// <summary>Simple static class to determine if a string is empty or not.</summary>
+    TStringDecorator = class
+
+      ///	<summary>
+      ///	  Determines if a string has content in it or not.
+      ///	</summary>
+      ///	<param name="aString">
+      ///	  The string to be examined for emptiness.
+      ///	</param>
+      ///	<param name="aSpacesAreContent">
+      ///	  An optional parameter that determines if empty spaces should be included. 
+      ///	</param>
+      class function StringIsEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
+      class function StringIsNotEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
+    end;
 
   type
 
@@ -433,18 +461,18 @@ type
 
 implementation
 
-function StringIsEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+class function TStringDecorator.StringIsEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
 begin
   Result := aString = EmptyStr;
-  if (not Result) and aCountSpacesOnlyAsEmpty then
+  if (not Result) and (aSpacesAreContent = csSpacesCountAsContent) then
   begin
     Result := Trim(aString) = EmptyStr;
   end;
 end;
 
-function StringIsNotEmpty(aString: string; aCountSpacesOnlyAsEmpty: Boolean = False): Boolean;
+class function TStringDecorator.StringIsNotEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
 begin
-  Result := not StringIsEmpty(aString, aCountSpacesOnlyAsEmpty);
+  Result := not StringIsEmpty(aString, aSpacesAreContent);
 end;
 
 class function TTagMaker.MakeCommentCloseTag: string;
