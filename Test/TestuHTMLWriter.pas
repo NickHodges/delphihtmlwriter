@@ -1577,44 +1577,44 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   // Width
-  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, ipIsNotPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, ipIsNotPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, ipIsNotPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, ipIsNotPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, False)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, ipIsNotPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
   // Width as percentage
-  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, 4, 5, THTMLWidth.Create(6, ipIsPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, 4, 5, THTMLWidth.Create(6, ipIsPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellpadding="4" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, ipIsPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(3, -1, 5, THTMLWidth.Create(6, ipIsPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table border="3" cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
-  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, True)).AddText('blah').CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory('html').OpenTable(-1, -1, 5, THTMLWidth.Create(6, ipIsPercentage)).AddText('blah').CloseTag.CloseTag.AsHTML;
   ExpectedResult := '<html><table cellspacing="5" width="6%">blah</table></html>';
   CheckEquals(ExpectedResult, TestResult);
 
@@ -2052,7 +2052,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   ExpectedResult := Format(HTML('<iframe src="%s" width="42" height="300"></iframe>'), [Temp]);
-  TestResult := HTMLWriterFactory(cHTML).OpenIFrame(Temp, THTMLWidth.Create(42, False), 300).CloseTag.CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).OpenIFrame(Temp, THTMLWidth.Create(42, ipIsNotPercentage), 300).CloseTag.CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
@@ -2439,7 +2439,7 @@ var
   ExpectedResult: string;
   TestResult: string;
 begin
-  TempWidth.IsPercentage := False;
+  TempWidth.IsPercentage := ipIsNotPercentage;
   TempWidth.Width := 42;
   ExpectedResult := '';
   TestResult := TempWidth.AsPercentage;
@@ -2454,7 +2454,7 @@ var
   TestResult: string;
 begin
   TempWidth.Width := 42;
-  TempWidth.IsPercentage := True;
+  TempWidth.IsPercentage := ipIsPercentage;
   ExpectedResult := '42%';
   TestResult := TempWidth.AsPercentage;
   CheckEquals(ExpectedResult, TestResult);
@@ -3398,7 +3398,7 @@ begin
   Temp := 'http://www.nickhodges.com';
   TempAlt := 'Hepger';
   ExpectedResult := Format(HTML('<iframe src="%s" width="42" height="300">%s</iframe>'), [Temp, TempAlt]);
-  TestResult := HTMLWriterFactory(cHTML).AddIFrame(Temp, TempAlt, THTMLWidth.Create(42, False), 300).CloseTag.AsHTML;
+  TestResult := HTMLWriterFactory(cHTML).AddIFrame(Temp, TempAlt, THTMLWidth.Create(42, ipIsNotPercentage), 300).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
 end;
