@@ -280,12 +280,29 @@ type
       ntLowerRoman
     );
     TTargetType = (ttBlank, ttParent, ttSelf, ttTop, ttFrameName);
-    /// <summary>Enumeration to define the kind of closing a given tag requires.</summary>
-    TCloseTagType = (ctNormal,
 
+    ///	<summary>
+    ///	  Enumeration to define the kind of closing a given tag requires.
+    ///	</summary>
+    ///	<remarks>
+    ///	  This type is used internally, and should not normally be used by a consuer of HTMLWriter.
+    ///	</remarks>
+    TCloseTagType = (
+      ///	<summary>
+      ///	  Use the normal closing tag, i.e. "&gt;"
+      ///	</summary>
+      ctNormal,
+
+      ///	<summary>
+      ///	  Use the empty closing tag, i.e. "/&gt;"
+      ///	</summary>
       ctEmpty,
 
-      ctComment);
+      ///	<summary>
+      ///	  Use the comment closing tag, i.e. "--&gt;"
+      ///	</summary>
+      ctComment
+    );
 
     THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
 
@@ -306,7 +323,30 @@ type
 
     TBlockType = (btDiv, btSpan, btParagraph);
 
-    THTMLErrorLevel = (elErrors, elStrictHTML4, elStrictHTML5, elStrictxhtml);
+    ///	<summary>
+    ///	  Enumeration of the various types of errors that can be checked for.
+    ///	</summary>
+    THTMLErrorLevel = (
+      ///	<summary>
+      ///	  Include this member if you want any error checking at all. 
+      ///	</summary>
+      elErrors,
+
+      ///	<summary>
+      ///	  Include this member if you want your HTML to conform to the HTML 4 specification
+      ///	</summary>
+      elStrictHTML4,
+
+      ///	<summary>
+      ///	  Include this member if you want your code to be HTML5 compatible. 
+      ///	</summary>
+      elStrictHTML5,
+
+      ///	<summary>
+      ///	  Include this member if you want your code to conform to the xHTML specification.
+      ///	</summary>
+      elStrictxhtml
+    );
 
     THTMLErrorLevels = set of THTMLErrorLevel;
 
@@ -433,7 +473,7 @@ type
     );
 
  type
-    /// <summary>Simple static class to determine if a string is empty or not.</summary>
+    /// <summary>Simple static class to add functionality to string.</summary>
     TStringDecorator = class
 
       ///	<summary>
