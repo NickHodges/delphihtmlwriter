@@ -1,4 +1,4 @@
-unit HTMLWriterUtils;
+ï»¿unit HTMLWriterUtils;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -422,12 +422,12 @@ type
     ///	</remarks>
     TCountSpaces = (
       ///	<summary>
-      ///	  Spaces should count as empty space. Use this member when you want a string to be considered empty if it contains spaces.  For instance, a string that consists of nothing but three spaces will be considered empty when this member is passed.
+      ///	  Spaces should count as empty space. Use thisÂ member when you want a string to be considered empty if it contains spaces.Â  For instance, a string that consists of nothing but three spaces will be considered empty when this member is passed.
       ///	</summary>
       csSpacesCountAsEmpty,
 
       ///	<summary>
-      ///	  Spaces should count as content.  Use this member when you want spaces to indicate that a string is not empty.  For instance, a string with nothing but three spaces in it would be considered not empty when this member is chosen. 
+      ///	  Spaces should count as content.Â  Use this member when you want spaces to indicate thatÂ a string is not empty.Â  For instance, a string with nothing but three spaces in it would be considered not empty when this member is chosen.Â 
       ///	</summary>
       csSpacesCountAsContent
     );
@@ -443,7 +443,7 @@ type
       ///	  The string to be examined for emptiness.
       ///	</param>
       ///	<param name="aSpacesAreContent">
-      ///	  An optional parameter that determines if empty spaces should be included. 
+      ///	  An optional parameter that determines if empty spaces should be included.Â 
       ///	</param>
       class function StringIsEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
       class function StringIsNotEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
