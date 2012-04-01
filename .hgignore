@@ -21,3 +21,9 @@ glob:*.aqt
 glob:*.orig
 glob:*.otares
 glob:*.res
+glob:*.fbl7
+glob:*.fbp7
+glob:*.fbpInf
+glob:*.chp
+syntax: glob
+CreateFileToUploadNoCopy.bat
