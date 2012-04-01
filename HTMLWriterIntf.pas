@@ -56,7 +56,7 @@ type
   /// to create a complete document.</summary>
   /// <remarks>
   /// <para>Most methods begin with either "Open" or "Add". Methods that start with "Open" will
-  /// add  &lt;tag  to the HTML stream, leaving it ready for the addition of attributes or other content. The
+  /// add  &lt;tag&gt;  to the HTML stream, leaving it ready for the addition of attributes or other content. The
   /// system will automatically close the tag when necessary.</para>
   /// <para>Methods that start with "Add" will normally take paramenters and then add content within a complete tag
   /// pair. For example, a call to AddBoldText('blah') will result in  &lt;b&gt;blah&lt;/b&gt;  being added to
