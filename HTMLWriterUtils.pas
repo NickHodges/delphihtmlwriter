@@ -354,14 +354,68 @@ type
     ///	<summary>String array for use with the TFormatType</summary>
     ///	<seealso cref="TFormatType">TFormatType</seealso>
     TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used with the THeadingType
+    ///	</summary>
+    {$ENDREGION}
     THeadingTypeStrings: array [THeadingType] of string = ('h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used with the TClearValue type
+    ///	</summary>
+    {$ENDREGION}
     TClearValueStrings: array [TClearValue] of string = ('', 'none', 'left', 'right', 'all');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used for the TBulletShape type
+    ///	</summary>
+    {$ENDREGION}
     TBulletShapeStrings: array [TBulletShape] of string = ('', 'disc', 'circle', 'square');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used for the TNumberType type
+    ///	</summary>
+    {$ENDREGION}
     TNumberTypeStrings: array [TNumberType] of string = ('', '1', 'A', 'a', 'I', 'i');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used for the TBlockType type
+    ///	</summary>
+    {$ENDREGION}
     TBlockTypeStrings: array [TBlockType] of string = ('div', 'span', 'p');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used for the TTargetType type
+    ///	</summary>
+    {$ENDREGION}
     TTargetTypeStrings: array [TTargetType] of string = ('_blank', '_parent', '_self', '_target', '');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used with the TInputType type
+    ///	</summary>
+    {$ENDREGION}
     TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used with the TFormMethod type.
+    ///	</summary>
+    {$ENDREGION}
     TFormMethodStrings: array [TFormMethod] of string = ('', 'get', 'post');
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Strings to be used with the THTMLErrorLevel type
+    ///	</summary>
+    {$ENDREGION}
     THTMLErrorLevelStrings: array [THTMLErrorLevel] of string = ('', '4.x', '5.x', 'xhmtl');
 
 
