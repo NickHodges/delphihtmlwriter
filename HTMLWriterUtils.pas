@@ -160,17 +160,43 @@ type
       );
     TTagStates = set of TTagState;
 
-    /// <summary>Enumeration to define possible states of an open &lt;table&gt; tag.</summary>
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Enumeration to define possible states of an open &lt;table&gt; tag.
+    ///	</summary>
+    ///	<remarks>
+    ///	  This enumeration is used internally and should not be used by the
+    ///	  user.
+    ///	</remarks>
+    {$ENDREGION}
     TTableState = (
-      /// <summary>Indicates that the current HTML is part of a table. (&lt;table&gt;)</summary>
+      ///	<summary>
+      ///	  Indicates that the current HTML is part of a table. (&lt;table&gt;)
+      ///	</summary>
       tbsInTable,
-      /// <summary>Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)</summary>
+
+      ///	<summary>
+      ///	  Indicates that the current HTML is part of a Table Row (&lt;tr&gt;)
+      ///	</summary>
       tbsInTableRowTag,
+
+      ///	<summary>
+      ///	  Indicates that a &lt;caption&gt; tag has been added to the table tag
+      ///	</summary>
       tbsTableHasCaption,
+
+      ///	<summary>
+      ///	  Indicates that a &lt;colgroup&gt; tag has been added to the table tag
+      ///	</summary>
       tbsTableHasColGroup,
+
       tbsTableHasCol,
+
+      ///	<summary>
+      ///	  Indicates that at least one &lt;td&gt; tag has been added.
+      ///	</summary>
       tbsTableHasData
-                   );
+    );
     TTableStates = set of TTableState;
 
     ///	<remarks>These tags are used to keep track of the cursor inside of a &lt;form&gt; tag.</remarks>
@@ -304,9 +330,44 @@ type
       ctComment
     );
 
-    THTMLDocType = (dtHTML401Strict, dtHTML401Transitional, dtHTML401Frameset, cXHTML10Strict, dtXHTML10Transitional, dtXHTML10Frameset, dtXHTML11);
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  An enumaration defining the various DocumentType tags that can be used by an HTML document.
+    ///	</summary>
+    {$ENDREGION}
+    THTMLDocType = (
+      dtHTML401Strict,
 
-    TUseCRLFOptions = (ucoUseCRLF, ucoNoCRLF);
+      dtHTML401Transitional,
+
+      dtHTML401Frameset,
+
+      cXHTML10Strict,
+
+      dtXHTML10Transitional,
+
+      dtXHTML10Frameset,
+
+      dtXHTML11
+    );
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  An enumeration used to determine whether a carriage return/line feed
+    ///	  pair should be used between tags
+    ///	</summary>
+    {$ENDREGION}
+    TUseCRLFOptions = (
+      ///	<summary>
+      ///	  Indicates that a CRLF should be used
+      ///	</summary>
+      ucoUseCRLF,
+
+      ///	<summary>
+      ///	  Indicates that a CRLF should not be used
+      ///	</summary>
+      ucoNoCRLF
+    );
 
     /// <summary>
     /// <para>Indicates the action type to be taken by a &lt;form&gt; tag</para>
@@ -319,9 +380,84 @@ type
       /// <summary>Indicates a POST action</summary>
       fmPost);
 
-    TInputType = (itButton, itCheckbox, itFile, itHidden, itImage, itPassword, ctRadio, itReset, itSubmit, itText);
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Enumerated type to determine the type assigned to an &lt;input&gt; tag
+    ///	</summary>
+    {$ENDREGION}
+    TInputType = (
+      ///	<summary>
+      ///	  Indicates a button input type
+      ///	</summary>
+      itButton,
 
-    TBlockType = (btDiv, btSpan, btParagraph);
+      ///	<summary>
+      ///	  Indicates a checkbox input type
+      ///	</summary>
+      itCheckbox,
+
+      ///	<summary>
+      ///	  Indicates a file input type
+      ///	</summary>
+      itFile,
+
+      ///	<summary>
+      ///	  Indicates a hidden input type
+      ///	</summary>
+      itHidden,
+
+      ///	<summary>
+      ///	  Indicates a imgage input type
+      ///	</summary>
+      itImage,
+
+      ///	<summary>
+      ///	  Indicates a password input type
+      ///	</summary>
+      itPassword,
+
+      ///	<summary>
+      ///	  Indicates a radio button input type
+      ///	</summary>
+      ctRadio,
+
+      ///	<summary>
+      ///	  Indicates a reset button input type
+      ///	</summary>
+      itReset,
+
+      ///	<summary>
+      ///	  Indicates a submit button input type
+      ///	</summary>
+      itSubmit,
+
+      ///	<summary>
+      ///	  Indicates a text input type
+      ///	</summary>
+      itText
+    );
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Enumerated type defining the type of text block to be used to tag text
+    ///	</summary>
+    {$ENDREGION}
+    TBlockType = (
+      ///	<summary>
+      ///	  Indicates the use of the &lt;div&gt; tag
+      ///	</summary>
+      btDiv,
+
+      ///	<summary>
+      ///	  Indicates the use of the &lt;span&gt; tag
+      ///	</summary>
+      btSpan,
+
+      ///	<summary>
+      ///	  Indicates the use of the &lt;p&gt; tag
+      ///	</summary>
+      btParagraph
+    );
 
     ///	<summary>
     ///	  Enumeration of the various types of errors that can be checked for.
@@ -348,6 +484,12 @@ type
       elStrictxhtml
     );
 
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  A set containing the items from the <see cref="THTMLErrorLevel" />
+    ///	  enumeration
+    ///	</summary>
+    {$ENDREGION}
     THTMLErrorLevels = set of THTMLErrorLevel;
 
   const
@@ -505,6 +647,12 @@ type
     cSpace = ' ';
     cEmptyString = '';
 
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  An array of strings corresponding to the <see cref="THTMLDocType" />
+    ///	  enumeration
+    ///	</summary>
+    {$ENDREGION}
     THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 
 type
