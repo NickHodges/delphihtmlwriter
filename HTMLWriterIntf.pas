@@ -408,6 +408,18 @@ type
     function OpenTable: IHTMLWriter; overload;
     /// <summary>Opens a &lt;table&gt; tag and adds the 'border' attribute</summary>
     function OpenTable(aBorder: integer): IHTMLWriter; overload;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Opens a &lt;table&gt; tag with border and cellpadding attributes
+    ///	</summary>
+    ///	<param name="aBorder">
+    ///	  The value to be added as the border attribute
+    ///	</param>
+    ///	<param name="aCellPadding">
+    ///	  The value to be added as the cellpadding attribute
+    ///	</param>
+    {$ENDREGION}
     function OpenTable(aBorder: integer; aCellPadding: integer): IHTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): IHTMLWriter; overload;
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter; overload;
@@ -416,6 +428,12 @@ type
     /// <summary>Opens a &lt;td&gt; tag.</summary>
     /// <remarks>This method can only be called when a &lt;tr&gt; tag is open.</remarks>
     function OpenTableData: IHTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Opens a &lt;th&gt; tag
+    ///	</summary>
+    {$ENDREGION}
     function OpenTableHeader: IHTMLWriter;
     function OpenTableHead: IHTMLWriter;
     function OpenTableBody: IHTMLWriter;
@@ -424,13 +442,35 @@ type
     /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
     /// <remarks>This tag can only be added while a table row &lt;tr&gt; tag is open. Otherwise, an exception is raised.</remarks>
     function AddTableData(aText: string): IHTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Opens a &lt;caption&gt; tag
+    ///	</summary>
+    {$ENDREGION}
     function OpenCaption: IHTMLWriter;
     function OpenColGroup: IHTMLWriter;
     function OpenCol: IHTMLWriter;
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
     function OpenInput: IHTMLWriter; overload;
     function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Opens a &lt;button&gt; tag
+    ///	</summary>
+    ///	<param name="aName">
+    ///	  Required attribute.  Value given for the 'name' attribute.  All
+    ///	  buttons must be named.
+    ///	</param>
+    {$ENDREGION}
     function OpenButton(aName: string): IHTMLWriter;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Opens a &lt;label&gt; tag
+    ///	</summary>
+    {$ENDREGION}
     function OpenLabel: IHTMLWriter; overload;
     function OpenLabel(aFor: string): IHTMLWriter; overload;
     function OpenSelect(aName: string): IHTMLWriter;
