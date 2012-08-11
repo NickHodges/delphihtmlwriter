@@ -25,5 +25,6 @@ glob:*.fbl7
 glob:*.fbp7
 glob:*.fbpInf
 glob:*.chp
+glob:*.stat
 syntax: glob
 CreateFileToUploadNoCopy.bat
