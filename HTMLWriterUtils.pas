@@ -1,4 +1,4 @@
-﻿unit HTMLWriterUtils;
+unit HTMLWriterUtils;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
