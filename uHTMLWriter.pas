@@ -533,7 +533,7 @@ end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 begin
-  if TStringDecorator.StringIsEmpty(aTagName) then
+  if aTagName.IsEmpty then
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
   end;
@@ -770,7 +770,7 @@ begin
   Temp := THTMLWriter.Create(Self);
   Temp.FParent := Self.FParent;
   Result := Temp.AddTag(cForm);
-  if not TStringDecorator.StringIsEmpty(aActionURL) then
+  if not aActionURL.IsEmpty then
   begin
     Result := Result[cAction, aActionURL];
   end;
@@ -862,7 +862,7 @@ function THTMLWriter.OpenInput(aType: TInputType; aName: string = cEmptyString):
 begin
   CheckInFormTag;
   Result := OpenInput[cType, TInputTypeStrings[aType]];
-  if TStringDecorator.StringIsNotEmpty(aName) then
+  if not aName.IsEmpty then
   begin
     Result := Result[cName, aName];
   end;
@@ -1431,7 +1431,7 @@ function THTMLWriter.AddHardRule(const aAttributes: string = cEmptyString; aUseE
 begin
   CloseBracket;
   FHTML := FHTML.Append(cOpenBracket).Append(cHardRule);
-  if not TStringDecorator.StringIsEmpty(aAttributes) then
+  if not aAttributes.IsEmpty then
   begin
     FHTML := FHTML.Append(cSpace).Append(aAttributes);
   end;
@@ -1525,7 +1525,7 @@ procedure THTMLWriter.CloseTheTag;
 begin
   if TagIsOpen or InCommentTag then
   begin
-    if TStringDecorator.StringIsEmpty(FClosingTag) then
+    if FClosingTag.IsEmpty then
     begin
       raise ENoClosingTagHTMLWriterException.Create(strNoClosingTag);
     end;
@@ -2018,12 +2018,12 @@ end;
 function THTMLWriter.OpenParam(aName: string; aValue: string = cEmptyString): IHTMLWriter;
 begin
   CheckInObjectTag;
-  if TStringDecorator.StringIsEmpty(aName) then
+  if aName.IsEmpty then
   begin
     raise EParamNameRequiredHTMLWriterException.Create(strParamNameRequired);
   end;
   Result := AddTag(cParam)[cName, aName];
-  if TStringDecorator.StringIsNotEmpty(aValue) then
+  if not aValue.IsEmpty then
   begin
     Result := Result[cValue, aValue];
   end;
