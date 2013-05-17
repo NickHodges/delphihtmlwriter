@@ -73,7 +73,6 @@ type
     procedure TestAddInsertText;
     procedure TestOpenInsert;
     procedure TestBaseFont;
-    procedure TestStringIsEmpty;
     procedure TestMap;
 
     procedure TestFrameset;
@@ -2273,21 +2272,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-procedure TestTHTMLWriter.TestStringIsEmpty;
-begin
-  CheckTrue(TStringDecorator.StringIsEmpty(''), 'StringIsEmpty failed in a horrible, disgusting way #1');
-  CheckTrue(TStringDecorator.StringIsEmpty('', csSpacesCountAsContent), 'StringIsEmpty failed in a horrible, disgusting way #2');
-  CheckTrue(TStringDecorator.StringIsEmpty('', csSpacesCountAsEmpty), 'StringIsEmpty failed in a horrible, disgusting way #3');
-
-  CheckFalse(TStringDecorator.StringIsEmpty('   '), 'StringIsEmpty failed in a horrible, disgusting way #4');
-  CheckTrue(TStringDecorator.StringIsEmpty('   ', csSpacesCountAsContent), 'StringIsEmpty failed in a horrible, disgusting way #5');
-  CheckFalse(TStringDecorator.StringIsEmpty('   ', csSpacesCountAsEmpty), 'StringIsEmpty failed in a horrible, disgusting way #6');
-
-  CheckFalse(TStringDecorator.StringIsEmpty('Gruthy'), 'StringIsEmpty failed in a horrible, disgusting way #7');
-  CheckFalse(TStringDecorator.StringIsEmpty('quilet', csSpacesCountAsContent), 'StringIsEmpty failed in a horrible, disgusting way #8');
-  CheckFalse(TStringDecorator.StringIsEmpty('crefting', csSpacesCountAsEmpty), 'StringIsEmpty failed in a horrible, disgusting way #9');
-
-end;
 
 procedure TestTHTMLWriter.TestOpenForm;
 var
