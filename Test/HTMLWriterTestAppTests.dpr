@@ -12,7 +12,7 @@ program HTMLWriterTestAppTests;
 }
 
 {$IFDEF CONSOLE_TESTRUNNER}
-{$APPTYPE CONSOLE}
+{ $APPTYPE CONSOLE}
 {$ENDIF}
 
 uses

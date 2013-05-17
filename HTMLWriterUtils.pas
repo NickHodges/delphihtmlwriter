@@ -1,4 +1,4 @@
-unit HTMLWriterUtils;
+﻿unit HTMLWriterUtils;
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -674,22 +674,6 @@ type
       csSpacesCountAsContent
     );
 
- type
-    /// <summary>Simple static class to add functionality to string.</summary>
-    TStringDecorator = class
-
-      ///	<summary>
-      ///	  Determines if a string has content in it or not.
-      ///	</summary>
-      ///	<param name="aString">
-      ///	  The string to be examined for emptiness.
-      ///	</param>
-      ///	<param name="aSpacesAreContent">
-      ///	  An optional parameter that determines if empty spaces should be included. 
-      ///	</param>
-      class function StringIsEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
-      class function StringIsNotEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
-    end;
 
   type
 
@@ -702,20 +686,6 @@ type
     end;
 
 implementation
-
-class function TStringDecorator.StringIsEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
-begin
-  Result := aString = EmptyStr;
-  if (not Result) and (aSpacesAreContent = csSpacesCountAsContent) then
-  begin
-    Result := Trim(aString) = EmptyStr;
-  end;
-end;
-
-class function TStringDecorator.StringIsNotEmpty(aString: string; aSpacesAreContent: TCountSpaces = csSpacesCountAsEmpty): Boolean;
-begin
-  Result := not StringIsEmpty(aString, aSpacesAreContent);
-end;
 
 class function TTagMaker.MakeCommentCloseTag: string;
 begin
