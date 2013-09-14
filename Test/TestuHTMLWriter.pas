@@ -369,12 +369,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-procedure test;
-var
-  This: Integer;
-begin
-  This := 9;
-end;
 
 procedure TestTHTMLWriter.TestOpenParagraphWithID;
 var
