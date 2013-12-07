@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{316A00AF-70EE-45FA-9649-786B73454808}</ProjectGuid>
         <MainSource>HTMLWriterTestPackage_XE5.dpk</MainSource>
-        <ProjectVersion>15.1</ProjectVersion>
+        <ProjectVersion>15.2</ProjectVersion>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <FrameworkType>VCL</FrameworkType>
@@ -15,8 +15,8 @@
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Android' and '$(Base)'=='true') or '$(Base_Android)'!=''">
-        <Base_Android>true</Base_Android>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -25,8 +25,8 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
-        <Base_Win64>true</Base_Win64>
+    <PropertyGroup Condition="('$(Platform)'=='Android' and '$(Base)'=='true') or '$(Base_Android)'!=''">
+        <Base_Android>true</Base_Android>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -57,19 +57,19 @@
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Android)'!=''">
-        <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=preferExternal;largeHeap=False;theme=TitleBar</VerInfo_Keys>
-        <BT_BuildType>Debug</BT_BuildType>
-        <VerInfo_IncludeVerInfo>false</VerInfo_IncludeVerInfo>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Icon_MainIcon>HTMLWriterTestPackage_Icon10.ico</Icon_MainIcon>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <Icon_MainIcon>HTMLWriterTestPackage_Icon9.ico</Icon_MainIcon>
+        <Icon_MainIcon>HTMLWriterTestPackage_Icon10.ico</Icon_MainIcon>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <Icon_MainIcon>HTMLWriterTestPackage_Icon9.ico</Icon_MainIcon>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    <PropertyGroup Condition="'$(Base_Android)'!=''">
+        <VerInfo_IncludeVerInfo>false</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=preferExternal;largeHeap=False;theme=TitleBar</VerInfo_Keys>
+        <BT_BuildType>Debug</BT_BuildType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -97,7 +97,6 @@
         <None Include="ModelSupport_HTMLWriterTestPackage\uTest\default.txvpck"/>
         <None Include="ModelSupport_HTMLWriterTestPackage\uTest\default.txaPackage"/>
         <None Include="ModelSupport_HTMLWriterTestPackage\default.txaPackage"/>
-        <None Include="ModelSupport_HTMLWriterTestPackage_XE5\default.txaPackage"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -150,7 +149,7 @@
             </Delphi.Personality>
             <ModelSupport>True</ModelSupport>
             <Platforms>
-                <Platform value="Android" ActiveMobileDevice="emulator-5554">False</Platform>
+                <Platform value="Android">False</Platform>
                 <Platform value="iOSDevice">False</Platform>
                 <Platform value="iOSSimulator">False</Platform>
                 <Platform value="Win32">True</Platform>
