@@ -369,7 +369,6 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 end;
 
-
 procedure TestTHTMLWriter.TestOpenParagraphWithID;
 var
   TestResult: string;
