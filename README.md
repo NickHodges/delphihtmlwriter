@@ -16,10 +16,10 @@ Some things to note:
 
 * Any tag that is opened will need to be closed via CloseTag
 * Any tag that is added via a AddXXXX call will close itself.
-** The rule to follow: Close what you open. Additions take care of themselves.
+* The rule to follow: Close what you open. Additions take care of themselves.
 * As a general rule, THTMLWriter will raise an exception if a tag is placed somewhere that doesn't make sense.
-** Certain tags like <meta> and <base> can only be added inside at <head> tag.
-** Tags such as <td>, <tr> can only be added inside of a <table> tag
+* Certain tags like <meta> and <base> can only be added inside at <head> tag.
+* Tags such as <td>, <tr> can only be added inside of a <table> tag
 * The same is true for list items inside lists.
 
 Things to work on:
