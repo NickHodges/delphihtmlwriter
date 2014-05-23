@@ -1,14 +1,15 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{6776CF32-E2CB-422E-90B4-0DF1B244298F}</ProjectGuid>
+        <ProjectGuid>{A8CA49C6-CB5E-4AA5-8A98-FA045574AE90}</ProjectGuid>
         <ProjectVersion>15.4</ProjectVersion>
+        <MainSource>HTMLWriterTestApp_XE6.dpr</MainSource>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-        <MainSource>HTMLWriterTestAppTests.dpr</MainSource>
+        <FrameworkType>None</FrameworkType>
         <Base>True</Base>
-        <AppType>Application</AppType>
-        <FrameworkType>VCL</FrameworkType>
         <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Console</AppType>
+        <FrameworkType>None</FrameworkType>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -29,41 +30,24 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
-        <Cfg_2_Win32>true</Cfg_2_Win32>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Console' or '$(Cfg_4)'!=''">
-        <Cfg_4>true</Cfg_4>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <SanitizedProjectName>HTMLWriterTestAppTests</SanitizedProjectName>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <SanitizedProjectName>HTMLWriterTestApp_XE6</SanitizedProjectName>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
-        <DCC_UnitSearchPath>$(BDS)\lib;$(BDS)\Source\DUnit\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_DependencyCheckOutputName>HTMLWriterTestAppTests.exe</DCC_DependencyCheckOutputName>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_DependencyCheckOutputName>HTMLWriterTestApp.exe</DCC_DependencyCheckOutputName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_UnitSearchPath>$(BDS)\lib;C:\Code\OmniXML;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_Platform>x86</DCC_Platform>
-        <DCC_Define>_CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
-        <DCC_K>false</DCC_K>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
-        <DCC_DcuOutput>.</DCC_DcuOutput>
+        <DCC_K>false</DCC_K>
         <DCC_E>false</DCC_E>
         <DCC_F>false</DCC_F>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Debugger_RunParams>&gt; c:\junk\output.txt</Debugger_RunParams>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -72,36 +56,27 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
-        <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
-        <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
-        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
-        <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <DCC_Define>CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
-        <Manifest_File>None</Manifest_File>
-        <DCC_DebugDCUs>true</DCC_DebugDCUs>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_4)'!=''">
-        <DCC_Define>CONSOLE_TESTRUNNER;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="TestuHTMLWriter.pas"/>
-        <DCCReference Include="..\uHTMLWriter.pas"/>
-        <DCCReference Include="..\HTMLWriterUtils.pas"/>
-        <DCCReference Include="..\HTMLWriterIntf.pas"/>
-        <DCCReference Include="..\LoadSaveIntf.pas"/>
+        <DCCReference Include="uHTMLWriter.pas"/>
+        <None Include="ModelSupport_HTMLWriterTestApp\default.txaPackage"/>
+        <None Include="ModelSupport_HTMLWriterTestApp\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp\TestStuff\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp\HTMLWriter\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp\HTMLWriterTestApp\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\uHTMLWriter\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\HTMLWriterTestApp_XE6\default.txvpck"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\uHTMLWriter\default.txaPackage"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\HTMLWriterTestApp_XE6\default.txaPackage"/>
+        <None Include="ModelSupport_HTMLWriterTestApp_XE6\default.txaPackage"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
-        <BuildConfiguration Include="Console">
-            <Key>Cfg_4</Key>
-            <CfgParent>Cfg_2</CfgParent>
         </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -117,11 +92,14 @@
         <Borland.ProjectType/>
         <BorlandProject>
             <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">HTMLWriterTestApp_XE6.dpr</Source>
+                </Source>
                 <Parameters>
                     <Parameters Name="RunParams">&gt; c:\junk\output.txt</Parameters>
                 </Parameters>
                 <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
                     <VersionInfo Name="AutoIncBuild">False</VersionInfo>
                     <VersionInfo Name="MajorVer">1</VersionInfo>
                     <VersionInfo Name="MinorVer">0</VersionInfo>
@@ -147,29 +125,15 @@
                     <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
                     <VersionInfoKeys Name="Comments"/>
                 </VersionInfoKeys>
-                <Source>
-                    <Source Name="MainSource">HTMLWriterTestAppTests.dpr</Source>
-                </Source>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\11.0\Bpl\NickStuffPackage.bpl">(untitled)</Excluded_Packages>
-                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\11.0\Bpl\MarkdownActions.bpl">(untitled)</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp180.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                </Excluded_Packages>
             </Delphi.Personality>
-            <UnitTesting>
-                <TestFramework>DUnit / Delphi Win32</TestFramework>
-                <TestRunner>GUI</TestRunner>
-                <TestProjectName/>
-                <SourceProjectName/>
-            </UnitTesting>
-            <ModelSupport>False</ModelSupport>
+            <ModelSupport>True</ModelSupport>
             <Platforms>
+                <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
-    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+    <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
 </Project>
