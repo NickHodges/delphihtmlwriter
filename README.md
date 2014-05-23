@@ -1,5 +1,7 @@
 This is a Delphi-based class library that enables the developer to create HTML and HTML documents. It uses the fluent interface to make creating HTML text easy and natural.
 
+I am releasing this under the Apache 2,0 license.
+
 THTMLWriter is a class for creating HTML and HTML Documents. THTMLWriter uses the fluent interface. It can be used to create either complete HTML documents or chunks of HTML. By using the fluent interface, you can link together number of methods to create a complete document.
 
 THTMLWriter is very method heavy, but relatively code light. Most of the code simply ends up calling the AddTag method.
