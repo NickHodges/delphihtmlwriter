@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{71164124-0A8E-4BAE-89EC-C71F20B14841}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="HTMLWriterTestApp_XE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="HTMLWriterTestPackage_XE6.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\HTMLWriterTestAppTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="HTMLWriterTestApp_XE6">
+        <MSBuild Projects="HTMLWriterTestApp_XE6.dproj"/>
+    </Target>
+    <Target Name="HTMLWriterTestApp_XE6:Clean">
+        <MSBuild Projects="HTMLWriterTestApp_XE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HTMLWriterTestApp_XE6:Make">
+        <MSBuild Projects="HTMLWriterTestApp_XE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="HTMLWriterTestPackage_XE6">
+        <MSBuild Projects="HTMLWriterTestPackage_XE6.dproj"/>
+    </Target>
+    <Target Name="HTMLWriterTestPackage_XE6:Clean">
+        <MSBuild Projects="HTMLWriterTestPackage_XE6.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HTMLWriterTestPackage_XE6:Make">
+        <MSBuild Projects="HTMLWriterTestPackage_XE6.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="HTMLWriterTestAppTests">
+        <MSBuild Projects="Test\HTMLWriterTestAppTests.dproj"/>
+    </Target>
+    <Target Name="HTMLWriterTestAppTests:Clean">
+        <MSBuild Projects="Test\HTMLWriterTestAppTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HTMLWriterTestAppTests:Make">
+        <MSBuild Projects="Test\HTMLWriterTestAppTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="HTMLWriterTestApp_XE6;HTMLWriterTestPackage_XE6;HTMLWriterTestAppTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="HTMLWriterTestApp_XE6:Clean;HTMLWriterTestPackage_XE6:Clean;HTMLWriterTestAppTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="HTMLWriterTestApp_XE6:Make;HTMLWriterTestPackage_XE6:Make;HTMLWriterTestAppTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
