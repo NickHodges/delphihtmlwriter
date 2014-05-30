@@ -3470,13 +3470,8 @@ begin
   TempStr := 'prittle';
   ExpectedResult := '<html>' + cCRLF + '  <b>' + cCRLF + '    ' + TempStr + cCRLF + '  </b>' + cCRLF + '</html>';
   TempWriter := HTMLWriterFactory(cHTML).CRLF.Indent(2).OpenBold.CRLF.Indent(4).AddText(TempStr).CRLF.Indent(2).CloseTag.CRLF.CloseTag;
-  try
     TestResult := TempWriter.AsHTML;
     CheckEquals(ExpectedResult, TestResult);
-  finally
-    TempWriter.SaveToFile('c:\junk\text.txt');
-  end;
-
 end;
 
 procedure TestTHTMLWriter.TestDeprecated;
