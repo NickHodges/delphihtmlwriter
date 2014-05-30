@@ -3526,7 +3526,7 @@ begin
   CheckEquals(ExpectedResult, TestResult);
 
   TempStr := 'mashtes';
-  ExpectedResult := Format('<b>%s harkenback</b>', [TempStr]);
+  ExpectedResult := Format('<b>%s</b>', [TempStr]);
   TestResult := HTMLWriterCreate(TFormatTypeStrings[ftBold]).AddText(TempStr).CloseTag.AsHTML;
   CheckEquals(ExpectedResult, TestResult);
 
