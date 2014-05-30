@@ -25,14 +25,14 @@ uses
   HTMLWriterUtils in '..\HTMLWriterUtils.pas',
   HTMLWriterIntf in '..\HTMLWriterIntf.pas',
   LoadSaveIntf in '..\LoadSaveIntf.pas',
-  FinalBuilder.XMLTestRunner in '..\FinalBuilder.XMLTestRunner.pas';
+  FinalBuilder.XMLTestRunner in '..\FinalBuilder.XMLTestRunner.pas',
+  XMLTestRunner2 in 'XMLTestRunner2.pas';
 
 {$R *.RES}
 
 begin
   Application.Initialize;
-  TXMLTestListener.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free;
-  ReadLn;
+  XMLTestRunner2.RunRegisteredTests('HTMLWriterTestAppTests.xml');
 end.
 
 
