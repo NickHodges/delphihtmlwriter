@@ -24,19 +24,15 @@ uses
   uHTMLWriter in '..\uHTMLWriter.pas',
   HTMLWriterUtils in '..\HTMLWriterUtils.pas',
   HTMLWriterIntf in '..\HTMLWriterIntf.pas',
-  LoadSaveIntf in '..\LoadSaveIntf.pas';
+  LoadSaveIntf in '..\LoadSaveIntf.pas',
+  FinalBuilder.XMLTestRunner in '..\FinalBuilder.XMLTestRunner.pas';
 
 {$R *.RES}
 
 begin
   Application.Initialize;
-  if IsConsole then
-  {$IFDEF USEXML}
-    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
-  {$ELSE}
-    TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
-  {$ENDIF}
-  else
-    GUITestRunner.RunRegisteredTests;
+  TXMLTestListener.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free;
+  ReadLn;
 end.
+
 
