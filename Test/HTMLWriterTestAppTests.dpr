@@ -32,7 +32,7 @@ uses
 
 begin
   Application.Initialize;
-  XMLTestRunner2.RunRegisteredTests('HTMLWriterTestAppTests.xml');
+  FinalBuilder.XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml');
 end.
 
 
