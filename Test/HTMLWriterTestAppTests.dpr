@@ -32,7 +32,14 @@ uses
 
 begin
   Application.Initialize;
-  FinalBuilder.XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml');
+  if IsConsole then
+  {$IFDEF USEXML}
+    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
+  {$ELSE}
+    TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
+  {$ENDIF}
+  else
+    GUITestRunner.RunRegisteredTests;
 end.
 
 
