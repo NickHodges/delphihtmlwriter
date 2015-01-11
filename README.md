@@ -8,7 +8,7 @@ THTMLWriter is very method heavy, but relatively code light. Most of the code si
 
 Most methods begin with either "Open" or "Add". Methods that start with "Open" will add <tag to the HTML stream (the lack of a closing bracket is purposeful, leaving room for attributes if desired...), leaving it ready for the addition of attributes or other content. The system will automatically close the tag (i.e. add the closing '>' when necessary.
 
-Tags that are started with an "OpenXXX" will require a corresponding call to CloseTag? or one of the other CloseXXX methods. Tags created with "AddXXX" require no CloseTag? call.
+Tags that are started with an "OpenXXX" will require a corresponding call to CloseTag or one of the other CloseXXX methods. Tags created with "AddXXX" require no CloseTag? call.
 
 Methods that start with "Add" will normally take paramenters and then add content within a complete tag pair. For example, a call to AddBoldText('blah') will result in <b>blah</b> being added to the HTML stream.
 
