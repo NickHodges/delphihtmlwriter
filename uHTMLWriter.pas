@@ -1,4 +1,5 @@
 unit uHTMLWriter;
+
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
@@ -533,6 +534,7 @@ end;
 
 constructor THTMLWriter.Create(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes);
 begin
+  inherited Create;
   if TStringDecorator.StringIsEmpty(aTagName) then
   begin
     raise EEmptyTagHTMLWriterException.Create(strTagNameRequired);
