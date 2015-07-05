@@ -28,3 +28,4 @@ glob:*.chp
 glob:*.stat
 syntax: glob
 CreateFileToUploadNoCopy.bat
+*.ficfg
