@@ -208,8 +208,12 @@ type
     /// <summary>Adds a &lt;i&gt;&lt;/i&gt; containing the passed text</summary>
     /// <param name="aString">The text to be placed within the italic tag.</param>
     function AddItalicText(aString: string): IHTMLWriter;
-    /// <summary>Adds a &lt;u&gt;&lt;/u&gt; containing the passed text</summary>
-    /// <param name="aString">The text to be placed within the underline tag.</param>
+    /// <summary>
+    ///   Adds a &lt;u&gt;&lt;/u&gt; containing the passed text
+    /// </summary>
+    /// <param name="aString">
+    ///   The text to be placed within the underline tag. <br />
+    /// </param>
     function AddUnderlinedText(aString: string): IHTMLWriter;
     /// <summary>Adds the passed text inside of a &lt;em&gt;&lt;/em&gt; tag</summary>
     /// <param name="aString">The text to be added inside the Emphasis tag.</param>

@@ -94,7 +94,7 @@ function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload
 ///	  complete HTML document.
 ///	</remarks>
 {$ENDREGION}
-function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
+function HTMLWriterCreate(const aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
 implementation
 
@@ -2174,7 +2174,7 @@ begin
   Result := THTMLWriter.CreateDocument;
 end;
 
-function HTMLWriterCreate(aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
+function HTMLWriterCreate(const aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter;
 begin
   Result := THTMLWriter.Create(aTagName, aCloseTagType, aCanAddAttributes);
 end;

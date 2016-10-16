@@ -17,6 +17,8 @@ program HTMLWriterTestAppTests;
 
 uses
   Forms,
+  TestInsight.Client,
+  TestInsight.Dunit,
   TestFramework,
   GUITestRunner,
   TextTestRunner,
@@ -30,16 +32,31 @@ uses
 
 {$R *.RES}
 
+function IsTestInsightRunning: Boolean;
+var
+  client: ITestInsightClient;
+begin
+  client := TTestInsightRestClient.Create;
+  client.StartedTesting(0);
+  Result := not client.HasError;
+end;
+
 begin
   Application.Initialize;
-  if IsConsole then
-  {$IFDEF USEXML}
-    XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
-  {$ELSE}
-    TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
-  {$ENDIF}
-  else
-    GUITestRunner.RunRegisteredTests;
+  if IsTestInsightRunning then
+  begin
+    TestInsight.DUnit.RunRegisteredTests
+  end else
+  begin
+    if IsConsole then
+    {$IFDEF USEXML}
+      XMLTestRunner.RunRegisteredTests('HTMLWriterTestAppTests.xml').Free
+    {$ELSE}
+      TextTestRunner.RunRegisteredTests(rxbHaltOnFailures).Free
+    {$ENDIF}
+    else
+      GUITestRunner.RunRegisteredTests;
+  end;
 end.
 
 
