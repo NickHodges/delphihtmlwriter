@@ -1,3 +1,7 @@
 *.local
 *.tvsconfig
 *.txaPackage
+*.dcu
+*.identcache
+*.~?~
+*.res
