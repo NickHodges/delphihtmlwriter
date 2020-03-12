@@ -109,7 +109,6 @@
         <DCCReference Include="..\HTMLWriterIntf.pas"/>
         <DCCReference Include="..\LoadSaveIntf.pas"/>
         <DCCReference Include="..\FinalBuilder.XMLTestRunner.pas"/>
-        <DCCReference Include="XMLTestRunner2.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
