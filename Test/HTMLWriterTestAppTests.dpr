@@ -24,8 +24,7 @@ uses
   uHTMLWriter in '..\uHTMLWriter.pas',
   HTMLWriterUtils in '..\HTMLWriterUtils.pas',
   HTMLWriterIntf in '..\HTMLWriterIntf.pas',
-  LoadSaveIntf in '..\LoadSaveIntf.pas',
-  FinalBuilder.XMLTestRunner in '..\FinalBuilder.XMLTestRunner.pas';
+  LoadSaveIntf in '..\LoadSaveIntf.pas';
 
 {$R *.RES}
 

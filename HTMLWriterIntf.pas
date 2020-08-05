@@ -1,4 +1,5 @@
  unit HTMLWriterIntf;
+
 {$REGION 'License'}
 {
   ***** BEGIN LICENSE BLOCK *****
