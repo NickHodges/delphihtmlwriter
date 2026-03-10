@@ -210,6 +210,14 @@ type
     procedure TestAddID;
     procedure TestAddAttribute;
     procedure TestCloseTag;
+
+    // Fragment tests
+    procedure TestCreateFragment;
+    procedure TestCreateFragmentEmpty;
+    procedure TestCreateFragmentMultipleTags;
+    procedure TestCreateFragmentWithTableRows;
+    procedure TestCreateFragmentAddText;
+    procedure TestCreateFragmentNested;
   end;
   // Test methods for class IGetHTML
 
@@ -3620,6 +3628,86 @@ var
   ReturnValue: string;
 begin
   ReturnValue := FIGetHTML.AsHTML;
+end;
+
+{ Fragment Tests }
+
+procedure TestTHTMLWriter.TestCreateFragment;
+var
+  Writer: IHTMLWriter;
+begin
+  Writer := HTMLWriterCreateFragment;
+  CheckEquals('', Writer.AsHTML, 'Empty fragment should produce empty string');
+end;
+
+procedure TestTHTMLWriter.TestCreateFragmentEmpty;
+var
+  Writer: IHTMLWriter;
+begin
+  Writer := HTMLWriterCreateFragment;
+  CheckNotNull(Writer, 'HTMLWriterCreateFragment should return a valid interface');
+  CheckEquals('', Writer.AsHTML, 'New fragment should be empty');
+end;
+
+procedure TestTHTMLWriter.TestCreateFragmentMultipleTags;
+var
+  Writer: IHTMLWriter;
+  Expected: string;
+begin
+  Writer := HTMLWriterCreateFragment;
+  Writer
+    .AddTag('div').AddText('First').CloseTag
+    .AddTag('div').AddText('Second').CloseTag
+    .AddTag('div').AddText('Third').CloseTag;
+
+  Expected := '<div>First</div><div>Second</div><div>Third</div>';
+  CheckEquals(Expected, Writer.AsHTML, 'Fragment should contain multiple sibling divs');
+end;
+
+procedure TestTHTMLWriter.TestCreateFragmentWithTableRows;
+var
+  Writer: IHTMLWriter;
+  Expected: string;
+begin
+  Writer := HTMLWriterCreateFragment;
+  Writer
+    .AddTag('tr')
+      .AddTag('td').AddText('A1').CloseTag
+      .AddTag('td').AddText('A2').CloseTag
+    .CloseTag
+    .AddTag('tr')
+      .AddTag('td').AddText('B1').CloseTag
+      .AddTag('td').AddText('B2').CloseTag
+    .CloseTag;
+
+  Expected := '<tr><td>A1</td><td>A2</td></tr><tr><td>B1</td><td>B2</td></tr>';
+  CheckEquals(Expected, Writer.AsHTML, 'Fragment should contain table rows without table wrapper');
+end;
+
+procedure TestTHTMLWriter.TestCreateFragmentAddText;
+var
+  Writer: IHTMLWriter;
+begin
+  Writer := HTMLWriterCreateFragment;
+  Writer.AddTag('span').AddText('Hello World').CloseTag;
+
+  CheckEquals('<span>Hello World</span>', Writer.AsHTML);
+end;
+
+procedure TestTHTMLWriter.TestCreateFragmentNested;
+var
+  Writer: IHTMLWriter;
+  Expected: string;
+begin
+  Writer := HTMLWriterCreateFragment;
+  Writer
+    .AddTag('ul')
+      .AddTag('li').AddText('Item 1').CloseTag
+      .AddTag('li').AddText('Item 2').CloseTag
+    .CloseTag;
+
+  Expected := '<ul><li>Item 1</li><li>Item 2</li></ul>';
+  CheckEquals(Expected, Writer.AsHTML, 'Fragment should support nested structures');
 end;
 
 initialization

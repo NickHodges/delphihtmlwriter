@@ -96,6 +96,19 @@ function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload
 {$ENDREGION}
 function HTMLWriterCreate(const aTagName: string; aCloseTagType: TCloseTagType = ctNormal; aCanAddAttributes: TCanHaveAttributes = chaCanHaveAttributes): IHTMLWriter; overload;
 
+{$REGION 'Documentation'}
+///	<summary>
+///	  This function creates a reference to an IHTMLWriter interface without
+///	  an initial tag. Use this when you need to create HTML fragments that
+///	  don't have a wrapping element.
+///	</summary>
+///	<remarks>
+///	  Use this function when you need to create multiple sibling elements
+///	  without a parent wrapper, such as table rows without a table element.
+///	</remarks>
+{$ENDREGION}
+function HTMLWriterCreateFragment: IHTMLWriter;
+
 implementation
 
 type
@@ -209,6 +222,13 @@ type
     {$ENDREGION}
     constructor CreateDocument; overload;
     constructor CreateDocument(aDocType: THTMLDocType); overload;
+
+    {$REGION 'Documentation'}
+    ///	<summary>
+    ///	  Creates an empty HTML fragment without an initial tag.
+    ///	</summary>
+    {$ENDREGION}
+    constructor CreateFragment;
 
     destructor Destroy; override;
 {$ENDREGION}
@@ -547,6 +567,13 @@ begin
   inherited Create;
   CreateDocument;
   FHTML := FHTML.Insert(0, THTMLDocTypeStrings[aDocType]);
+end;
+
+constructor THTMLWriter.CreateFragment;
+begin
+  inherited Create;
+  FHTML := TStringBuilder.Create;
+  FErrorLevels := [elErrors];
 end;
 
 function THTMLWriter.CRLF: IHTMLWriter;
@@ -2182,6 +2209,11 @@ end;
 function HTMLWriterCreateDocument(aDocType: THTMLDocType): IHTMLWriter; overload;
 begin
   Result := THTMLWriter.CreateDocument(aDocType);
+end;
+
+function HTMLWriterCreateFragment: IHTMLWriter;
+begin
+  Result := THTMLWriter.CreateFragment;
 end;
 
 end.
