@@ -4840,7 +4840,7 @@ var
   TestResult, ExpectedResult: string;
 begin
   TestResult := HTMLWriterFactory('html').AddPictureImg('photo.jpg', 'A photo').CloseTag.AsHTML;
-  ExpectedResult := HTML('<picture><img src="photo.jpg" /></picture>');
+  ExpectedResult := HTML('<picture><img src="photo.jpg" alt="A photo" /></picture>');
   CheckEquals(ExpectedResult, TestResult);
 end;
 

@@ -2612,7 +2612,7 @@ end;
 
 function THTMLWriter.AddPictureImg(aImageSrc: string; aAltText: string): IHTMLWriter;
 begin
-  Result := OpenPicture.AddImage(aImageSrc).CloseTag;
+  Result := OpenPicture.OpenImage(aImageSrc).AddAttribute(cAlt, aAltText).CloseTag.CloseTag;
 end;
 
 function THTMLWriter.OpenTemplate: IHTMLWriter;
