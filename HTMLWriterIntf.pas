@@ -465,7 +465,7 @@ type
     ///	  Opens a &lt;button&gt; tag
     ///	</summary>
     ///	<param name="aName">
-    ///	  Required attribute.  Value given for the 'name' attribute.  All
+    ///	  Required attribute.ï¿½ Value given for the 'name' attribute.ï¿½ All
     ///	  buttons must be named.
     ///	</param>
     {$ENDREGION}
@@ -542,6 +542,122 @@ type
     function OpenDefinitionList: IHTMLWriter;
     function OpenDefinitionTerm: IHTMLWriter;
     function OpenDefinitionItem: IHTMLWriter;
+
+    // HTML5 Semantic Structure Elements
+    /// <summary>Opens an &lt;article&gt; tag.</summary>
+    function OpenArticle: IHTMLWriter;
+    /// <summary>Adds the passed in text inside an &lt;article&gt;&lt;/article&gt; tag.</summary>
+    function AddArticleText(aString: string): IHTMLWriter;
+    /// <summary>Opens an &lt;aside&gt; tag.</summary>
+    function OpenAside: IHTMLWriter;
+    /// <summary>Adds the passed in text inside an &lt;aside&gt;&lt;/aside&gt; tag.</summary>
+    function AddAsideText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;details&gt; tag.</summary>
+    function OpenDetails: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;details&gt;&lt;/details&gt; tag.</summary>
+    function AddDetailsText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;figcaption&gt; tag.</summary>
+    function OpenFigCaption: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;figcaption&gt;&lt;/figcaption&gt; tag.</summary>
+    function AddFigCaptionText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;figure&gt; tag.</summary>
+    function OpenFigure: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;figure&gt;&lt;/figure&gt; tag.</summary>
+    function AddFigureText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;footer&gt; tag.</summary>
+    function OpenFooter: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;footer&gt;&lt;/footer&gt; tag.</summary>
+    function AddFooterText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;header&gt; tag.</summary>
+    function OpenHeader: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;header&gt;&lt;/header&gt; tag.</summary>
+    function AddHeaderText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;main&gt; tag.</summary>
+    function OpenMain: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;main&gt;&lt;/main&gt; tag.</summary>
+    function AddMainText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;nav&gt; tag.</summary>
+    function OpenNav: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;nav&gt;&lt;/nav&gt; tag.</summary>
+    function AddNavText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;section&gt; tag.</summary>
+    function OpenSection: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;section&gt;&lt;/section&gt; tag.</summary>
+    function AddSectionText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;summary&gt; tag.</summary>
+    function OpenSummary: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;summary&gt;&lt;/summary&gt; tag.</summary>
+    function AddSummaryText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;dialog&gt; tag.</summary>
+    function OpenDialog: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;dialog&gt;&lt;/dialog&gt; tag.</summary>
+    function AddDialogText(aString: string): IHTMLWriter;
+
+    // HTML5 Text-Level Semantic Elements
+    /// <summary>Opens a &lt;mark&gt; tag.</summary>
+    function OpenMark: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;mark&gt;&lt;/mark&gt; tag.</summary>
+    function AddMarkText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;bdi&gt; tag.</summary>
+    function OpenBdi: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;bdi&gt;&lt;/bdi&gt; tag.</summary>
+    function AddBdiText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;ruby&gt; tag.</summary>
+    function OpenRuby: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;ruby&gt;&lt;/ruby&gt; tag.</summary>
+    function AddRubyText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;rt&gt; tag.</summary>
+    function OpenRt: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;rt&gt;&lt;/rt&gt; tag.</summary>
+    function AddRtText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;rp&gt; tag.</summary>
+    function OpenRp: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;rp&gt;&lt;/rp&gt; tag.</summary>
+    function AddRpText(aString: string): IHTMLWriter;
+    /// <summary>Opens a &lt;time&gt; tag.</summary>
+    function OpenTime: IHTMLWriter;
+    /// <summary>Adds the passed in text inside a &lt;time&gt;&lt;/time&gt; tag.</summary>
+    function AddTimeText(aString: string): IHTMLWriter;
+    /// <summary>Opens an &lt;output&gt; tag.</summary>
+    function OpenOutput: IHTMLWriter;
+    /// <summary>Adds the passed in text inside an &lt;output&gt;&lt;/output&gt; tag.</summary>
+    function AddOutputText(aString: string): IHTMLWriter;
+    /// <summary>Adds a &lt;wbr /&gt; tag.</summary>
+    function AddWordBreak: IHTMLWriter;
+
+    // HTML5 Media Elements
+    /// <summary>Opens an &lt;audio&gt; tag.</summary>
+    function OpenAudio: IHTMLWriter; overload;
+    /// <summary>Opens an &lt;audio&gt; tag with a src attribute.</summary>
+    function OpenAudio(aSource: string): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;video&gt; tag.</summary>
+    function OpenVideo: IHTMLWriter; overload;
+    /// <summary>Opens a &lt;video&gt; tag with a src attribute.</summary>
+    function OpenVideo(aSource: string): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;video&gt; tag with src, width, and height attributes.</summary>
+    function OpenVideo(aSource: string; aWidth: integer; aHeight: integer): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;source&gt; tag.</summary>
+    function OpenSourceElement: IHTMLWriter;
+    /// <summary>Adds a &lt;source /&gt; tag with src and type attributes.</summary>
+    function AddSourceElement(aSource: string; aType: string): IHTMLWriter;
+    /// <summary>Opens a &lt;track&gt; tag.</summary>
+    function OpenTrack: IHTMLWriter;
+    /// <summary>Opens a &lt;canvas&gt; tag.</summary>
+    function OpenCanvas: IHTMLWriter; overload;
+    /// <summary>Opens a &lt;canvas&gt; tag with width and height attributes.</summary>
+    function OpenCanvas(aWidth: integer; aHeight: integer): IHTMLWriter; overload;
+
+    // HTML5 Form Elements
+    /// <summary>Opens a &lt;datalist&gt; tag.</summary>
+    function OpenDatalist: IHTMLWriter;
+    /// <summary>Opens a &lt;progress&gt; tag.</summary>
+    function OpenProgress: IHTMLWriter; overload;
+    /// <summary>Opens a &lt;progress&gt; tag with value and max attributes.</summary>
+    function OpenProgress(aValue: integer; aMax: integer): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;meter&gt; tag.</summary>
+    function OpenMeter: IHTMLWriter; overload;
+    /// <summary>Opens a &lt;meter&gt; tag with value, min, and max attributes.</summary>
+    function OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter; overload;
 
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
     ///	<summary>Property determining the level of error reporting that the class should provide.</summary>

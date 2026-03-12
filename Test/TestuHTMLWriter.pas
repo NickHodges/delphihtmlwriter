@@ -218,6 +218,69 @@ type
     procedure TestCreateFragmentWithTableRows;
     procedure TestCreateFragmentAddText;
     procedure TestCreateFragmentNested;
+
+    // HTML5 Semantic Structure tests
+    procedure TestOpenArticle;
+    procedure TestAddArticleText;
+    procedure TestOpenAside;
+    procedure TestAddAsideText;
+    procedure TestOpenDetails;
+    procedure TestAddDetailsText;
+    procedure TestOpenFigCaption;
+    procedure TestAddFigCaptionText;
+    procedure TestOpenFigure;
+    procedure TestAddFigureText;
+    procedure TestOpenFooter;
+    procedure TestAddFooterText;
+    procedure TestOpenHeader;
+    procedure TestAddHeaderText;
+    procedure TestOpenMain;
+    procedure TestAddMainText;
+    procedure TestOpenNav;
+    procedure TestAddNavText;
+    procedure TestOpenSection;
+    procedure TestAddSectionText;
+    procedure TestOpenSummary;
+    procedure TestAddSummaryText;
+    procedure TestOpenDialog;
+    procedure TestAddDialogText;
+
+    // HTML5 Text-Level Semantic tests
+    procedure TestOpenMark;
+    procedure TestAddMarkText;
+    procedure TestOpenBdi;
+    procedure TestAddBdiText;
+    procedure TestOpenRuby;
+    procedure TestAddRubyText;
+    procedure TestOpenRt;
+    procedure TestAddRtText;
+    procedure TestOpenRp;
+    procedure TestAddRpText;
+    procedure TestOpenTime;
+    procedure TestAddTimeText;
+    procedure TestOpenOutput;
+    procedure TestAddOutputText;
+    procedure TestAddWordBreak;
+
+    // HTML5 Media tests
+    procedure TestOpenAudio;
+    procedure TestOpenVideo;
+    procedure TestOpenSourceElement;
+    procedure TestAddSourceElement;
+    procedure TestOpenTrack;
+    procedure TestOpenCanvas;
+
+    // HTML5 Form tests
+    procedure TestHTML5InputTypes;
+    procedure TestOpenDatalist;
+    procedure TestOpenProgress;
+    procedure TestOpenMeter;
+
+    // HTML5 DOCTYPE
+    procedure TestHTML5DocType;
+
+    // HTML5 Deprecation
+    procedure TestHTML5Deprecation;
   end;
   // Test methods for class IGetHTML
 
@@ -3708,6 +3771,945 @@ begin
 
   Expected := '<ul><li>Item 1</li><li>Item 2</li></ul>';
   CheckEquals(Expected, Writer.AsHTML, 'Fragment should support nested structures');
+end;
+
+// =====================================================================
+// HTML5 Semantic Structure Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestOpenArticle;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenArticle.AsHTML;
+  ExpectedResult := '<html><article';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenArticle.CloseTag.AsHTML;
+  ExpectedResult := '<html><article></article>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenArticle.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><article></article></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenArticle.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><article>blah</article></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenArticle.AddClass('blog').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><article class="blog"></article></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddArticleText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><article>' + TempString + '</article>';
+  TestResult := HTMLWriterFactory('html').AddArticleText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<article>' + TempString + '</article>');
+  TestResult := HTMLWriterFactory('html').AddArticleText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenAside;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenAside.AsHTML;
+  ExpectedResult := '<html><aside';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAside.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><aside></aside></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAside.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><aside>blah</aside></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddAsideText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><aside>' + TempString + '</aside>';
+  TestResult := HTMLWriterFactory('html').AddAsideText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<aside>' + TempString + '</aside>');
+  TestResult := HTMLWriterFactory('html').AddAsideText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenDetails;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenDetails.AsHTML;
+  ExpectedResult := '<html><details';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDetails.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><details></details></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDetails.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><details>blah</details></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDetailsText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><details>' + TempString + '</details>';
+  TestResult := HTMLWriterFactory('html').AddDetailsText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<details>' + TempString + '</details>');
+  TestResult := HTMLWriterFactory('html').AddDetailsText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenFigCaption;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenFigCaption.AsHTML;
+  ExpectedResult := '<html><figcaption';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFigCaption.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><figcaption></figcaption></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFigCaption.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><figcaption>blah</figcaption></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddFigCaptionText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><figcaption>' + TempString + '</figcaption>';
+  TestResult := HTMLWriterFactory('html').AddFigCaptionText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<figcaption>' + TempString + '</figcaption>');
+  TestResult := HTMLWriterFactory('html').AddFigCaptionText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenFigure;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenFigure.AsHTML;
+  ExpectedResult := '<html><figure';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFigure.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><figure></figure></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFigure.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><figure>blah</figure></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddFigureText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><figure>' + TempString + '</figure>';
+  TestResult := HTMLWriterFactory('html').AddFigureText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<figure>' + TempString + '</figure>');
+  TestResult := HTMLWriterFactory('html').AddFigureText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenFooter;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenFooter.AsHTML;
+  ExpectedResult := '<html><footer';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFooter.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><footer></footer></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenFooter.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><footer>blah</footer></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddFooterText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><footer>' + TempString + '</footer>';
+  TestResult := HTMLWriterFactory('html').AddFooterText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<footer>' + TempString + '</footer>');
+  TestResult := HTMLWriterFactory('html').AddFooterText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenHeader;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenHeader.AsHTML;
+  ExpectedResult := '<html><header';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHeader.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><header></header></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenHeader.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><header>blah</header></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddHeaderText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><header>' + TempString + '</header>';
+  TestResult := HTMLWriterFactory('html').AddHeaderText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<header>' + TempString + '</header>');
+  TestResult := HTMLWriterFactory('html').AddHeaderText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenMain;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenMain.AsHTML;
+  ExpectedResult := '<html><main';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMain.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><main></main></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMain.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><main>blah</main></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddMainText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><main>' + TempString + '</main>';
+  TestResult := HTMLWriterFactory('html').AddMainText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<main>' + TempString + '</main>');
+  TestResult := HTMLWriterFactory('html').AddMainText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenNav;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenNav.AsHTML;
+  ExpectedResult := '<html><nav';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNav.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><nav></nav></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenNav.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><nav>blah</nav></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddNavText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><nav>' + TempString + '</nav>';
+  TestResult := HTMLWriterFactory('html').AddNavText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<nav>' + TempString + '</nav>');
+  TestResult := HTMLWriterFactory('html').AddNavText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenSection;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenSection.AsHTML;
+  ExpectedResult := '<html><section';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenSection.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><section></section></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenSection.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><section>blah</section></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddSectionText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><section>' + TempString + '</section>';
+  TestResult := HTMLWriterFactory('html').AddSectionText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<section>' + TempString + '</section>');
+  TestResult := HTMLWriterFactory('html').AddSectionText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenSummary;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenSummary.AsHTML;
+  ExpectedResult := '<html><summary';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenSummary.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><summary></summary></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenSummary.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><summary>blah</summary></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddSummaryText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><summary>' + TempString + '</summary>';
+  TestResult := HTMLWriterFactory('html').AddSummaryText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<summary>' + TempString + '</summary>');
+  TestResult := HTMLWriterFactory('html').AddSummaryText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenDialog;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenDialog.AsHTML;
+  ExpectedResult := '<html><dialog';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDialog.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><dialog></dialog></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDialog.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := '<html><dialog>blah</dialog></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDialogText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'grundle';
+
+  ExpectedResult := '<html><dialog>' + TempString + '</dialog>';
+  TestResult := HTMLWriterFactory('html').AddDialogText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<dialog>' + TempString + '</dialog>');
+  TestResult := HTMLWriterFactory('html').AddDialogText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Text-Level Semantic Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestOpenMark;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := TFormatTypeStrings[ftMark];
+
+  TestResult := HTMLWriterFactory('html').OpenMark.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMark.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMark.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMark.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddMarkText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+  TempTag: string;
+begin
+  TempString := 'grundle';
+  TempTag := TFormatTypeStrings[ftMark];
+
+  ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
+  TestResult := HTMLWriterFactory('html').AddMarkText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  TestResult := HTMLWriterFactory('html').AddMarkText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenBdi;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := TFormatTypeStrings[ftBdi];
+
+  TestResult := HTMLWriterFactory('html').OpenBdi.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenBdi.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenBdi.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddBdiText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+  TempTag: string;
+begin
+  TempString := 'grundle';
+  TempTag := TFormatTypeStrings[ftBdi];
+
+  ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
+  TestResult := HTMLWriterFactory('html').AddBdiText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  TestResult := HTMLWriterFactory('html').AddBdiText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenRuby;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := TFormatTypeStrings[ftRuby];
+
+  TestResult := HTMLWriterFactory('html').OpenRuby.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRuby.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRuby.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddRubyText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+  TempTag: string;
+begin
+  TempString := 'grundle';
+  TempTag := TFormatTypeStrings[ftRuby];
+
+  ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
+  TestResult := HTMLWriterFactory('html').AddRubyText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  TestResult := HTMLWriterFactory('html').AddRubyText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenRt;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := TFormatTypeStrings[ftRt];
+
+  TestResult := HTMLWriterFactory('html').OpenRt.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRt.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRt.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddRtText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+  TempTag: string;
+begin
+  TempString := 'grundle';
+  TempTag := TFormatTypeStrings[ftRt];
+
+  ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
+  TestResult := HTMLWriterFactory('html').AddRtText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  TestResult := HTMLWriterFactory('html').AddRtText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenRp;
+var
+  TestResult: string;
+  ExpectedResult: string;
+  TempTag: string;
+begin
+  TempTag := TFormatTypeStrings[ftRp];
+
+  TestResult := HTMLWriterFactory('html').OpenRp.AsHTML;
+  ExpectedResult := Format('<html><%s', [TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRp.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s></%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenRp.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := Format('<html><%s>blah</%s></html>', [TempTag, TempTag]);
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddRpText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+  TempTag: string;
+begin
+  TempString := 'grundle';
+  TempTag := TFormatTypeStrings[ftRp];
+
+  ExpectedResult := Format('<html><%s>%s</%s>', [TempTag, TempString, TempTag]);
+  TestResult := HTMLWriterFactory('html').AddRpText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML(Format('<%s>%s</%s>', [TempTag, TempString, TempTag]));
+  TestResult := HTMLWriterFactory('html').AddRpText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenTime;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTime.AsHTML;
+  ExpectedResult := '<html><time';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTime.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<time></time>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTime.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<time>blah</time>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTime.AddAttribute(cDatetime, '2024-01-01').AddText('New Year').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<time datetime="2024-01-01">New Year</time>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddTimeText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := 'January 1';
+
+  ExpectedResult := '<html><time>' + TempString + '</time>';
+  TestResult := HTMLWriterFactory('html').AddTimeText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<time>' + TempString + '</time>');
+  TestResult := HTMLWriterFactory('html').AddTimeText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenOutput;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenOutput.AsHTML;
+  ExpectedResult := '<html><output';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenOutput.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<output></output>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenOutput.AddText('42').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<output>42</output>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenOutput.AddAttribute(cFor, 'a b').AddText('42').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<output for="a b">42</output>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddOutputText;
+var
+  TestResult, ExpectedResult: string;
+  TempString: string;
+begin
+  TempString := '42';
+
+  ExpectedResult := '<html><output>' + TempString + '</output>';
+  TestResult := HTMLWriterFactory('html').AddOutputText(TempString).AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+
+  ExpectedResult := HTML('<output>' + TempString + '</output>');
+  TestResult := HTMLWriterFactory('html').AddOutputText(TempString).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddWordBreak;
+var
+  TestResult, ExpectedResult: string;
+begin
+  ExpectedResult := HTML('<wbr />');
+  TestResult := HTMLWriterFactory('html').AddWordBreak.CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Media Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestOpenAudio;
+var
+  TestResult, ExpectedResult: string;
+  TempSource: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenAudio.AsHTML;
+  ExpectedResult := '<html><audio';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenAudio.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<audio></audio>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempSource := 'song.mp3';
+  TestResult := HTMLWriterFactory('html').OpenAudio(TempSource).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<audio src="%s"></audio>', [TempSource]));
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenVideo;
+var
+  TestResult, ExpectedResult: string;
+  TempSource: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenVideo.AsHTML;
+  ExpectedResult := '<html><video';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenVideo.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<video></video>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TempSource := 'movie.mp4';
+  TestResult := HTMLWriterFactory('html').OpenVideo(TempSource).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<video src="%s"></video>', [TempSource]));
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenVideo(TempSource, 640, 480).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML(Format('<video src="%s" width="640" height="480"></video>', [TempSource]));
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenSourceElement;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenSourceElement.AsHTML;
+  ExpectedResult := '<html><source';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenSourceElement.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<source />');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddSourceElement;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').AddSourceElement('audio.mp3', 'audio/mpeg').CloseTag.AsHTML;
+  ExpectedResult := HTML('<source src="audio.mp3" type="audio/mpeg" />');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenTrack;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTrack.AsHTML;
+  ExpectedResult := '<html><track';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTrack.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<track />');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenCanvas;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenCanvas.AsHTML;
+  ExpectedResult := '<html><canvas';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenCanvas.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<canvas></canvas>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenCanvas(400, 300).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<canvas width="400" height="300"></canvas>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Form Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestHTML5InputTypes;
+var
+  TestResult, ExpectedResult: string;
+  TempType: TInputType;
+begin
+  for TempType := itColor to itWeek do
+  begin
+    TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(TempType).CloseTag.CloseForm.CloseDocument.AsHTML;
+    ExpectedResult := Format('<html><form method="get"><input type="%s" /></form></html>', [TInputTypeStrings[TempType]]);
+    CheckEquals(ExpectedResult, TestResult);
+  end;
+end;
+
+procedure TestTHTMLWriter.TestOpenDatalist;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenDatalist.AsHTML;
+  ExpectedResult := '<html><datalist';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDatalist.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<datalist></datalist>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenDatalist.AddID('browsers').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<datalist id="browsers"></datalist>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenProgress;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenProgress.AsHTML;
+  ExpectedResult := '<html><progress';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenProgress.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<progress></progress>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenProgress(70, 100).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<progress value="70" max="100"></progress>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenMeter;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenMeter.AsHTML;
+  ExpectedResult := '<html><meter';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMeter.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<meter></meter>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenMeter(60, 0, 100).CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<meter value="60" min="0" max="100"></meter>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 DOCTYPE Test
+// =====================================================================
+
+procedure TestTHTMLWriter.TestHTML5DocType;
+var
+  TestResult: string;
+  ExpectedResult: string;
+begin
+  ExpectedResult := '<!DOCTYPE html><html></html>';
+  TestResult := HTMLWriterCreateDocument(dtHTML5).CloseTag.AsHTML;
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Deprecation Test
+// =====================================================================
+
+procedure TestTHTMLWriter.TestHTML5Deprecation;
+begin
+  // <center> should be deprecated in HTML5
+  CheckException(ETagIsDeprecatedHTMLWriterException,
+    procedure()
+    var Temp: IHTMLWriter;
+    begin
+      Temp := HTMLWriterFactory(cHTML);
+      Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML5];
+      Temp.OpenCenter;
+    end,
+    'Failed to raise ETagIsDeprecatedHTMLWriterException for <center> with elStrictHTML5');
+
+  // <font> should be deprecated in HTML5
+  CheckException(ETagIsDeprecatedHTMLWriterException,
+    procedure()
+    var Temp: IHTMLWriter;
+    begin
+      Temp := HTMLWriterFactory(cHTML);
+      Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML5];
+      Temp.OpenFont;
+    end,
+    'Failed to raise ETagIsDeprecatedHTMLWriterException for <font> with elStrictHTML5');
+
+  // <strike> should be deprecated in HTML5
+  CheckException(ETagIsDeprecatedHTMLWriterException,
+    procedure()
+    var Temp: IHTMLWriter;
+    begin
+      Temp := HTMLWriterFactory(cHTML);
+      Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML5];
+      Temp.OpenStrike;
+    end,
+    'Failed to raise ETagIsDeprecatedHTMLWriterException for <strike> with elStrictHTML5');
+
+  // <basefont> should be deprecated in HTML5
+  CheckException(ETagIsDeprecatedHTMLWriterException,
+    procedure()
+    var Temp: IHTMLWriter;
+    begin
+      Temp := HTMLWriterFactory(cHTML);
+      Temp.ErrorLevels := Temp.ErrorLevels + [elStrictHTML5];
+      Temp.OpenHead.OpenBaseFont;
+    end,
+    'Failed to raise ETagIsDeprecatedHTMLWriterException for <basefont> with elStrictHTML5');
 end;
 
 initialization

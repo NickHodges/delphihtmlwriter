@@ -450,6 +450,68 @@ type
       function OpenDefinitionTerm: IHTMLWriter;
       function OpenDefinitionItem: IHTMLWriter;
 {$ENDREGION}
+{$REGION 'HTML5 Semantic Structure Methods'}
+    function OpenArticle: IHTMLWriter;
+    function AddArticleText(aString: string): IHTMLWriter;
+    function OpenAside: IHTMLWriter;
+    function AddAsideText(aString: string): IHTMLWriter;
+    function OpenDetails: IHTMLWriter;
+    function AddDetailsText(aString: string): IHTMLWriter;
+    function OpenFigCaption: IHTMLWriter;
+    function AddFigCaptionText(aString: string): IHTMLWriter;
+    function OpenFigure: IHTMLWriter;
+    function AddFigureText(aString: string): IHTMLWriter;
+    function OpenFooter: IHTMLWriter;
+    function AddFooterText(aString: string): IHTMLWriter;
+    function OpenHeader: IHTMLWriter;
+    function AddHeaderText(aString: string): IHTMLWriter;
+    function OpenMain: IHTMLWriter;
+    function AddMainText(aString: string): IHTMLWriter;
+    function OpenNav: IHTMLWriter;
+    function AddNavText(aString: string): IHTMLWriter;
+    function OpenSection: IHTMLWriter;
+    function AddSectionText(aString: string): IHTMLWriter;
+    function OpenSummary: IHTMLWriter;
+    function AddSummaryText(aString: string): IHTMLWriter;
+    function OpenDialog: IHTMLWriter;
+    function AddDialogText(aString: string): IHTMLWriter;
+{$ENDREGION}
+{$REGION 'HTML5 Text-Level Semantic Methods'}
+    function OpenMark: IHTMLWriter;
+    function AddMarkText(aString: string): IHTMLWriter;
+    function OpenBdi: IHTMLWriter;
+    function AddBdiText(aString: string): IHTMLWriter;
+    function OpenRuby: IHTMLWriter;
+    function AddRubyText(aString: string): IHTMLWriter;
+    function OpenRt: IHTMLWriter;
+    function AddRtText(aString: string): IHTMLWriter;
+    function OpenRp: IHTMLWriter;
+    function AddRpText(aString: string): IHTMLWriter;
+    function OpenTime: IHTMLWriter;
+    function AddTimeText(aString: string): IHTMLWriter;
+    function OpenOutput: IHTMLWriter;
+    function AddOutputText(aString: string): IHTMLWriter;
+    function AddWordBreak: IHTMLWriter;
+{$ENDREGION}
+{$REGION 'HTML5 Media Methods'}
+    function OpenAudio: IHTMLWriter; overload;
+    function OpenAudio(aSource: string): IHTMLWriter; overload;
+    function OpenVideo: IHTMLWriter; overload;
+    function OpenVideo(aSource: string): IHTMLWriter; overload;
+    function OpenVideo(aSource: string; aWidth: integer; aHeight: integer): IHTMLWriter; overload;
+    function OpenSourceElement: IHTMLWriter;
+    function AddSourceElement(aSource: string; aType: string): IHTMLWriter;
+    function OpenTrack: IHTMLWriter;
+    function OpenCanvas: IHTMLWriter; overload;
+    function OpenCanvas(aWidth: integer; aHeight: integer): IHTMLWriter; overload;
+{$ENDREGION}
+{$REGION 'HTML5 Form Methods'}
+    function OpenDatalist: IHTMLWriter;
+    function OpenProgress: IHTMLWriter; overload;
+    function OpenProgress(aValue: integer; aMax: integer): IHTMLWriter; overload;
+    function OpenMeter: IHTMLWriter; overload;
+    function OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter; overload;
+{$ENDREGION}
 
     class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
@@ -761,6 +823,7 @@ end;
 function THTMLWriter.OpenCenter: IHTMLWriter;
 begin
   IsDeprecatedTag(TFormatTypeStrings[ftCenter], elStrictHTML4);
+  IsDeprecatedTag(TFormatTypeStrings[ftCenter], elStrictHTML5);
   Result := OpenFormatTag(ftCenter);
 end;
 
@@ -788,6 +851,7 @@ end;
 function THTMLWriter.OpenFont: IHTMLWriter;
 begin
   IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML4);
+  IsDeprecatedTag(TFormatTypeStrings[ftFont], elStrictHTML5);
   Result := OpenFormatTag(ftFont);
 end;
 
@@ -986,6 +1050,7 @@ end;
 function THTMLWriter.OpenStrike: IHTMLWriter;
 begin
   IsDeprecatedTag(TFormatTypeStrings[ftStrike], elStrictHTML4);
+  IsDeprecatedTag(TFormatTypeStrings[ftStrike], elStrictHTML5);
   Result := OpenFormatTag(ftStrike);
 end;
 
@@ -1571,6 +1636,7 @@ end;
 function THTMLWriter.OpenBaseFont: IHTMLWriter;
 begin
   IsDeprecatedTag(cBaseFont, elStrictHTML4);
+  IsDeprecatedTag(cBaseFont, elStrictHTML5);
   CheckInHeadTag;
   Result := AddTag(cBaseFont, ctEmpty);
 end;
@@ -2193,6 +2259,292 @@ begin
   end;
   Result := Self;
 end;
+
+{$REGION 'HTML5 Semantic Structure Methods'}
+
+function THTMLWriter.OpenArticle: IHTMLWriter;
+begin
+  Result := AddTag(cArticle, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddArticleText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cArticle, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenAside: IHTMLWriter;
+begin
+  Result := AddTag(cAside, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddAsideText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cAside, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenDetails: IHTMLWriter;
+begin
+  Result := AddTag(cDetails, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddDetailsText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cDetails, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenFigCaption: IHTMLWriter;
+begin
+  Result := AddTag(cFigCaption, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddFigCaptionText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cFigCaption, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenFigure: IHTMLWriter;
+begin
+  Result := AddTag(cFigure, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddFigureText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cFigure, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenFooter: IHTMLWriter;
+begin
+  Result := AddTag(cFooter, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddFooterText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cFooter, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenHeader: IHTMLWriter;
+begin
+  Result := AddTag(cHeader, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddHeaderText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cHeader, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenMain: IHTMLWriter;
+begin
+  Result := AddTag(cMain, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddMainText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cMain, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenNav: IHTMLWriter;
+begin
+  Result := AddTag(cNav, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddNavText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cNav, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenSection: IHTMLWriter;
+begin
+  Result := AddTag(cSection, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddSectionText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cSection, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenSummary: IHTMLWriter;
+begin
+  Result := AddTag(cSummary, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddSummaryText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cSummary, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenDialog: IHTMLWriter;
+begin
+  Result := AddTag(cDialog, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddDialogText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cDialog, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Text-Level Semantic Methods'}
+
+function THTMLWriter.OpenMark: IHTMLWriter;
+begin
+  Result := OpenFormatTag(ftMark);
+end;
+
+function THTMLWriter.AddMarkText(aString: string): IHTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftMark);
+end;
+
+function THTMLWriter.OpenBdi: IHTMLWriter;
+begin
+  Result := OpenFormatTag(ftBdi);
+end;
+
+function THTMLWriter.AddBdiText(aString: string): IHTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftBdi);
+end;
+
+function THTMLWriter.OpenRuby: IHTMLWriter;
+begin
+  Result := OpenFormatTag(ftRuby);
+end;
+
+function THTMLWriter.AddRubyText(aString: string): IHTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftRuby);
+end;
+
+function THTMLWriter.OpenRt: IHTMLWriter;
+begin
+  Result := OpenFormatTag(ftRt);
+end;
+
+function THTMLWriter.AddRtText(aString: string): IHTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftRt);
+end;
+
+function THTMLWriter.OpenRp: IHTMLWriter;
+begin
+  Result := OpenFormatTag(ftRp);
+end;
+
+function THTMLWriter.AddRpText(aString: string): IHTMLWriter;
+begin
+  Result := AddFormattedText(aString, ftRp);
+end;
+
+function THTMLWriter.OpenTime: IHTMLWriter;
+begin
+  Result := AddTag(cTime, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddTimeText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cTime, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.OpenOutput: IHTMLWriter;
+begin
+  Result := AddTag(cOutput, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddOutputText(aString: string): IHTMLWriter;
+begin
+  Result := AddTag(cOutput, ctNormal, chaCannotHaveAttributes).AddText(aString).CloseTag;
+end;
+
+function THTMLWriter.AddWordBreak: IHTMLWriter;
+begin
+  Result := AddTag(cWbr, ctEmpty, chaCannotHaveAttributes).CloseTag;
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Media Methods'}
+
+function THTMLWriter.OpenAudio: IHTMLWriter;
+begin
+  Result := AddTag(cAudio, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenAudio(aSource: string): IHTMLWriter;
+begin
+  Result := OpenAudio[cSource, aSource];
+end;
+
+function THTMLWriter.OpenVideo: IHTMLWriter;
+begin
+  Result := AddTag(cVideo, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenVideo(aSource: string): IHTMLWriter;
+begin
+  Result := OpenVideo[cSource, aSource];
+end;
+
+function THTMLWriter.OpenVideo(aSource: string; aWidth: integer; aHeight: integer): IHTMLWriter;
+begin
+  Result := OpenVideo(aSource)[cWidth, IntToStr(aWidth)][cHeight, IntToStr(aHeight)];
+end;
+
+function THTMLWriter.OpenSourceElement: IHTMLWriter;
+begin
+  Result := AddTag(cSourceElement, ctEmpty);
+end;
+
+function THTMLWriter.AddSourceElement(aSource: string; aType: string): IHTMLWriter;
+begin
+  Result := OpenSourceElement[cSource, aSource][cType, aType].CloseTag;
+end;
+
+function THTMLWriter.OpenTrack: IHTMLWriter;
+begin
+  Result := AddTag(cTrack, ctEmpty);
+end;
+
+function THTMLWriter.OpenCanvas: IHTMLWriter;
+begin
+  Result := AddTag(cCanvas, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenCanvas(aWidth: integer; aHeight: integer): IHTMLWriter;
+begin
+  Result := OpenCanvas[cWidth, IntToStr(aWidth)][cHeight, IntToStr(aHeight)];
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Form Methods'}
+
+function THTMLWriter.OpenDatalist: IHTMLWriter;
+begin
+  Result := AddTag(cDatalist, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenProgress: IHTMLWriter;
+begin
+  Result := AddTag(cProgress, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenProgress(aValue: integer; aMax: integer): IHTMLWriter;
+begin
+  Result := OpenProgress[cValue, IntToStr(aValue)][cMax, IntToStr(aMax)];
+end;
+
+function THTMLWriter.OpenMeter: IHTMLWriter;
+begin
+  Result := AddTag(cMeter, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter;
+begin
+  Result := OpenMeter[cValue, IntToStr(aValue)][cMin, IntToStr(aMin)][cMax, IntToStr(aMax)];
+end;
+
+{$ENDREGION}
 
 // Interface Access functions
 

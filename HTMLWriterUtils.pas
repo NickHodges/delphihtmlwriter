@@ -271,7 +271,17 @@ type
       /// <summary>Formats with a &lt;var&gt; tag</summary>
       ftVariable,
       /// <summary>Formats with a &lt;ins&gt; tag</summary>
-      ftInsert);
+      ftInsert,
+      /// <summary>Formats with a &lt;mark&gt; tag</summary>
+      ftMark,
+      /// <summary>Formats with a &lt;bdi&gt; tag</summary>
+      ftBdi,
+      /// <summary>Formats with a &lt;ruby&gt; tag</summary>
+      ftRuby,
+      /// <summary>Formats with a &lt;rt&gt; tag</summary>
+      ftRt,
+      /// <summary>Formats with a &lt;rp&gt; tag</summary>
+      ftRp);
     THeadingType = (htHeading1, htHeading2, htHeading3, htHeading4, htHeading5, htHeading6);
 
     TClearValue = (cvNoValue, cvNone, cvLeft, cvRight, cvAll);
@@ -348,7 +358,9 @@ type
 
       dtXHTML10Frameset,
 
-      dtXHTML11
+      dtXHTML11,
+
+      dtHTML5
     );
 
     {$REGION 'Documentation'}
@@ -434,7 +446,32 @@ type
       ///	<summary>
       ///	  Indicates a text input type
       ///	</summary>
-      itText
+      itText,
+
+      /// <summary>Indicates a color input type</summary>
+      itColor,
+      /// <summary>Indicates a date input type</summary>
+      itDate,
+      /// <summary>Indicates a datetime-local input type</summary>
+      itDatetimeLocal,
+      /// <summary>Indicates an email input type</summary>
+      itEmail,
+      /// <summary>Indicates a month input type</summary>
+      itMonth,
+      /// <summary>Indicates a number input type</summary>
+      itNumber,
+      /// <summary>Indicates a range input type</summary>
+      itRange,
+      /// <summary>Indicates a search input type</summary>
+      itSearch,
+      /// <summary>Indicates a tel input type</summary>
+      itTel,
+      /// <summary>Indicates a time input type</summary>
+      itTime,
+      /// <summary>Indicates a url input type</summary>
+      itUrl,
+      /// <summary>Indicates a week input type</summary>
+      itWeek
     );
 
     {$REGION 'Documentation'}
@@ -495,7 +532,7 @@ type
   const
     ///	<summary>String array for use with the TFormatType</summary>
     ///	<seealso cref="TFormatType">TFormatType</seealso>
-    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins');
+    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins', 'mark', 'bdi', 'ruby', 'rt', 'rp');
 
     {$REGION 'Documentation'}
     ///	<summary>
@@ -544,7 +581,7 @@ type
     ///	  Strings to be used with the TInputType type
     ///	</summary>
     {$ENDREGION}
-    TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text');
+    TInputTypeStrings: array [TInputType] of string = ('button', 'checkbox', 'file', 'hidden', 'image', 'password', 'radio', 'reset', 'submit', 'text', 'color', 'date', 'datetime-local', 'email', 'month', 'number', 'range', 'search', 'tel', 'time', 'url', 'week');
 
     {$REGION 'Documentation'}
     ///	<summary>
@@ -639,6 +676,60 @@ type
     cDT = 'dt';
     cDL = 'dl';
 
+    // HTML5 Semantic Structure Elements
+    cArticle = 'article';
+    cAside = 'aside';
+    cDetails = 'details';
+    cFigCaption = 'figcaption';
+    cFigure = 'figure';
+    cFooter = 'footer';
+    cHeader = 'header';
+    cMain = 'main';
+    cNav = 'nav';
+    cSection = 'section';
+    cSummary = 'summary';
+    cDialog = 'dialog';
+
+    // HTML5 Text-Level Semantic Elements
+    cMark = 'mark';
+    cTime = 'time';
+    cWbr = 'wbr';
+    cBdi = 'bdi';
+    cRuby = 'ruby';
+    cRt = 'rt';
+    cRp = 'rp';
+    cOutput = 'output';
+
+    // HTML5 Media Elements
+    cAudio = 'audio';
+    cVideo = 'video';
+    cSourceElement = 'source';
+    cTrack = 'track';
+    cCanvas = 'canvas';
+
+    // HTML5 Form Elements
+    cDatalist = 'datalist';
+    cProgress = 'progress';
+    cMeter = 'meter';
+
+    // HTML5 Attribute Constants
+    cDatetime = 'datetime';
+    cMin = 'min';
+    cMax = 'max';
+    cLow = 'low';
+    cHigh = 'high';
+    cOptimum = 'optimum';
+    cControls = 'controls';
+    cAutoplay = 'autoplay';
+    cLoop = 'loop';
+    cMuted = 'muted';
+    cPoster = 'poster';
+    cPreload = 'preload';
+    cOpen = 'open';
+    cList = 'list';
+    cPlaceholder = 'placeholder';
+    cRequired = 'required';
+
     cOpenBracket = '<';
     cCloseBracket = '>';
     cCloseSlashBracket = '/>';
@@ -653,7 +744,7 @@ type
     ///	  enumeration
     ///	</summary>
     {$ENDREGION}
-    THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
+    THTMLDocTypeStrings: array [THTMLDocType] of string = ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">', '<!DOCTYPE html>');
 
 type
     ///	<summary>
