@@ -63,6 +63,8 @@ type
     /// <remarks>This tag will always be closed with the '/&gt;' tag. In addition, this tag can only be added inside of
     /// a &lt;head&gt; tag.</remarks>
     function OpenBase: IHTMLWriter;
+    /// <summary>Opens a &lt;basefont&gt; tag.</summary>
+    /// <remarks>This tag is deprecated in HTML 4.01 and HTML5.</remarks>
     function OpenBaseFont: IHTMLWriter;
     ///	<summary>Adds a &lt;base /&gt; tag to the HTML.</summary>
     ///	<remarks>Note: This method can only be called inside an open &lt;head&gt; tag.</remarks>
@@ -76,6 +78,9 @@ type
     /// <param name="aTitleText">The text to be placed inside the &lt;title&gt;&lt;/title&gt; tag</param>
     /// <remarks>There is no need to close this tag manually.   All "AddXXXX" methods close themselves.</remarks>
     function AddTitle(aTitleText: string): IHTMLWriter;
+    /// <summary>Adds a &lt;meta&gt; tag with name and content attributes.</summary>
+    /// <param name="aName">The value for the name attribute.</param>
+    /// <param name="aContent">The value for the content attribute.</param>
     function AddMetaNamedContent(aName: string; aContent: string): IHTMLWriter;
     /// <summary>Opens a &lt;body&gt; tag.</summary>
     function OpenBody: IHTMLWriter;
@@ -84,6 +89,8 @@ type
     /// <summary>Opens a &lt;p&gt; tag and gives it the passed in style="" attribute</summary>
     /// <param name="aStyle">The CSS-based text to be included in the style attribute for the &lt;p&gt; tag.</param>
     function OpenParagraphWithStyle(aStyle: string): IHTMLWriter;
+    /// <summary>Opens a &lt;p&gt; tag with an id="" attribute.</summary>
+    /// <param name="aID">The value for the id attribute.</param>
     function OpenParagraphWithID(aID: string): IHTMLWriter;
     /// <summary>Opens a &lt;span&gt; tag.</summary>
     function OpenSpan: IHTMLWriter;
@@ -98,13 +105,28 @@ type
     /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
     /// <param name="aStyle">The value for the Style attribute  to be added to the &lt;p&gt; tag.</param>
     function AddParagraphTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
+    /// <summary>Adds the passed in text into a &lt;p&gt; tag with an id="" attribute.</summary>
+    /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
+    /// <param name="aID">The value for the id attribute.</param>
     function AddParagraphTextWithID(aString: string; aID: string): IHTMLWriter;
+    /// <summary>Adds the passed in text into a &lt;p&gt; tag with a class="" attribute.</summary>
+    /// <param name="aString">The text to be added within the &lt;p&gt; tag.</param>
+    /// <param name="aClass">The value for the class attribute.</param>
     function AddParagraphTextWithClass(aString: string; aClass: string): IHTMLWriter;
     /// <summary>Adds text inside of a &lt;span&gt; tag.</summary>
     /// <param name="aString">The text to be added inside of the &lt;span&gt;&lt;/span&gt; tag.</param>
     function AddSpanText(aString: string): IHTMLWriter;
+    /// <summary>Adds text inside a &lt;span&gt; tag with a style="" attribute.</summary>
+    /// <param name="aString">The text to be added inside the &lt;span&gt; tag.</param>
+    /// <param name="aStyle">The CSS style value for the style attribute.</param>
     function AddSpanTextWithStyle(aString: string; aStyle: string): IHTMLWriter;
+    /// <summary>Adds text inside a &lt;span&gt; tag with an id="" attribute.</summary>
+    /// <param name="aString">The text to be added inside the &lt;span&gt; tag.</param>
+    /// <param name="aID">The value for the id attribute.</param>
     function AddSpanTextWithID(aString: string; aID: string): IHTMLWriter;
+    /// <summary>Adds text inside a &lt;span&gt; tag with a class="" attribute.</summary>
+    /// <param name="aString">The text to be added inside the &lt;span&gt; tag.</param>
+    /// <param name="aID">The value for the class attribute.</param>
     function AddSpanTextWithClass(aString: string; aID: string): IHTMLWriter;
     ///	<summary>Adds the passed in text to a &lt;div&gt;&lt;/div&gt; tag.</summary>
     ///	<param name="aString">The text to be added inside the &lt;div&gt;&lt;/div&gt; tag</param>
@@ -370,10 +392,21 @@ type
     /// <summary>Opens an &lt;img&gt; tag and adds the 'src' parameter.</summary>
     /// <param name="aImageSource">The URL of the image to be displayed</param>
     function OpenImage(aImageSource: string): IHTMLWriter; overload;
+    /// <summary>Adds a complete &lt;img /&gt; tag with the given source.</summary>
+    /// <param name="aImageSource">The URL of the image to be displayed.</param>
     function AddImage(aImageSource: string): IHTMLWriter;
+    /// <summary>Opens an &lt;a&gt; tag.</summary>
     function OpenAnchor: IHTMLWriter; overload;
+    /// <summary>Opens an &lt;a&gt; tag with a name attribute.</summary>
+    /// <param name="aName">The value for the name attribute.</param>
     function OpenAnchor(aName: string): IHTMLWriter; overload;
+    /// <summary>Opens an &lt;a&gt; tag with an href attribute and adds text content.</summary>
+    /// <param name="aHREF">The URL for the href attribute.</param>
+    /// <param name="aText">The text to be displayed inside the anchor tag.</param>
     function OpenAnchor(const aHREF: string; aText: string): IHTMLWriter; overload;
+    /// <summary>Adds a complete &lt;a&gt;&lt;/a&gt; tag with href and text content.</summary>
+    /// <param name="aHREF">The URL for the href attribute.</param>
+    /// <param name="aText">The text to be displayed inside the anchor tag.</param>
     function AddAnchor(const aHREF: string; aText: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;table&gt; tag</summary>
     /// <remarks>You cannot use other table related tags (&lt;tr&gt;, &lt;td&gt;, etc.) until a &lt;table&gt; tag is
@@ -394,7 +427,16 @@ type
     ///	</param>
     {$ENDREGION}
     function OpenTable(aBorder: integer; aCellPadding: integer): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;table&gt; tag with border, cellpadding, and cellspacing attributes.</summary>
+    /// <param name="aBorder">The value for the border attribute.</param>
+    /// <param name="aCellPadding">The value for the cellpadding attribute.</param>
+    /// <param name="aCellSpacing">The value for the cellspacing attribute.</param>
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;table&gt; tag with border, cellpadding, cellspacing, and width attributes.</summary>
+    /// <param name="aBorder">The value for the border attribute.</param>
+    /// <param name="aCellPadding">The value for the cellpadding attribute.</param>
+    /// <param name="aCellSpacing">The value for the cellspacing attribute.</param>
+    /// <param name="aWidth">The width specification for the table.</param>
     function OpenTable(aBorder: integer; aCellPadding: integer; aCellSpacing: integer; aWidth: THTMLWidth): IHTMLWriter; overload;
     /// <summary>Opens a &lt;tr&gt; tag.</summary>
     function OpenTableRow: IHTMLWriter;
@@ -408,8 +450,14 @@ type
     ///	</summary>
     {$ENDREGION}
     function OpenTableHeader: IHTMLWriter;
+    /// <summary>Opens a &lt;thead&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;table&gt; tag.</remarks>
     function OpenTableHead: IHTMLWriter;
+    /// <summary>Opens a &lt;tbody&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;table&gt; tag.</remarks>
     function OpenTableBody: IHTMLWriter;
+    /// <summary>Opens a &lt;tfoot&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;table&gt; tag.</remarks>
     function OpenTableFoot: IHTMLWriter;
     /// <summary>Adds the given text inside of a &lt;td&gt; tag.</summary>
     /// <exception cref="ENotInTableTagException">Raised when an attempt is made to add something in a table when the appropriate tag is not open.</exception>
@@ -422,10 +470,23 @@ type
     ///	</summary>
     {$ENDREGION}
     function OpenCaption: IHTMLWriter;
+    /// <summary>Opens a &lt;colgroup&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;table&gt; tag before any table content.</remarks>
     function OpenColGroup: IHTMLWriter;
+    /// <summary>Opens a &lt;col /&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;table&gt; tag before any table content.</remarks>
     function OpenCol: IHTMLWriter;
+    /// <summary>Opens a &lt;form&gt; tag.</summary>
+    /// <param name="aActionURL">The URL for the action attribute. If empty, no action attribute is added.</param>
+    /// <param name="aMethod">The HTTP method for the form (GET or POST).</param>
     function OpenForm(aActionURL: string = ''; aMethod: TFormMethod = fmGet): IHTMLWriter;
+    /// <summary>Opens an &lt;input /&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;form&gt; tag.</remarks>
     function OpenInput: IHTMLWriter; overload;
+    /// <summary>Opens an &lt;input /&gt; tag with type and optional name attributes.</summary>
+    /// <param name="aType">The input type (text, password, checkbox, etc.).</param>
+    /// <param name="aName">The optional name attribute value.</param>
+    /// <remarks>This method can only be called inside a &lt;form&gt; tag.</remarks>
     function OpenInput(aType: TInputType; aName: string = ''): IHTMLWriter; overload;
 
     {$REGION 'Documentation'}
@@ -445,13 +506,23 @@ type
     ///	</summary>
     {$ENDREGION}
     function OpenLabel: IHTMLWriter; overload;
+    /// <summary>Opens a &lt;label&gt; tag with a for="" attribute.</summary>
+    /// <param name="aFor">The ID of the form element this label is associated with.</param>
     function OpenLabel(aFor: string): IHTMLWriter; overload;
+    /// <summary>Opens a &lt;select&gt; tag with a name attribute.</summary>
+    /// <param name="aName">The name attribute value for the select element.</param>
+    /// <remarks>This method can only be called inside a &lt;form&gt; tag.</remarks>
     function OpenSelect(aName: string): IHTMLWriter;
+    /// <summary>Opens an &lt;option&gt; tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;select&gt; tag.</remarks>
     function OpenOption: IHTMLWriter;
     ///	<summary>Creates and opens a &lt;textarea&gt; tag.</summary>
     ///	<param name="aName">A unique identifier given to the tag.</param>
     ///	<param name="aText">The text to be added inside the &lt;textarea&gt; tag.</param>
     function OpenTextArea(aName: string; aCols: integer; aRows: integer): IHTMLWriter;
+    /// <summary>Opens an &lt;optgroup&gt; tag with a label attribute.</summary>
+    /// <param name="aLabel">The label for the option group.</param>
+    /// <remarks>This method can only be called inside a &lt;select&gt; tag.</remarks>
     function OpenOptGroup(aLabel: string): IHTMLWriter;
     /// <summary>Opens a &lt;fieldset&gt; tag.</summary>
     function OpenFieldSet: IHTMLWriter;
@@ -466,8 +537,20 @@ type
     /// <summary>Opens an &lt;iframe&gt; tag and adds a url parameter</summary>
     /// <param name="aURL">The value to be added with the url parameter.</param>
     function OpenIFrame(aURL: string): IHTMLWriter; overload;
+    /// <summary>Opens an &lt;iframe&gt; tag with URL, width, and height attributes.</summary>
+    /// <param name="aURL">The URL to be displayed in the iframe.</param>
+    /// <param name="aWidth">The width of the iframe.</param>
+    /// <param name="aHeight">The height of the iframe in pixels.</param>
     function OpenIFrame(aURL: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter; overload;
+    /// <summary>Adds a complete &lt;iframe&gt;&lt;/iframe&gt; tag with a URL and alternate text.</summary>
+    /// <param name="aURL">The URL to be displayed in the iframe.</param>
+    /// <param name="aAlternateText">The text displayed if the iframe cannot be rendered.</param>
     function AddIFrame(aURL: string; aAlternateText: string): IHTMLWriter; overload;
+    /// <summary>Adds a complete &lt;iframe&gt;&lt;/iframe&gt; tag with URL, alternate text, width, and height.</summary>
+    /// <param name="aURL">The URL to be displayed in the iframe.</param>
+    /// <param name="aAlternateText">The text displayed if the iframe cannot be rendered.</param>
+    /// <param name="aWidth">The width of the iframe.</param>
+    /// <param name="aHeight">The height of the iframe in pixels.</param>
     function AddIFrame(aURL: string; aAlternateText: string; aWidth: THTMLWidth; aHeight: integer): IHTMLWriter; overload;
     /// <summary>Opens an unordered list tag (&lt;ul&gt;)</summary>
     /// <param name="aBulletShape">An optional parameter indicating the bullet type that the list should use.</param>
@@ -507,88 +590,112 @@ type
     /// tag</exception>
     function OpenParam(aName: string; aValue: string = ''): IHTMLWriter; // name parameter is required
 
+    /// <summary>Opens a &lt;dl&gt; (definition list) tag.</summary>
     function OpenDefinitionList: IHTMLWriter;
+    /// <summary>Opens a &lt;dt&gt; (definition term) tag.</summary>
+    /// <remarks>This method can only be called inside a &lt;dl&gt; tag.</remarks>
     function OpenDefinitionTerm: IHTMLWriter;
+    /// <summary>Opens a &lt;dd&gt; (definition item) tag.</summary>
+    /// <remarks>This method can only be called after a &lt;dt&gt; or another &lt;dd&gt; tag.</remarks>
     function OpenDefinitionItem: IHTMLWriter;
 
     // HTML5 Semantic Structure Elements
     /// <summary>Opens an &lt;article&gt; tag.</summary>
     function OpenArticle: IHTMLWriter;
     /// <summary>Adds the passed in text inside an &lt;article&gt;&lt;/article&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the article tag.</param>
     function AddArticleText(aString: string): IHTMLWriter;
     /// <summary>Opens an &lt;aside&gt; tag.</summary>
     function OpenAside: IHTMLWriter;
     /// <summary>Adds the passed in text inside an &lt;aside&gt;&lt;/aside&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the aside tag.</param>
     function AddAsideText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;details&gt; tag.</summary>
     function OpenDetails: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;details&gt;&lt;/details&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the details tag.</param>
     function AddDetailsText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;figcaption&gt; tag.</summary>
     function OpenFigCaption: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;figcaption&gt;&lt;/figcaption&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the figcaption tag.</param>
     function AddFigCaptionText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;figure&gt; tag.</summary>
     function OpenFigure: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;figure&gt;&lt;/figure&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the figure tag.</param>
     function AddFigureText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;footer&gt; tag.</summary>
     function OpenFooter: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;footer&gt;&lt;/footer&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the footer tag.</param>
     function AddFooterText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;header&gt; tag.</summary>
     function OpenHeader: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;header&gt;&lt;/header&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the header tag.</param>
     function AddHeaderText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;main&gt; tag.</summary>
     function OpenMain: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;main&gt;&lt;/main&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the main tag.</param>
     function AddMainText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;nav&gt; tag.</summary>
     function OpenNav: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;nav&gt;&lt;/nav&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the nav tag.</param>
     function AddNavText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;section&gt; tag.</summary>
     function OpenSection: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;section&gt;&lt;/section&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the section tag.</param>
     function AddSectionText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;summary&gt; tag.</summary>
     function OpenSummary: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;summary&gt;&lt;/summary&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the summary tag.</param>
     function AddSummaryText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;dialog&gt; tag.</summary>
     function OpenDialog: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;dialog&gt;&lt;/dialog&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the dialog tag.</param>
     function AddDialogText(aString: string): IHTMLWriter;
 
     // HTML5 Text-Level Semantic Elements
     /// <summary>Opens a &lt;mark&gt; tag.</summary>
     function OpenMark: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;mark&gt;&lt;/mark&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the mark tag.</param>
     function AddMarkText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;bdi&gt; tag.</summary>
     function OpenBdi: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;bdi&gt;&lt;/bdi&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the bdi tag.</param>
     function AddBdiText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;ruby&gt; tag.</summary>
     function OpenRuby: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;ruby&gt;&lt;/ruby&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the ruby tag.</param>
     function AddRubyText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;rt&gt; tag.</summary>
     function OpenRt: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;rt&gt;&lt;/rt&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the rt tag.</param>
     function AddRtText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;rp&gt; tag.</summary>
     function OpenRp: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;rp&gt;&lt;/rp&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the rp tag.</param>
     function AddRpText(aString: string): IHTMLWriter;
     /// <summary>Opens a &lt;time&gt; tag.</summary>
     function OpenTime: IHTMLWriter;
     /// <summary>Adds the passed in text inside a &lt;time&gt;&lt;/time&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the time tag.</param>
     function AddTimeText(aString: string): IHTMLWriter;
     /// <summary>Opens an &lt;output&gt; tag.</summary>
     function OpenOutput: IHTMLWriter;
     /// <summary>Adds the passed in text inside an &lt;output&gt;&lt;/output&gt; tag.</summary>
+    /// <param name="aString">The text to be added inside the output tag.</param>
     function AddOutputText(aString: string): IHTMLWriter;
     /// <summary>Adds a &lt;wbr /&gt; tag.</summary>
     function AddWordBreak: IHTMLWriter;
@@ -597,66 +704,96 @@ type
     /// <summary>Opens an &lt;audio&gt; tag.</summary>
     function OpenAudio: IHTMLWriter; overload;
     /// <summary>Opens an &lt;audio&gt; tag with a src attribute.</summary>
+    /// <param name="aSource">The URL of the audio source.</param>
     function OpenAudio(aSource: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;video&gt; tag.</summary>
     function OpenVideo: IHTMLWriter; overload;
     /// <summary>Opens a &lt;video&gt; tag with a src attribute.</summary>
+    /// <param name="aSource">The URL of the video source.</param>
     function OpenVideo(aSource: string): IHTMLWriter; overload;
     /// <summary>Opens a &lt;video&gt; tag with src, width, and height attributes.</summary>
+    /// <param name="aSource">The URL of the video source.</param>
+    /// <param name="aWidth">The width of the video in pixels.</param>
+    /// <param name="aHeight">The height of the video in pixels.</param>
     function OpenVideo(aSource: string; aWidth: integer; aHeight: integer): IHTMLWriter; overload;
-    /// <summary>Opens a &lt;source&gt; tag.</summary>
+    /// <summary>Opens a &lt;source&gt; tag (void element).</summary>
     function OpenSourceElement: IHTMLWriter;
     /// <summary>Adds a &lt;source /&gt; tag with src and type attributes.</summary>
+    /// <param name="aSource">The URL of the media source.</param>
+    /// <param name="aType">The MIME type of the media source.</param>
     function AddSourceElement(aSource: string; aType: string): IHTMLWriter;
-    /// <summary>Opens a &lt;track&gt; tag.</summary>
+    /// <summary>Opens a &lt;track&gt; tag (void element).</summary>
     function OpenTrack: IHTMLWriter;
     /// <summary>Opens a &lt;canvas&gt; tag.</summary>
     function OpenCanvas: IHTMLWriter; overload;
     /// <summary>Opens a &lt;canvas&gt; tag with width and height attributes.</summary>
+    /// <param name="aWidth">The width of the canvas in pixels.</param>
+    /// <param name="aHeight">The height of the canvas in pixels.</param>
     function OpenCanvas(aWidth: integer; aHeight: integer): IHTMLWriter; overload;
 
     // HTML5 Attribute Helpers
     /// <summary>Adds a role="" attribute to the current tag.</summary>
+    /// <param name="aRole">The WAI-ARIA role value.</param>
     function AddRole(aRole: string): IHTMLWriter;
-    /// <summary>Adds a data-{aName}="{aValue}" attribute to the current tag.</summary>
+    /// <summary>Adds a data-{aName}="{aValue}" custom data attribute to the current tag.</summary>
+    /// <param name="aName">The data attribute name (without the "data-" prefix).</param>
+    /// <param name="aValue">The data attribute value.</param>
     function AddDataAttribute(aName: string; aValue: string): IHTMLWriter;
-    /// <summary>Adds an aria-{aName}="{aValue}" attribute to the current tag.</summary>
+    /// <summary>Adds an aria-{aName}="{aValue}" accessibility attribute to the current tag.</summary>
+    /// <param name="aName">The ARIA attribute name (without the "aria-" prefix).</param>
+    /// <param name="aValue">The ARIA attribute value.</param>
     function AddAriaAttribute(aName: string; aValue: string): IHTMLWriter;
     /// <summary>Adds a placeholder="" attribute to the current tag.</summary>
+    /// <param name="aPlaceholder">The placeholder text to display.</param>
     function AddPlaceholder(aPlaceholder: string): IHTMLWriter;
 
     // HTML5 Boolean Attribute Helpers
     /// <summary>Adds the required boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "required" attribute with no value.</remarks>
     function AddRequired: IHTMLWriter;
     /// <summary>Adds the disabled boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "disabled" attribute with no value.</remarks>
     function AddDisabled: IHTMLWriter;
     /// <summary>Adds the autofocus boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "autofocus" attribute with no value.</remarks>
     function AddAutofocus: IHTMLWriter;
     /// <summary>Adds the hidden boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "hidden" attribute with no value.</remarks>
     function AddHidden: IHTMLWriter;
     /// <summary>Adds the readonly boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "readonly" attribute with no value.</remarks>
     function AddReadonly: IHTMLWriter;
     /// <summary>Adds the multiple boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "multiple" attribute with no value.</remarks>
     function AddMultiple: IHTMLWriter;
     /// <summary>Adds the novalidate boolean attribute to the current tag.</summary>
+    /// <remarks>Produces a bare "novalidate" attribute with no value.</remarks>
     function AddNovalidate: IHTMLWriter;
 
     // HTML5 Additional Elements
     /// <summary>Opens a &lt;picture&gt; tag.</summary>
     function OpenPicture: IHTMLWriter;
-    /// <summary>Adds a &lt;picture&gt; tag containing an &lt;img&gt; child element.</summary>
+    /// <summary>Adds a &lt;picture&gt; tag containing an &lt;img&gt; child element with src and alt attributes.</summary>
+    /// <param name="aImageSrc">The URL of the image source.</param>
+    /// <param name="aAltText">The alternative text for the image.</param>
     function AddPictureImg(aImageSrc: string; aAltText: string): IHTMLWriter;
     /// <summary>Opens a &lt;template&gt; tag.</summary>
     function OpenTemplate: IHTMLWriter;
     /// <summary>Opens an &lt;embed&gt; tag (void element).</summary>
     function OpenEmbed: IHTMLWriter;
-    /// <summary>Adds an &lt;embed&gt; tag with src and type attributes.</summary>
+    /// <summary>Adds an &lt;embed /&gt; tag with src and type attributes.</summary>
+    /// <param name="aSource">The URL of the embedded content.</param>
+    /// <param name="aType">The MIME type of the embedded content.</param>
     function AddEmbed(aSource: string; aType: string): IHTMLWriter;
 
     // HTML5 Convenience Combo Methods
     /// <summary>Adds a &lt;figure&gt; containing an &lt;img&gt; and &lt;figcaption&gt;.</summary>
+    /// <param name="aImageSrc">The URL of the image source.</param>
+    /// <param name="aCaptionText">The text for the figcaption element.</param>
     function AddFigure(aImageSrc: string; aCaptionText: string): IHTMLWriter;
     /// <summary>Adds a &lt;details&gt; containing a &lt;summary&gt; and detail text.</summary>
+    /// <param name="aSummaryText">The text for the summary element.</param>
+    /// <param name="aDetailsText">The detail text content.</param>
     function AddDetailsSummary(aSummaryText: string; aDetailsText: string): IHTMLWriter;
 
     // HTML5 Form Elements
@@ -665,10 +802,15 @@ type
     /// <summary>Opens a &lt;progress&gt; tag.</summary>
     function OpenProgress: IHTMLWriter; overload;
     /// <summary>Opens a &lt;progress&gt; tag with value and max attributes.</summary>
+    /// <param name="aValue">The current progress value.</param>
+    /// <param name="aMax">The maximum value.</param>
     function OpenProgress(aValue: integer; aMax: integer): IHTMLWriter; overload;
     /// <summary>Opens a &lt;meter&gt; tag.</summary>
     function OpenMeter: IHTMLWriter; overload;
     /// <summary>Opens a &lt;meter&gt; tag with value, min, and max attributes.</summary>
+    /// <param name="aValue">The current meter value.</param>
+    /// <param name="aMin">The minimum value.</param>
+    /// <param name="aMax">The maximum value.</param>
     function OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter; overload;
 
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
