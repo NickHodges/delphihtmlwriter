@@ -480,6 +480,32 @@ type
     function OpenMeter: IHTMLWriter; overload;
     function OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter; overload;
 {$ENDREGION}
+{$REGION 'HTML5 Attribute Helpers'}
+    function AddRole(aRole: string): IHTMLWriter;
+    function AddDataAttribute(aName: string; aValue: string): IHTMLWriter;
+    function AddAriaAttribute(aName: string; aValue: string): IHTMLWriter;
+    function AddPlaceholder(aPlaceholder: string): IHTMLWriter;
+{$ENDREGION}
+{$REGION 'HTML5 Boolean Attribute Helpers'}
+    function AddRequired: IHTMLWriter;
+    function AddDisabled: IHTMLWriter;
+    function AddAutofocus: IHTMLWriter;
+    function AddHidden: IHTMLWriter;
+    function AddReadonly: IHTMLWriter;
+    function AddMultiple: IHTMLWriter;
+    function AddNovalidate: IHTMLWriter;
+{$ENDREGION}
+{$REGION 'HTML5 Additional Elements'}
+    function OpenPicture: IHTMLWriter;
+    function AddPictureImg(aImageSrc: string; aAltText: string): IHTMLWriter;
+    function OpenTemplate: IHTMLWriter;
+    function OpenEmbed: IHTMLWriter;
+    function AddEmbed(aSource: string; aType: string): IHTMLWriter;
+{$ENDREGION}
+{$REGION 'HTML5 Convenience Combo Methods'}
+    function AddFigure(aImageSrc: string; aCaptionText: string): IHTMLWriter;
+    function AddDetailsSummary(aSummaryText: string; aDetailsText: string): IHTMLWriter;
+{$ENDREGION}
 
     class function Write: IHTMLWriter;
     property Attribute[const Name: string; const Value: string]: IHTMLWriter read GetAttribute; default;
@@ -2510,6 +2536,112 @@ end;
 function THTMLWriter.OpenMeter(aValue: integer; aMin: integer; aMax: integer): IHTMLWriter;
 begin
   Result := OpenMeter[cValue, IntToStr(aValue)][cMin, IntToStr(aMin)][cMax, IntToStr(aMax)];
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Attribute Helpers'}
+
+function THTMLWriter.AddRole(aRole: string): IHTMLWriter;
+begin
+  Result := AddAttribute(cRole, aRole);
+end;
+
+function THTMLWriter.AddDataAttribute(aName: string; aValue: string): IHTMLWriter;
+begin
+  Result := AddAttribute(cData + aName, aValue);
+end;
+
+function THTMLWriter.AddAriaAttribute(aName: string; aValue: string): IHTMLWriter;
+begin
+  Result := AddAttribute(cAria + aName, aValue);
+end;
+
+function THTMLWriter.AddPlaceholder(aPlaceholder: string): IHTMLWriter;
+begin
+  Result := AddAttribute(cPlaceholder, aPlaceholder);
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Boolean Attribute Helpers'}
+
+function THTMLWriter.AddRequired: IHTMLWriter;
+begin
+  Result := AddAttribute(cRequired);
+end;
+
+function THTMLWriter.AddDisabled: IHTMLWriter;
+begin
+  Result := AddAttribute(cDisabled);
+end;
+
+function THTMLWriter.AddAutofocus: IHTMLWriter;
+begin
+  Result := AddAttribute(cAutofocus);
+end;
+
+function THTMLWriter.AddHidden: IHTMLWriter;
+begin
+  Result := AddAttribute(cHidden);
+end;
+
+function THTMLWriter.AddReadonly: IHTMLWriter;
+begin
+  Result := AddAttribute(cReadonly);
+end;
+
+function THTMLWriter.AddMultiple: IHTMLWriter;
+begin
+  Result := AddAttribute(cMultiple);
+end;
+
+function THTMLWriter.AddNovalidate: IHTMLWriter;
+begin
+  Result := AddAttribute(cNovalidate);
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Additional Elements'}
+
+function THTMLWriter.OpenPicture: IHTMLWriter;
+begin
+  Result := AddTag(cPicture, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.AddPictureImg(aImageSrc: string; aAltText: string): IHTMLWriter;
+begin
+  Result := OpenPicture.AddImage(aImageSrc).CloseTag;
+end;
+
+function THTMLWriter.OpenTemplate: IHTMLWriter;
+begin
+  Result := AddTag(cTemplate, ctNormal, chaCanHaveAttributes);
+end;
+
+function THTMLWriter.OpenEmbed: IHTMLWriter;
+begin
+  Result := AddTag(cEmbed, ctEmpty);
+end;
+
+function THTMLWriter.AddEmbed(aSource: string; aType: string): IHTMLWriter;
+begin
+  Result := OpenEmbed[cSource, aSource][cType, aType].CloseTag;
+end;
+
+{$ENDREGION}
+
+{$REGION 'HTML5 Convenience Combo Methods'}
+
+function THTMLWriter.AddFigure(aImageSrc: string; aCaptionText: string): IHTMLWriter;
+begin
+  Result := OpenFigure.AddImage(aImageSrc).AddFigCaptionText(aCaptionText).CloseTag;
+end;
+
+function THTMLWriter.AddDetailsSummary(aSummaryText: string; aDetailsText: string): IHTMLWriter;
+begin
+  Result := OpenDetails.AddSummaryText(aSummaryText).AddText(aDetailsText).CloseTag;
 end;
 
 {$ENDREGION}

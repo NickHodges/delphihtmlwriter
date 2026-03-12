@@ -218,7 +218,7 @@ type
       ftCenter,
       /// <summary>Formats with a &lt;code&gt; tag</summary>
       ftCode,
-      /// <summary>Formats with a &lt;delete&gt; tag</summary>
+      /// <summary>Formats with a &lt;del&gt; tag</summary>
       ftDelete,
       /// <summary>Formats with a &lt;dfn&gt; tag</summary>
       ftDefinition,
@@ -500,7 +500,7 @@ type
   const
     ///	<summary>String array for use with the TFormatType</summary>
     ///	<seealso cref="TFormatType">TFormatType</seealso>
-    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'delete', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins', 'mark', 'bdi', 'ruby', 'rt', 'rp');
+    TFormatTypeStrings: array [TFormatType] of string = ('b', 'i', 'u', 'em', 'strong', 'sub', 'sup', 'pre', 'cite', 'acronym', 'abbr', 'address', 'bdo', 'big', 'center', 'code', 'del', 'dfn', 'font', 'kbd', 'q', 'samp', 'small', 'strike', 'tt', 'var', 'ins', 'mark', 'bdi', 'ruby', 'rt', 'rp');
 
     {$REGION 'Documentation'}
     ///	<summary>
@@ -697,6 +697,18 @@ type
     cList = 'list';
     cPlaceholder = 'placeholder';
     cRequired = 'required';
+    cRole = 'role';
+    cData = 'data-';
+    cAria = 'aria-';
+    cDisabled = 'disabled';
+    cAutofocus = 'autofocus';
+    cHidden = 'hidden';
+    cReadonly = 'readonly';
+    cMultiple = 'multiple';
+    cNovalidate = 'novalidate';
+    cPicture = 'picture';
+    cTemplate = 'template';
+    cEmbed = 'embed';
 
     cOpenBracket = '<';
     cCloseBracket = '>';

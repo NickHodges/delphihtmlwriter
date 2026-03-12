@@ -281,6 +281,24 @@ type
 
     // HTML5 Deprecation
     procedure TestHTML5Deprecation;
+
+    // HTML5 Attribute Helpers
+    procedure TestAddRole;
+    procedure TestAddDataAttribute;
+    procedure TestAddAriaAttribute;
+    procedure TestAddPlaceholder;
+    procedure TestBooleanAttributes;
+
+    // HTML5 Additional Elements
+    procedure TestOpenPicture;
+    procedure TestAddPictureImg;
+    procedure TestOpenTemplate;
+    procedure TestOpenEmbed;
+    procedure TestAddEmbed;
+
+    // HTML5 Convenience Combos
+    procedure TestAddFigure;
+    procedure TestAddDetailsSummary;
   end;
   // Test methods for class IGetHTML
 
@@ -4710,6 +4728,185 @@ begin
       Temp.OpenHead.OpenBaseFont;
     end,
     'Failed to raise ETagIsDeprecatedHTMLWriterException for <basefont> with elStrictHTML5');
+end;
+
+// =====================================================================
+// HTML5 Attribute Helper Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestAddRole;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenNav.AddRole('navigation').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<nav role="navigation"></nav>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDataAttribute;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenDiv.AddDataAttribute('id', '42').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<div data-id="42"></div>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddAriaAttribute;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenSpan.AddAriaAttribute('label', 'Close').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<span aria-label="Close"></span>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddPlaceholder;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(itText).AddPlaceholder('Enter text').CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><input type="text" placeholder="Enter text" /></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestBooleanAttributes;
+var
+  TestResult, ExpectedResult: string;
+begin
+  // Test AddRequired
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(itText).AddRequired.CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><input type="text" required /></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddDisabled
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(itText).AddDisabled.CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><input type="text" disabled /></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddAutofocus
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(itText).AddAutofocus.CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><input type="text" autofocus /></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddHidden
+  TestResult := HTMLWriterFactory('html').OpenDiv.AddHidden.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<div hidden></div>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddReadonly
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenInput(itText).AddReadonly.CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><input type="text" readonly /></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddMultiple
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.OpenSelect('files').AddMultiple.CloseTag.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get"><select name="files" multiple></select></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  // Test AddNovalidate
+  TestResult := HTMLWriterFactory(cHTML).OpenForm.AddNovalidate.CloseForm.CloseDocument.AsHTML;
+  ExpectedResult := '<html><form method="get" novalidate></form></html>';
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Additional Element Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestOpenPicture;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenPicture.AsHTML;
+  ExpectedResult := '<html><picture';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenPicture.CloseTag.AsHTML;
+  ExpectedResult := '<html><picture></picture>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenPicture.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<picture></picture>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenPicture.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<picture>blah</picture>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddPictureImg;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').AddPictureImg('photo.jpg', 'A photo').CloseTag.AsHTML;
+  ExpectedResult := HTML('<picture><img src="photo.jpg" /></picture>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenTemplate;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenTemplate.AsHTML;
+  ExpectedResult := '<html><template';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTemplate.CloseTag.AsHTML;
+  ExpectedResult := '<html><template></template>';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTemplate.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<template></template>');
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenTemplate.AddText('blah').CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<template>blah</template>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestOpenEmbed;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').OpenEmbed.AsHTML;
+  ExpectedResult := '<html><embed';
+  CheckEquals(ExpectedResult, TestResult);
+
+  TestResult := HTMLWriterFactory('html').OpenEmbed.CloseTag.CloseTag.AsHTML;
+  ExpectedResult := HTML('<embed />');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddEmbed;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').AddEmbed('game.swf', 'application/x-shockwave-flash').CloseTag.AsHTML;
+  ExpectedResult := HTML('<embed src="game.swf" type="application/x-shockwave-flash" />');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+// =====================================================================
+// HTML5 Convenience Combo Tests
+// =====================================================================
+
+procedure TestTHTMLWriter.TestAddFigure;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').AddFigure('photo.jpg', 'A beautiful photo').CloseTag.AsHTML;
+  ExpectedResult := HTML('<figure><img src="photo.jpg" /><figcaption>A beautiful photo</figcaption></figure>');
+  CheckEquals(ExpectedResult, TestResult);
+end;
+
+procedure TestTHTMLWriter.TestAddDetailsSummary;
+var
+  TestResult, ExpectedResult: string;
+begin
+  TestResult := HTMLWriterFactory('html').AddDetailsSummary('Click me', 'Hidden content').CloseTag.AsHTML;
+  ExpectedResult := HTML('<details><summary>Click me</summary>Hidden content</details>');
+  CheckEquals(ExpectedResult, TestResult);
 end;
 
 initialization

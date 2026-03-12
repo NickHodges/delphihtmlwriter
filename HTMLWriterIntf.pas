@@ -149,7 +149,7 @@ type
     function OpenCenter: IHTMLWriter;
     /// <summary>Opens a &lt;code&gt; tag.</summary>
     function OpenCode: IHTMLWriter;
-    /// <summary>Opens a &lt;delete&gt; tag.</summary>
+    /// <summary>Opens a &lt;del&gt; tag.</summary>
     function OpenDelete: IHTMLWriter;
     /// <summary>Opens a &lt;dfn&gt; tag.</summary>
     function OpenDefinition: IHTMLWriter;
@@ -220,7 +220,7 @@ type
     /// <summary>Adds the passed in text to a &lt;code&gt;&lt;/code&gt; tag.</summary>
     /// <param name="aString">The text to be added to the Code tag.</param>
     function AddCodeText(aString: string): IHTMLWriter;
-    /// <summary>Adds the passed in text to a &lt;delete&gt;&lt;/delete&gt; tag.</summary>
+    /// <summary>Adds the passed in text to a &lt;del&gt;&lt;/del&gt; tag.</summary>
     /// <param name="aString">The text to be added to the Delete tag.</param>
     function AddDeleteText(aString: string): IHTMLWriter;
     /// <summary>Adds the passed in text to a &lt;dfn&gt;&lt;/dfn&gt; tag.</summary>
@@ -614,6 +614,50 @@ type
     function OpenCanvas: IHTMLWriter; overload;
     /// <summary>Opens a &lt;canvas&gt; tag with width and height attributes.</summary>
     function OpenCanvas(aWidth: integer; aHeight: integer): IHTMLWriter; overload;
+
+    // HTML5 Attribute Helpers
+    /// <summary>Adds a role="" attribute to the current tag.</summary>
+    function AddRole(aRole: string): IHTMLWriter;
+    /// <summary>Adds a data-{aName}="{aValue}" attribute to the current tag.</summary>
+    function AddDataAttribute(aName: string; aValue: string): IHTMLWriter;
+    /// <summary>Adds an aria-{aName}="{aValue}" attribute to the current tag.</summary>
+    function AddAriaAttribute(aName: string; aValue: string): IHTMLWriter;
+    /// <summary>Adds a placeholder="" attribute to the current tag.</summary>
+    function AddPlaceholder(aPlaceholder: string): IHTMLWriter;
+
+    // HTML5 Boolean Attribute Helpers
+    /// <summary>Adds the required boolean attribute to the current tag.</summary>
+    function AddRequired: IHTMLWriter;
+    /// <summary>Adds the disabled boolean attribute to the current tag.</summary>
+    function AddDisabled: IHTMLWriter;
+    /// <summary>Adds the autofocus boolean attribute to the current tag.</summary>
+    function AddAutofocus: IHTMLWriter;
+    /// <summary>Adds the hidden boolean attribute to the current tag.</summary>
+    function AddHidden: IHTMLWriter;
+    /// <summary>Adds the readonly boolean attribute to the current tag.</summary>
+    function AddReadonly: IHTMLWriter;
+    /// <summary>Adds the multiple boolean attribute to the current tag.</summary>
+    function AddMultiple: IHTMLWriter;
+    /// <summary>Adds the novalidate boolean attribute to the current tag.</summary>
+    function AddNovalidate: IHTMLWriter;
+
+    // HTML5 Additional Elements
+    /// <summary>Opens a &lt;picture&gt; tag.</summary>
+    function OpenPicture: IHTMLWriter;
+    /// <summary>Adds a &lt;picture&gt; tag containing an &lt;img&gt; child element.</summary>
+    function AddPictureImg(aImageSrc: string; aAltText: string): IHTMLWriter;
+    /// <summary>Opens a &lt;template&gt; tag.</summary>
+    function OpenTemplate: IHTMLWriter;
+    /// <summary>Opens an &lt;embed&gt; tag (void element).</summary>
+    function OpenEmbed: IHTMLWriter;
+    /// <summary>Adds an &lt;embed&gt; tag with src and type attributes.</summary>
+    function AddEmbed(aSource: string; aType: string): IHTMLWriter;
+
+    // HTML5 Convenience Combo Methods
+    /// <summary>Adds a &lt;figure&gt; containing an &lt;img&gt; and &lt;figcaption&gt;.</summary>
+    function AddFigure(aImageSrc: string; aCaptionText: string): IHTMLWriter;
+    /// <summary>Adds a &lt;details&gt; containing a &lt;summary&gt; and detail text.</summary>
+    function AddDetailsSummary(aSummaryText: string; aDetailsText: string): IHTMLWriter;
 
     // HTML5 Form Elements
     /// <summary>Opens a &lt;datalist&gt; tag.</summary>
