@@ -1433,6 +1433,7 @@ begin
   Temp.FTagState := Self.FTagState + [tsBracketOpen];
   Temp.FFormState := Self.FFormState;
   Temp.FTableState := Self.FTableState;
+  Temp.FErrorLevels := Self.FErrorLevels;
   // take Self tag, add the new tag, and make it the HTML for the return
   Self.HTML.Append(Temp.AsHTML);
   Temp.HTML.Clear;
